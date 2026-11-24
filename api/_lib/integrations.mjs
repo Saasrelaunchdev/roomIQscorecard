@@ -1,9 +1,10 @@
 // The outside systems a scorecard reaches, each optional and each off until its settings are set in Vercel. A failure
 // is logged and never fails the visitor's request.
 //
-//   Meta Conversions API   META_PIXEL_ID, META_CAPI_TOKEN (+ META_TEST_EVENT_CODE, META_GRAPH_VERSION). Lead and Schedule
-//                          for qualified answers only (pixel conditioning), with the browser's event id, never after an
-//                          opt-out (Global Privacy Control or a declined cookie notice), never with the phone number.
+//   Meta Conversions API   META_PIXEL_ID, META_CAPI_TOKEN (+ META_TEST_EVENT_CODE, META_GRAPH_VERSION). The GTM's event map
+//                          (content/site.mjs metaEvents): ScorecardComplete for every completion, Schedule for qualified
+//                          bookings only, with the browser's event id, never after an opt-out (Global Privacy Control or a
+//                          declined cookie notice), never with the phone number, and never the market as the lead's city.
 //   GoHighLevel            GHL_TOKEN, GHL_LOCATION_ID (+ GHL_SCORECARD_TAG, GHL_SCORECARD_FIELDS). Each scorecard becomes
 //                          a contact in the founder's sub-account, tagged so the founder's workflows (nurture, call
 //                          reminders) start on it. The same pattern as the landing page's checkout handoff.
@@ -62,14 +63,17 @@ export function userData({ email, firstName, city, country = "us", externalId, i
   if (fbp && FBP.test(fbp)) u.fbp = fbp;
   return u;
 }
-/** Sends one Lead or Schedule event. Resolves true, false (failed), or null (not set up, or not to be sent). */
-export async function toMeta({ name, eventId, sourceUrl, row, ip, ua, custom }) {
+// Whether the quiz asks for the lead's own city (RoomIQ's does not: its city column holds the deal's market)
+const ASKS_CITY = SC.steps.some((s) => (s.fields || []).some((f) => f.name === "city"));
+/** Sends one event. everyone: true for an event the GTM counts on every completion (ScorecardComplete); otherwise
+ *  only for qualified answers (Schedule). Resolves true, false (failed), or null (not set up, or not to be sent). */
+export async function toMeta({ name, eventId, sourceUrl, row, ip, ua, custom, everyone = false }) {
   const cfg = capiConfig();
   const t = row.tracking || {};
-  if (!cfg || row.fit !== "qualified" || t.gpc === true || t.ads_consent === "denied") return null;
+  if (!cfg || (!everyone && row.fit !== "qualified") || t.gpc === true || t.ads_consent === "denied") return null;
   const event = {
     event_name: name, event_time: Math.floor(Date.now() / 1000), event_id: eventId, action_source: "website",
-    user_data: userData({ email: row.email, firstName: row.first_name, city: row.city, externalId: row.visit, ip, ua, fbc: t.fbc, fbp: t.fbp }),
+    user_data: userData({ email: row.email, firstName: row.first_name, city: ASKS_CITY ? row.city : "", externalId: row.visit, ip, ua, fbc: t.fbc, fbp: t.fbp }),
     ...(sourceUrl ? { event_source_url: sourceUrl } : {}),
     ...(custom ? { custom_data: custom } : {})
   };

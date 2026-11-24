@@ -3,55 +3,56 @@
 // Secrets never go here: they are Vercel environment variables (README.md, "Settings").
 export default {
   name: "RoomIQ",
-  product: "Rempo: the Done For You Review Engine",
+  product: "RoomIQ: room-by-room underwriting for rent-by-the-room investors",
 
   // This scorecard's own address once its domain points at Vercel, with no path (for example
-  // "https://scorecard.rempo.io"). Sets canonical links, the share image's full URL and the links in emails. Until then
+  // "https://score.roomiq.io"). Sets canonical links, the share image's full URL and the links in emails. Until then
   // the server uses the address the request came in on.
   url: null,
 
-  // The master page (rempo.io): card 2 "See how we'd run it for you" and the footer link
+  // The main site (the production landing page, once it serves roomiq.io): the "How RoomIQ shows its working" card and
+  // the footer link. The landing page greets visitors who arrive with src=scorecard.
   masterUrl: "https://roomiq.io",
+  // The app's free forecast (the Free plan: no card, three forecasts a month), as every "Run a free forecast" button on
+  // the landing page links to it. The results page adds src=scorecard and the visitor's campaign values.
+  forecastUrl: "https://roomiq.io/dashboard",
 
-  // The legal pages are the master page's (RempoLandingPage builds them into /legal). The forms link to them in the
-  // notice at collection; the footer links to all of them.
+  // RoomIQ's legal pages (the landing page's footer links). No cookie, SMS or accessibility page is published, so the
+  // cookie notice points to the privacy policy and the walkthrough offers no text messages (booking.consentText null).
   legal: {
-    hub: "https://rempo.io/legal",
-    terms: "https://rempo.io/legal/terms",
-    privacy: "https://rempo.io/legal/privacy",
-    cookies: "https://rempo.io/legal/cookies",
-    sms: "https://rempo.io/legal/sms",
-    choices: "https://rempo.io/legal/privacy-choices",
-    accessibility: "https://rempo.io/legal/accessibility"
+    hub: "https://roomiq.io/privacy",
+    terms: "https://roomiq.io/terms",
+    privacy: "https://roomiq.io/privacy",
+    cookies: "https://roomiq.io/privacy",
+    sms: null,
+    choices: "https://roomiq.io/privacy",
+    accessibility: null
   },
-  // The version of the consent and policy wording, stored with every lead. Keep it equal to noticeVersion in the
-  // landing page's legal-src/settings.mjs.
-  noticeVersion: "2026-11-08",
+  // The version of the consent and policy wording, stored with every lead. RoomIQ publishes none yet: set it to the
+  // date of roomiq.io's privacy policy (YYYY-MM-DD) once known (docs/DECISIONS.md 20).
+  noticeVersion: null,
 
-  // Legal name and city for the footer and the emails, for example "Rempo LLC, San Diego, California"
+  // Legal name and city for the footer and the emails, for example "RoomIQ Inc., Austin, Texas"
   company: null,
-  // The postal address commercial email must carry (CAN-SPAM). The prospect emails add it when set.
+  // The postal address commercial email must carry (CAN-SPAM). The prospect emails add it when set: set it before the
+  // first email goes out (docs/OPERATIONS.md)
   postalAddress: null,
 
-  // When the report arrives (Deliverable 2: "within one business day, checked by a person")
+  // Kept for the template's "checked" delivery; with instant delivery and no enrichment, nothing waits for a person
   reportTurnaround: "within one business day",
-  // How the report reaches the owner. "instant" (the owner's request of 2026-11-22): the PDF report is emailed the
-  // moment the scorecard is finished, built from the answers; then a person reads the public Google profile and sends
-  // the update with the top three, within reportTurnaround. "checked": no report until the team approves and sends
-  // it (the first version). The pages, the emails and the report link follow this setting; rebuild after a change.
+  // How the report reaches the buyer: "instant", the PDF report emailed the moment the scorecard is finished, built from
+  // the answers (docs/DECISIONS.md 12)
   reportDelivery: "instant",
-  // Outside data a person adds after the scorecard (Rempo's: the lead's public Google profile next to the top three),
-  // entered in the admin's profile form and sent as an update. false hides the form and the update; the report is then
-  // built from the answers alone.
-  enrichment: true,
-  // The report's checker when the admin leaves the field empty ("Checked by {checker_first_name} at Rempo")
+  // No outside data is added after the scorecard: the next step is the buyer's own free forecast
+  enrichment: false,
+  // The report's checker when the admin leaves the field empty (not shown with instant delivery)
   defaultChecker: null,
 
-  // The offer is undecided, so no price, guarantee or term appears anywhere. When decided: decided true, and the
-  // checkout link (card 4 "Get started" joins the results page, never for call-only visitors).
+  // No checkout in this funnel: Pro starts inside the product. No price, trial or term appears anywhere in the funnel
   offer: { decided: false, checkoutUrl: null },
 
-  // The call step (Meta PLAN.md, booking rules): the next 5 business days, never the same day, no weekends
+  // The walkthrough (the call step): a 20-minute video call with the founder, the next 5 business days, never the same
+  // day, no weekends, three windows in the visitor's time (docs/DECISIONS.md 14)
   booking: {
     days: 5,
     windows: [
@@ -59,20 +60,25 @@ export default {
       { v: "midday", label: "Midday", hint: "11 am to 2 pm", start: 11, end: 14 },
       { v: "afternoon", label: "Afternoon", hint: "2 to 5 pm", start: 14, end: 17 }
     ],
-    minutes: 15,
-    phone: { name: "phone", label: "Best number to call", prefix: "+1", autocomplete: "tel-national", inputmode: "tel" },
-    // Consent in Rempo's name and for this number (a written agreement to be called). Texts: a separate, optional,
-    // unticked box with what carriers check for (A2P 10DLC, CTIA)
-    consentPhone: { name: "consentPhone", label: "Rempo may call me at this number about my report and Rempo's service.", required: true },
-    consentText: { name: "consentText", label: "Rempo may text this number to confirm or move my call, up to 3 texts. Msg & data rates may apply. Reply STOP to opt out, HELP for help. Not required to book.", required: false }
+    minutes: 20,
+    phone: { name: "phone", label: "Best number to reach you", prefix: "+1", autocomplete: "tel-national", inputmode: "tel" },
+    // Consent in RoomIQ's name and for this number (a written agreement to be called)
+    consentPhone: { name: "consentPhone", label: "RoomIQ may call me at this number about my walkthrough.", required: true },
+    // No texts: RoomIQ publishes no SMS terms (set a box here, and legal.sms, to offer them)
+    consentText: null,
+    // The house to walk through, optional: typed by the buyer, kept with the booking, never shown in public
+    address: { name: "address", label: "The house's address, if you have one (optional)", autocomplete: "street-address", max: 200 }
   },
 
   // Advertising and analytics tools load only when an id is set, only after the visitor taps Allow in the cookie
-  // notice ("opt-in"), and never with Global Privacy Control. Meta is told about a Lead or a Schedule only when the
-  // answers qualify (fit), the same pixel conditioning as the Meta page.
+  // notice ("opt-in"), and never with Global Privacy Control
   metaPixelId: null,
   clarityId: null,
   trackingConsent: "opt-in",
+  // The events Meta hears, as the GTM's event map names them (meta-launch ads_content.py EVENTS): the quiz opened for
+  // the first time, and every completed scorecard (pixel and Conversions API, one event_id). Schedule goes only with a
+  // qualified walkthrough booking. null turns an event off (docs/DECISIONS.md 10)
+  metaEvents: { start: "ScorecardStart", complete: "ScorecardComplete", schedule: "Schedule", contentName: "scorecard" },
 
   // Where the page and the admin send things
   endpoints: { scorecard: "/api/scorecard", track: "/api/track", admin: "/api/admin" }

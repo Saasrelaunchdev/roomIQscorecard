@@ -9,7 +9,7 @@
 //        each only when set up.
 //   POST { action: "deepener", token, answers, timing } the eight optional questions; the report's scores follow them,
 //                                                      and the sharper report is emailed (instant delivery)
-//   POST { action: "book", token, slotDay, slotWindow, phone, consentPhone, consentText }    the 15-minute call
+//   POST { action: "book", token, slotDay, slotWindow, phone, address, consentPhone, consentText }    the 20-minute walkthrough
 //   POST { action: "unsubscribe", token }              no more emails to this address
 //   GET  ?token=...                                    the result for the results and sharpen pages (no answers, no contact)
 //   GET                                                a health report: which settings this deployment sees (names and
@@ -20,7 +20,7 @@ import SITE from "../content/site.mjs";
 import BRAND from "../content/brand.mjs";
 import EMAILS from "../content/emails.mjs";
 import RESULTS from "../content/results.mjs";
-import { evaluate, cleanDeepener, deepenerShown, fill } from "../lib/scoring.mjs";
+import { evaluate, cleanDeepener, deepenerShown, fill, optionOf } from "../lib/scoring.mjs";
 import { usPhone, dayAllowed, windowOf, phoneLabel } from "../lib/booking.mjs";
 import { send, readJson, query, sameOrigin, clientIp, header, userAgent, baseUrl, deployment, str, EMAIL, TOKEN, fail, HttpError } from "./_lib/http.mjs";
 import { getStore, storeConfig, notConnected, StoreError } from "./_lib/store.mjs";
@@ -28,7 +28,7 @@ import { emailConfig } from "./_lib/emails.mjs";
 import { notifyConfig, notifyTeam } from "./_lib/notify.mjs";
 import { toMeta, toGhl, toWebhooks, toLeadsTable, capiConfig, ghlConfig, webhookConfig, FBC, FBP, EVENT_ID } from "./_lib/integrations.mjs";
 import { visitorView, publicResult, bookingView, linksFor } from "./_lib/views.mjs";
-import { emailVars, prospectEmail, teamNotice, teamRows, webhookData, ghlValues, scoreEmail } from "./_lib/messages.mjs";
+import { emailVars, prospectEmail, teamNotice, teamRows, webhookData, ghlValues, scoreEmail, who } from "./_lib/messages.mjs";
 import { later } from "./_lib/background.mjs";
 import { loadSettings } from "./_lib/settings.mjs";
 import { makeReport, pdfName } from "./_lib/reports.mjs";
@@ -73,17 +73,22 @@ async function lookup(res, token) {
   return send(res, 200, visitorView(row));
 }
 
-/* ---------- The ten steps ---------- */
+/* ---------- The main quiz ---------- */
+// Which contact fields the quiz asks (content/scorecard.mjs steps): RoomIQ's asks no business name or city
+const FIELD_NAMES = new Set(SC.steps.flatMap((s) => (s.fields || []).map((f) => f.name)));
 async function submit(req, res, body) {
   const ev = evaluate(SC, body.answers || {});
   if (!ev.ok) return send(res, 400, { error: "Please answer every question", missing: ev.missing });
   const email = str(body.email, 254).toLowerCase();
   const firstName = str(body.firstName, 60);
-  const company = str(body.company, 120);
-  const city = str(body.city, 80);
+  const company = FIELD_NAMES.has("company") ? str(body.company, 120) : "";
+  // No city field: the lead's city column holds the market of the deal (a metro, never an address), for the admin's
+  // lists and the team's notices. It is never sent to Meta (api/_lib/integrations.mjs)
+  const market = optionOf(SC, "market", ev.answers.market);
+  const city = FIELD_NAMES.has("city") ? str(body.city, 80) : market && SC.markets && SC.markets.covered.includes(market.v) ? market.label : "";
   if (!email || !EMAIL.test(email)) return send(res, 400, { error: "A valid email is required" });
   if (!firstName) return send(res, 400, { error: "Your first name is required" });
-  if (!company || !city) return send(res, 400, { error: "Your business name and city are required" });
+  if ((FIELD_NAMES.has("company") && !company) || (FIELD_NAMES.has("city") && !city)) return send(res, 400, { error: "Your business name and city are required" });
   if (body.consentEmail !== true) return send(res, 400, { error: "Consent is required" });
 
   const t = body.tracking && typeof body.tracking === "object" && !Array.isArray(body.tracking) ? body.tracking : {};
@@ -107,14 +112,14 @@ async function submit(req, res, body) {
     form: SC.form,
     status: "new",
     email, first_name: firstName, company, city,
-    profiles: ev.answers.profiles, trade: ev.answers.trade,
+    profiles: ev.answers.profiles, trade: ev.trade,
     visit, variant: /^[a-z0-9-]{1,40}$/.test(str(body.variant, 40)) ? str(body.variant, 40) : "",
     answers: ev.answers,
     result: trim(ev),
     report_result: trim(ev),
     consent: { consentEmail: true, noticeVersion: /^\d{4}-\d{2}-\d{2}$/.test(str(body.noticeVersion, 10)) ? str(body.noticeVersion, 10) : SITE.noticeVersion, at: new Date().toISOString() },
     tracking,
-    fit: ev.fit, route: ev.callOnly ? `call (${ev.why})` : "call or checkout",
+    fit: ev.fit, route: ev.callOnly ? `walkthrough first (${ev.why})` : ev.covered ? "free forecast" : "market lookup",
     score: ev.score, tier: ev.tier, bottleneck: ev.bottleneck.primary,
     ip_hash: ip ? createHash("sha256").update(`${salt}|${ip}`).digest("hex") : null,
     // What the admin's analytics read: the time each question took (as the page measured it, only while on screen),
@@ -138,7 +143,7 @@ async function submit(req, res, body) {
   if (!saved) {
     // Not stored: the team's notice is the only copy, so it goes before the answer, with everything in it
     const notified = await notifyTeam({
-      title: `${fill(EMAILS.team.lead, { business: company, city, score: ev.score, tier: ev.tierName })} ${fill(EMAILS.team.notSaved, { reason })}`,
+      title: `${fill(EMAILS.team.lead, { ...who({ company, city, first_name: firstName }), score: ev.score, tier: ev.tierName })} ${fill(EMAILS.team.notSaved, { reason })}`,
       rows: teamRows(row, ev), links: []
     });
     if (!(notified && (notified.email || notified.slack))) {
@@ -168,12 +173,14 @@ async function afterSubmit(saved, ev, { links, ip, ua, leadEventId, tracking }) 
   const vars = emailVars(row, ev, links);
   const files = pdf ? [{ filename: pdfName(row), content: pdf }] : [];
   const n = settings.notifications;
-  const teamTitle = fill(EMAILS.team.lead, { business: row.company, city: row.city, score: ev.score, tier: ev.tierName });
+  const teamTitle = fill(EMAILS.team.lead, { ...who(row), score: ev.score, tier: ev.tierName });
   const teamRowsNow = teamRows(row, ev).concat(instant ? [["Report", pdf ? EMAILS.team.pdfSent : fill(EMAILS.team.pdfFailed, { reason: pdfError || "unknown" })]] : []);
   await Promise.all([
     scoreEmail(row, ev, vars, links, instant ? files : null),
     teamNotice(row, { title: teamTitle, rows: teamRowsNow, links: [["Open in the admin", links.admin], ["Their result", links.results], ["Their report", links.report]], attachments: n.attachPdf ? files : [], kind: "team-lead", settings }),
-    toMeta({ name: "Lead", eventId: leadEventId, sourceUrl: /^https?:\/\//.test(tracking.page || "") ? tracking.page : "", row, ip, ua, custom: { content_name: String(SC.name || "Scorecard").replace(/^the\s+/i, ""), content_category: ev.tier, variant: row.variant || "" } }),
+    // ScorecardComplete for every completed scorecard (the GTM's event map; decision 10 counts every completion), with the
+    // browser's event id; never after an opt-out (docs/DECISIONS.md 10, 11)
+    SITE.metaEvents && SITE.metaEvents.complete ? toMeta({ name: SITE.metaEvents.complete, everyone: true, eventId: leadEventId, sourceUrl: /^https?:\/\//.test(tracking.page || "") ? tracking.page : "", row, ip, ua, custom: { content_name: SITE.metaEvents.contentName || "scorecard" } }) : null,
     toGhl({ row, tags: [`scorecard-tier-${ev.tier}`, `scorecard-fit-${ev.fit}`], values: ghlValues(row, ev, links) }),
     toWebhooks("scorecard.completed", webhookData(row, ev, links)),
     toLeadsTable(row, SC.form),
@@ -181,7 +188,7 @@ async function afterSubmit(saved, ev, { links, ip, ua, leadEventId, tracking }) 
   ]);
 }
 
-/* ---------- The eight optional questions ---------- */
+/* ---------- The deepener: the optional questions ---------- */
 async function deepen(req, res, body) {
   const row = await byToken(body.token);
   if (row.status === "sent") return send(res, 409, { error: "Your report has already been sent with the answers it had." });
@@ -216,14 +223,14 @@ async function afterDeepener(saved, ev, links) {
   vars.report_line = fill(files.length ? EMAILS.sharper.reportAttached : EMAILS.sharper.reportLinked, vars);
   await Promise.all([
     instant ? prospectEmail(row, EMAILS.sharper, vars, `sharper-${row.id}-${row.deepened_at}`, links, { buttonUrl: links.report, buttonLabel: EMAILS.sharper.button, attachments: files, kind: "sharper" }) : null,
-    settings.notifications.deepener ? teamNotice(row, { title: fill(EMAILS.team.deepened, { business: row.company, city: row.city, score: ev.score }), rows: teamRows(row, ev), links: [["Open in the admin", links.admin]], kind: "team-deepener", settings }) : null,
+    settings.notifications.deepener ? teamNotice(row, { title: fill(EMAILS.team.deepened, { ...who(row), score: ev.score }), rows: teamRows(row, ev), links: [["Open in the admin", links.admin]], kind: "team-deepener", settings }) : null,
     toGhl({ row, tags: ["scorecard-deepened"], values: ghlValues(row, ev, links) }),
     toWebhooks("scorecard.deepened", webhookData(row, ev, links)),
     store.addEvents([{ visit: row.visit || row.id, variant: row.variant || "", name: "deepener_saved", step: "", data: {}, ...eventDims(row) }]).catch(() => 0)
   ]);
 }
 
-/* ---------- The call ---------- */
+/* ---------- The walkthrough (the call step) ---------- */
 async function book(req, res, body) {
   const row = await byToken(body.token);
   const phone = usPhone(body.phone);
@@ -233,7 +240,9 @@ async function book(req, res, body) {
   if (!win || !dayAllowed(body.slotDay, new Date(), 14)) return send(res, 400, { error: "Please pick a day and a time" });
   const t = body.tracking && typeof body.tracking === "object" ? body.tracking : {};
   const scheduleEventId = EVENT_ID.test(str(t.scheduleEventId, 80)) ? str(t.scheduleEventId, 80) : `schedule-${createHash("sha256").update(`${row.id}|call`).digest("hex").slice(0, 24)}`;
-  const booking = { day: body.slotDay, window: win.v, phone, consentPhone: true, consentText: body.consentText === true, tz: str(body.tz, 64), at: new Date().toISOString(), noticeVersion: SITE.noticeVersion };
+  // The house's address is optional, typed by the buyer for the walkthrough, and kept with the booking only
+  const address = SITE.booking.address ? str(body.address, SITE.booking.address.max || 200) : "";
+  const booking = { day: body.slotDay, window: win.v, phone, ...(address ? { address } : {}), consentPhone: true, consentText: Boolean(SITE.booking.consentText) && body.consentText === true, tz: str(body.tz, 64), at: new Date().toISOString(), noticeVersion: SITE.noticeVersion };
   const saved = await getStore().update(row.id, { booking, booked_at: booking.at, status: ["new", "ready"].includes(row.status) ? "booked" : row.status, tracking: { ...(row.tracking || {}), schedule_event_id: scheduleEventId } });
   const ev = saved.report_result || saved.result;
   const links = linksFor(baseUrl(req, SITE), saved);
@@ -244,10 +253,10 @@ async function book(req, res, body) {
     const settings = await loadSettings(getStore());
     await Promise.all([
       prospectEmail(saved, EMAILS.call, vars, `call-${saved.id}-${booking.day}-${booking.window}`, links, { kind: "call" }),
-      settings.notifications.booking ? teamNotice(saved, { title: fill(EMAILS.team.call, { business: saved.company, city: saved.city, day: bv.day, window: bv.window, hours: bv.hours, phone: phoneLabel(phone) }), rows: teamRows(saved, ev), links: [["Open in the admin", links.admin]], kind: "team-call", settings }) : null,
-      toMeta({ name: "Schedule", eventId: scheduleEventId, sourceUrl: links.results, row: saved, ip, ua, custom: { content_name: "Scorecard call", content_category: saved.tier } }),
+      settings.notifications.booking ? teamNotice(saved, { title: fill(EMAILS.team.call, { ...who(saved), day: bv.day, window: bv.window, hours: bv.hours, phone: phoneLabel(phone) }), rows: teamRows(saved, ev), links: [["Open in the admin", links.admin]], kind: "team-call", settings }) : null,
+      SITE.metaEvents && SITE.metaEvents.schedule ? toMeta({ name: SITE.metaEvents.schedule, eventId: scheduleEventId, sourceUrl: links.results, row: saved, ip, ua, custom: { content_name: SITE.metaEvents.contentName || "scorecard", content_category: "walkthrough" } }) : null,
       toGhl({ row: saved, tags: ["scorecard-booked"], values: { ...ghlValues(saved, ev, links), booking: `${bv.day}, ${bv.window} (${bv.hours})` } }),
-      toWebhooks("scorecard.booked", { ...webhookData(saved, ev, links), booking: { day: booking.day, window: booking.window, hours: win.hint, phone, consentText: booking.consentText, tz: booking.tz } }),
+      toWebhooks("scorecard.booked", { ...webhookData(saved, ev, links), booking: { day: booking.day, window: booking.window, hours: win.hint, phone, address: booking.address || "", consentText: booking.consentText, tz: booking.tz } }),
       getStore().addEvents([{ visit: saved.visit || saved.id, variant: saved.variant || "", name: "booked", step: "", data: {}, ...eventDims(saved) }]).catch(() => 0)
     ]);
   });

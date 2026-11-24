@@ -20,6 +20,7 @@ export const sourcedRe = (rules) => (rules && Array.isArray(rules.sources) && ru
 const SKIP = new Set(["v", "id", "key", "slug", "layout", "type", "kind", "area", "name", "autocomplete", "inputmode", "prefix", "img", "icon",
   "picture", "color", "form", "deepenerForm", "callForm", "qualifiedFit", "ogImage", "hideIf", "when", "fit", "callOnly", "gtm", "tieOrder",
   "strongOrder", "systemSoftwareAnswers", "ruleFlag", "invisible.jobs", "invisible.asked", "invisible.ticket", "averageTicket", "words",
+  "invisible.cost", "invisible.fill", "invisible.reserves", "invisible.horizon", "markets", "cascade", "segmentKey", "metaEvents", "forecastUrl", "mark",
   "averageSource", "endpoints", "legal", "start", "end", "v", "masterUrl", "url", "n", "min", "max", "points", "weight", "team", "rule", "reason"]);
 
 /** Every visitor-facing string, with a key path ("landing.faq.items.0.a"). Keys starting with _ are notes. */

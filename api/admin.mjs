@@ -34,7 +34,7 @@ import { capiConfig, ghlConfig, webhookConfig, toGhl, toWebhooks } from "./_lib/
 import { pdfAvailable } from "./_lib/pdf.mjs";
 import { phoneLabel } from "../lib/booking.mjs";
 import { listView, linksFor, bookingView } from "./_lib/views.mjs";
-import { emailVars, prospectEmail, teamNotice, webhookData, teamRows, placeOf, deviceLabel, duration, scoreEmail } from "./_lib/messages.mjs";
+import { emailVars, prospectEmail, teamNotice, webhookData, teamRows, placeOf, deviceLabel, duration, scoreEmail, who } from "./_lib/messages.mjs";
 import { loadSettings, cleanSettings, cleanOptions, sectionsFor, settingsOf, SECTIONS } from "./_lib/settings.mjs";
 import { makeReport, modelFor, pdfName } from "./_lib/reports.mjs";
 
@@ -218,7 +218,7 @@ async function approve(req, body) {
   const m = reportEmail(row, ev, links, checker, files.length > 0);
   const [emailed] = await Promise.all([
     prospectEmail(row, m.tpl, m.vars, `report-${row.id}-${now}`, links, { buttonUrl: links.report, buttonLabel: m.tpl.button, attachments: files, kind: m.kind }),
-    teamNotice(row, { title: fill(EMAILS.team.sent, { business: row.company, city: row.city, checker }), rows: teamRows(row, ev), links: [["The report", links.report]], kind: "team-sent", settings }),
+    teamNotice(row, { title: fill(EMAILS.team.sent, { ...who(row), checker }), rows: teamRows(row, ev), links: [["The report", links.report]], kind: "team-sent", settings }),
     toGhl({ row, tags: ["scorecard-report-sent"], values: { report_url: links.report, score: ev.score } }),
     toWebhooks("report.sent", { ...webhookData(row, ev, links), report: { checker, sent_at: now, url: links.report, pdf: links.pdf } })
   ]);

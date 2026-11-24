@@ -1,262 +1,273 @@
-// The Visible Work Method: the report's Rempo pages (the owner's request of 2026-11-22). The report shows the outcome a
-// fully visible shop works toward, the four steps that get there (the scorecard's four areas, in the order that fixes
-// causes first), where this shop stands on each step from its own answers, the two ways to run the method (yourself,
-// with the 30-day plan, or with Rempo's team), and the first 30 days with Rempo. lib/report-model.mjs fills it from the
-// answers; lib/report-html.mjs draws it. The service lines are the landing page's own (RempoLandingPage
-// meta/content/copy.json) and Deliverable 1's "Rempo features that close the gap". The claim rules apply here too
-// (tools/copy-lint.mjs): the method describes what the shop does and what Rempo's team runs, never a number of reviews
-// or a ranking, and no price or term while the offer is undecided.
+// The Room-by-Room Underwrite: the report's RoomIQ pages (spec 5, docs/spec/5-method.md). The report shows the outcome
+// an evidence-first underwrite works toward, the five steps that get there (the scorecard's five areas, in causal
+// order), where this investor stands on each step from their own answers, the two ways to run the method (by hand, with
+// the 30-day plan, or with RoomIQ's Free plan), and the first 30 days with RoomIQ. lib/report-model.mjs fills it from the
+// answers; lib/report-html.mjs draws it.
+//
+// The product lines name only what the product shows on screen (GTM-BRIEF.md Section 3, features marked Seen or Partly
+// seen), in the GTM's write-instead wording (Section 5): no accuracy, income or return claims, and the deal math is
+// "informational only, not financial or lending advice". No price, trial or term: the next step is the Free plan.
 export default {
-  // The note on the overview page. The admin's Settings can replace the body with the team's own letter; a lead's
-  // page can add a personal note under it.
+  // The note at the front. The admin's Settings can replace the body with the team's own letter; a lead's page can add
+  // a personal note under it
   letter: {
     title: "A note before you read",
     body: [
-      "Thank you for taking the Invisible Work Scorecard, {first_name}. Everything in this report comes from your answers{profile_clause}.",
-      "Read the page on {primary_bottleneck} first: it is where the next homeowner loses sight of your work.",
-      "The Visible Work Method in the middle of this report is how those gaps close. Run it yourself with the 30-day plan, or let our team run it for you."
+      "Thank you for taking the First Deal Risk Scorecard, {first_name}. Everything in this report comes from your own answers.",
+      "Read the page on {primary_bottleneck} first: it's where your plan borrows the most.",
+      "The Room-by-Room Underwrite in the middle of this report is how borrowed numbers become evidence. Run it by hand with the 30-day plan, or with RoomIQ's Free plan."
     ],
-    profileClause: " and your public Google profile",
-    noteTitle: "For {business}",
-    signoff: "The Rempo team",
-    signed: "{name}, Rempo",
-    signedTitle: "{name}, {title}, Rempo",
+    profileClause: "",
+    noteTitle: "For you, {first_name}",
+    signoff: "The RoomIQ team",
+    signed: "{name}, RoomIQ",
+    signedTitle: "{name}, {title}, RoomIQ",
     kicker: "Before you start",
     contentsTitle: "In this report",
     contents: {
-      invisible: "Your Invisible Work: the customers who never get asked, and what that work is worth",
-      top3: "Next to the Top Three: your public profile, measure by measure",
-      top3Coming: "Next to the Top Three: added within one business day",
-      overall: "Your Overall Score: your four areas, and what they mean",
+      invisible: "Your First Six Months: your lease-up gap, from your own numbers",
+      checks: "Three Checks RoomIQ Can't Do for You: zoning, financing and insurance",
+      overall: "Your Overall Score: your five areas, and what they mean",
       areas: "Your strongest and weakest areas, with what to do this week",
-      method: "The Visible Work Method: four steps, and where you stand on each",
-      service: "Two ways to run it, and your first 30 days with Rempo",
+      method: "The Room-by-Room Underwrite: five steps, and where you stand on each",
+      service: "Two ways to run it, and your first 30 days with RoomIQ",
       playbook: "The 30-day plan: a guide for each area, checklists and a weekly tracker",
       next: "Your next step"
     }
   },
 
-  // When the report goes out right after the quiz (site.reportDelivery "instant"): what the team adds next
+  // Nothing waits on a person in this funnel (site.enrichment false): kept for the template's shape, never shown
   coming: {
-    title: "Coming within one business day",
-    body: "Someone on our team will read your public Google profile next to the three shops a homeowner sees first for {service} in {city}. Then we'll email you this report again, with that comparison added."
+    title: "Coming next",
+    body: "Nothing in this report waits on our team: everything in it comes from your answers."
   },
 
   overview: {
-    // The overview page's last two sentences, built for the pages this report carries (lib/report-model.mjs): what
-    // comes next, then the rest in order ("Then a, b, and c.")
-    nextTop3: "Next come your Visibility Score, the work that never reaches Google, and how you compare with the top three near you.",
-    nextNoTop3: "Next come your Visibility Score and the work that never reaches Google.",
+    // The overview page's last two sentences, built for the pages this report carries
+    nextTop3: "Next come your Deal Readiness Score, your first six months and three checks RoomIQ can't do for you.",
+    nextNoTop3: "Next come your Deal Readiness Score, your first six months and three checks RoomIQ can't do for you.",
     then: "Then {items}.",
     items: {
       areas: "your strongest and weakest areas",
-      method: "the Visible Work Method that closes the gaps",
-      service: "how Rempo would run it for you",
-      playbook: "a 30-day plan you can run yourself"
+      method: "the Room-by-Room Underwrite that closes the gaps",
+      service: "how to run it with RoomIQ's Free plan",
+      playbook: "a 30-day plan you can run by hand"
     }
   },
 
   intro: {
-    kicker: "The Visible Work Method",
-    h1: "What a fully visible shop does",
-    lead: "Keeping your work visible on Google isn't more marketing. It is one habit, run the same way every week, busy or slow, with someone who checks it.",
+    kicker: "The Room-by-Room Underwrite",
+    h1: "What an evidence-first underwrite looks like",
+    lead: "A first deal goes wrong at the numbers nobody checked. The Room-by-Room Underwrite checks them in order, from the rent per room to the cushion, before the offer.",
     outcomeTitle: "The outcome",
-    outcome: "Every customer you finish a job for gets the same chance to vouch for you on Google, and every review gets an answer. A homeowner who looks you up sees an owner who asks everyone and answers everyone.",
-    stepsTitle: "Four steps, in this order",
-    chain: "The order matters. Asking decides how many customers get the chance. Steady asking decides how recent your reviews look. Replies decide how the next homeowner reads them. Fix the first weak link before the next.",
-    rhythmTitle: "And one monthly count",
-    rhythm: "Requests sent, reviews in, replies posted. What gets counted keeps running, and a slip shows within a month instead of a season.",
-    todayLabel: "Your shop today",
+    outcome: "An offer where every number rests on evidence you can check: the rent per room, how fast rooms fill, the competition, the room mix and the reserves.",
+    stepsTitle: "Five steps, in this order",
+    chain: "The order matters. The rent and the fill time are the numbers every other one rests on. The competition sets how hard rooms are to fill. The room mix is priced from rents and fill, and the cushion is sized from all of them.",
+    rhythmTitle: "And one recheck before the offer",
+    rhythm: "Rents, fill speed and supply move with the seasons and with new homes. Recheck them the week you make the offer.",
+    todayLabel: "Your plan today",
     startHere: "Start here"
   },
 
   steps: {
-    coverage: {
-      n: 1, t: "Ask every job",
-      standard: "One request after every finished job with a phone or email, the same honest request for every customer.",
-      service: "A request after every completed job, from the job software you already use. Our team does the setup, and every customer gets the same request."
+    rent: {
+      n: 1, t: "Price each room",
+      standard: "A rent for each room from rooms nearby with the same bath type and size, kept to the rooms that actually filled.",
+      service: "RoomIQ shows rent and occupancy split by bath type and size for comparable properties, and a revenue estimate for the address with its comps."
     },
-    system: {
-      n: 2, t: "Run it without remembering",
-      standard: "The request goes out when the job closes, with one reminder a few days later, then it stops. Someone checks the numbers every week.",
-      service: "Requests go out when a job closes, run by our team, with one reminder, then we stop. Every request shows in your monthly report."
+    fill: {
+      n: 2, t: "Time the fill",
+      standard: "Lease-up months from how fast comparable rooms nearby filled, with a slower case, and a launch month timed to the seasons.",
+      service: "RoomIQ shows observed occupancy over 7, 30 and 90-day windows for comparable properties, and when occupancy and fill speed peak in the market."
     },
-    freshness: {
-      n: 3, t: "Keep it steady",
-      standard: "Requests go out every week you work, busy season included, and your website shows your newest Google reviews.",
-      service: "Requests every week you work, watched by our team, and your recent Google reviews shown on your website."
+    supply: {
+      n: 3, t: "Count the competition",
+      standard: "Every co-living home within about 3 miles counted, with its open rooms, new listings and rent cuts.",
+      service: "RoomIQ counts and maps active co-living properties within about 3 miles of any address, with listing status on its supply map."
     },
-    replies: {
-      n: 4, t: "Answer every review",
-      standard: "A reply written for what each customer said, within two days. Hard reviews reach you the same day, so you can call first.",
-      service: "A reply written for each review, and an alert the day a hard review posts, so you can call the customer first."
+    mix: {
+      n: 4, t: "Price the bath mix",
+      standard: "The bath mix and the room count priced from private and shared-bath rooms nearby, and checked against the city's rule.",
+      service: "RoomIQ's forecast takes the room mix you plan, private-bath rooms included, and prints the formula behind the estimate."
+    },
+    reserves: {
+      n: 5, t: "Size the cushion",
+      standard: "Reserves sized from the lease-up months the evidence supports, plus a slower case, with the deal math run on your own costs.",
+      service: "RoomIQ carries the estimate into cash flow, cash-on-cash, DSCR and cap rate under your own assumptions. Informational only, not financial or lending advice."
     }
   },
 
   // "Where you stand on each step": today, from the answers (each answer's own sentence), next to the method's standard
-  // and how Rempo runs it. Only the questions the owner answered show.
+  // and what RoomIQ shows. Only the questions the investor answered show
   gap: {
-    kicker: "The Visible Work Method",
-    h1: "Where {business} stands on each step",
-    lead: "Each step below starts from your own answers, then shows the method's standard and how our team runs it for you.",
+    kicker: "The Room-by-Room Underwrite",
+    h1: "Where your plan stands on each step",
+    lead: "Each step below starts from your own answers, then shows the method's standard and what RoomIQ shows for it.",
     step: "Step {n}: {t}",
-    columns: { today: "Today, from your answers", standard: "The method's standard", service: "How Rempo runs it" },
+    columns: { today: "Today, from your answers", standard: "The method's standard", service: "What RoomIQ shows" },
     chips: { fix: "Fix first", low: "Gap", medium: "Partly there", high: "In place" },
-    fromProfile: "From your public profile",
+    fromProfile: "From outside data",
     today: {
-      asked10: {
-        all: "All 10 of your last 10 customers were asked for a review.",
-        "7to9": "7 to 9 of your last 10 customers were asked for a review.",
-        "4to6": "4 to 6 of your last 10 customers were asked for a review.",
-        "1to3": "1 to 3 of your last 10 customers were asked for a review.",
-        none: "None of your last 10 customers were asked for a review.",
-        unsure: "You weren't sure how many of your last 10 customers were asked."
+      rentsource: {
+        none: "You don't have a rent per room yet.",
+        calculator: "Your rent per room comes from a platform's earnings calculator.",
+        divide: "Your rent per room is a whole-home rent divided by bedrooms.",
+        listings: "Your rent comes from asking rents on room listings.",
+        comps: "Your rent comes from comps of nearby rooms, with how fast they filled."
       },
-      d1: {
-        every: "Every customer with a phone or email gets asked.",
-        most: "Most customers get asked, except on busy days.",
-        happy: "Mostly the customers who seemed happy get asked, which Google's review policy doesn't allow.",
-        remember: "Whoever someone remembers gets asked.",
-        hardly: "Hardly anyone gets asked."
+      rentperroom: {
+        notyet: "You don't have a rent for each room yet.",
+        same: "Every room has the same rent.",
+        split: "You have a rough split between private and shared-bath rooms.",
+        perroom: "Each room has its own rent, from nearby rooms with the same bath type and size."
       },
-      d2: {
-        every: "Every job record has the customer's mobile number or email.",
-        most: "Most job records have the customer's mobile number or email.",
-        half: "About half your job records have a mobile number or email.",
-        few: "Only a few job records have a mobile number or email.",
-        unsure: "You weren't sure how many job records have a mobile number or email."
+      rentcomps: {
+        none: "You weren't sure how many nearby rooms your rent rests on.",
+        few: "Your rent rests on 1 or 2 nearby rooms.",
+        some: "Your rent rests on 3 to 9 nearby rooms.",
+        many: "Your rent rests on 10 or more nearby rooms."
       },
-      asks: {
-        tool: "A review tool sends a request after every job, plus a reminder.",
-        software: "Your job software sends a request when the job closes.",
-        techs: "Your techs ask in person at the end of the job.",
-        remember: "Someone sends the link when they remember.",
-        none: "Customers don't really get asked yet."
+      fillsource: {
+        none: "You haven't looked at how fast rooms fill nearby.",
+        vacancy: "Your plan assumes a vacancy percentage.",
+        stories: "Your sense of fill speed comes from host stories and forum posts.",
+        reports: "Your sense of fill speed comes from a platform's market reports.",
+        observed: "Your fill speed comes from observed fill times of comparable rooms nearby."
       },
-      d3: {
-        one: "One reminder goes out a few days later, then it stops.",
-        several: "Several reminders go out until a customer leaves one.",
-        resend: "Someone re-sends the request if they remember.",
-        nothing: "Nothing happens after the first request, or you weren't sure."
+      occsource: {
+        none: "Your plan has no occupancy figure yet.",
+        rule: "Your occupancy figure is a rule of thumb.",
+        average: "Your occupancy figure is a platform's market average.",
+        observed: "Your occupancy figure comes from comparable rooms nearby."
       },
-      d4: {
-        runs: "Asking keeps running when the person who handles it is out.",
-        covers: "Someone else covers asking when the person who handles it is out.",
-        slows: "Asking slows down when the person who handles it is out.",
-        stops: "Asking stops when the person who handles it is out."
+      launch: {
+        notyet: "You haven't picked a launch month.",
+        whenever: "You'll start renting whenever the work is done.",
+        heard: "You plan to launch in a season you've heard is busy.",
+        timed: "You plan to launch when rooms nearby fill fastest."
       },
-      newest: {
-        week: "Your newest Google review came in this week.",
-        month: "Your newest Google review came in earlier this month.",
-        "1to3": "Your newest Google review is 1 to 3 months old.",
-        over3: "Your newest Google review is more than 3 months old.",
-        unsure: "You weren't sure when your newest Google review came in."
+      supply: {
+        none: "You don't know how many co-living homes compete nearby.",
+        some: "You think some co-living homes compete nearby.",
+        counted: "You counted the co-living listings nearby.",
+        known: "You know how many co-living homes compete nearby, and roughly how full they are."
       },
-      d5: {
-        yes: "In your busiest weeks, every job is still asked.",
-        mostly: "In your busiest weeks, asking mostly keeps up.",
-        drops: "Asking drops off when you're slammed.",
-        unsure: "You weren't sure whether asking keeps up in busy weeks."
+      newsupply: {
+        none: "You don't know whether new co-living homes opened nearby.",
+        think: "You think a few new co-living homes opened nearby.",
+        checked: "You checked the current co-living listings nearby.",
+        track: "You track the homes that open and close nearby."
       },
-      d6: {
-        current: "Your website shows recent Google reviews, and they stay current.",
-        manual: "Your website shows Google reviews that someone updates by hand.",
-        no: "Your website doesn't show your Google reviews yet.",
-        nosite: "You don't have a website yet.",
-        unsure: "You weren't sure whether your website shows your reviews."
+      pricedrops: {
+        unsure: "You don't know whether rooms nearby cut their rents.",
+        heard: "You've heard that rooms nearby cut their rents.",
+        seen: "You've seen a few rooms nearby cut their rents.",
+        checked: "You've checked recent price drops on comparable rooms."
       },
-      replies: {
-        all: "You reply to every review within two days.",
-        most: "You reply to most of your reviews.",
-        some: "You reply to some of your reviews.",
-        rarely: "You rarely reply to reviews.",
-        never: "You don't reply to reviews yet."
+      bathmix: {
+        notyet: "You haven't decided the bath mix.",
+        keep: "You're keeping the current bathrooms.",
+        adding: "You're adding a bathroom because it seems worth it.",
+        modeled: "You modeled private against shared-bath rents nearby."
       },
-      d7: {
-        sameday: "You hear about a 1, 2 or 3-star review the same day.",
-        week: "You hear about a 1, 2 or 3-star review within a week.",
-        mention: "You hear about a 1, 2 or 3-star review when someone mentions it.",
-        later: "You hear about a 1, 2 or 3-star review much later, or you weren't sure."
+      roomcount: {
+        notyet: "You haven't decided how many rooms to rent.",
+        max: "You plan to rent as many rooms as the house can fit.",
+        current: "You plan to rent the current bedroom count.",
+        checked: "Your room count is a layout checked against rents nearby."
       },
-      d8: {
-        personal: "Each reply is written for what the customer said.",
-        standard: "Replies reuse a few standard lines.",
-        badonly: "Only the bad reviews get a reply.",
-        unsure: "You weren't sure how replies are written."
+      garage: {
+        notyet: "You haven't priced the garage or extra space.",
+        convert: "You plan to turn the garage or extra space into a room.",
+        keep: "You plan to keep the garage or extra space as it is.",
+        compared: "You priced the garage or extra space both ways.",
+        na: "The house has no garage or extra space."
+      },
+      slowplan: {
+        none: "You haven't planned for a slow lease-up.",
+        lower: "If lease-up is slow, you'd lower rents.",
+        weeks: "You have a few weeks of reserves for a slow lease-up.",
+        sized: "Your reserves are sized from how comparable launches nearby filled."
+      },
+      dealmath: {
+        none: "You haven't run the deal math yet.",
+        defaults: "Your deal math uses a calculator's default settings.",
+        mine: "Your deal math uses your own estimates.",
+        evidence: "Your deal math uses rents and occupancy of comparable rooms, with your own costs."
+      },
+      stress: {
+        no: "Your deal math doesn't test a slower lease-up.",
+        vacancy: "Your deal math adds a vacancy rate on top.",
+        onecase: "Your deal math tests one slower case.",
+        comps: "Your deal math tests the lease-up against how comparable launches filled."
       }
     },
-    // From the public profile, when the team has read it
-    profile: {
-      rate: "About {rate} Google reviews came in per 100 jobs over the last 90 days.",
-      recent: "{reviews_90} Google reviews came in over the last 90 days, against {top3_reviews_90} each for the top three.",
-      newest: "Your newest Google review came in {newest}.",
-      replied: "{replied} of your last {sampled} reviews have a reply."
-    }
+    // Outside data (none in this funnel)
+    profile: {}
   },
 
-  // "Two ways to run the method": the playbook, or Rempo's team
+  // "Two ways to run the method": by hand with the playbook, or with RoomIQ's Free plan
   ways: {
-    kicker: "The Visible Work Method",
+    kicker: "The Room-by-Room Underwrite",
     h1: "Two ways to run the method",
-    lead: "The method works the same either way. The difference is who runs it every week, including the weeks you're slammed.",
+    lead: "The method works the same either way. The difference is where the evidence comes from: listings you track by hand, or RoomIQ's observed rooms.",
     self: {
-      title: "Run it yourself",
-      body: "The 30-day plan in this report is the method, step by step, and it is yours to keep.",
+      title: "Run it by hand",
+      body: "The 30-day plan in this report is the method, step by step, and it's yours to keep.",
       bullets: [
-        "A request after every finished job, sent by someone in your office",
-        "The weekly checks in this plan: about 40 minutes a week",
-        "A reply written for every review, within two days",
-        "Someone who covers it when that person is out"
+        "A list of ten rooms near the house, by bath type and size",
+        "A two-week fill watch on five of them",
+        "A count of the co-living homes within about 3 miles",
+        "Your own deal math, with a slower case"
       ],
-      note: "Rather run it yourself? A review tool costs less, and we'll tell you so."
+      note: "Rather do it by hand? The plan works, and it's yours to keep."
     },
     service: {
-      title: "Rempo runs it for you",
-      body: "Every completed job asked. Every review answered. You approve your messages once, then our team runs it.",
-      startTitle: "Starting is four things, once",
+      title: "Run it with RoomIQ",
+      body: "The same five steps for one address, in one place, with the evidence behind each number shown.",
+      startTitle: "Starting takes one address",
       start: [
-        { t: "Connect your job software.", b: "Our team handles the setup." },
-        { t: "Give Google profile access.", b: "So every review gets its reply." },
-        { t: "Send one team photo.", b: "It goes on every request." },
-        { t: "Approve your texting details.", b: "Email starts first. Texts follow once registration clears, usually about a week." }
+        { t: "Pick your market.", b: "The Free plan covers one main market." },
+        { t: "Type the address.", b: "Add the bedrooms, the baths and which rooms get a private bath." },
+        { t: "Run the forecast.", b: "Read the formula, the comps and the confidence label." },
+        { t: "Carry it into the deal math.", b: "Cash flow under your own costs. Informational only." }
       ],
-      listTitle: "Done for you, every month",
+      listTitle: "What you see",
       list: [
-        "Every completed job asked",
-        "One reminder, then we stop",
-        "Every review answered",
-        "The same request to everyone",
-        "Recent reviews on your website",
-        "An alert the day a bad review posts",
-        "A monthly report, sent to you"
+        "Monthly room revenue for the address, with the formula printed",
+        "Support and confidence labels, and how far away the comps are",
+        "Rent and occupancy by bath type and size for comparable properties",
+        "Active co-living properties within about 3 miles, mapped",
+        "When occupancy and fill speed peak in the market",
+        "Cash flow, cash-on-cash, DSCR and cap rate under your own assumptions"
       ]
     },
-    wontTitle: "What we won't do",
+    wontTitle: "What RoomIQ doesn't do",
     wont: [
-      { t: "We don't remove reviews.", b: "Every review gets a calm reply instead." },
-      { t: "We don't screen out unhappy customers.", b: "Everyone gets the same honest request." },
-      { t: "We don't promise counts or rankings.", b: "We track both and show you every month." }
+      { t: "No zoning check.", b: "Rules on unrelated adults differ by city: ask the city or an attorney." },
+      { t: "No financing or insurance.", b: "Talk early to a lender and an insurer who know room rentals." },
+      { t: "No promises.", b: "An estimate shows its working; it doesn't guarantee rent or occupancy." }
     ],
-    rules: "No rewards for reviews. No suggested words. Google's rules, and ours."
+    rules: "Based on observed rents and occupancy, not collected payments. Thin evidence is labeled Thin."
   },
 
-  // "Your first 30 days with Rempo": what happens, in order, if the owner picks the service
+  // "Your first 30 days with RoomIQ": the method, week by week, on the Free plan
   days: {
-    kicker: "The Visible Work Method",
-    h1: "Your first 30 days with Rempo",
-    lead: "Here is what happens, in order, if {business} lets our team run the method.",
+    kicker: "The Room-by-Room Underwrite",
+    h1: "Your first 30 days with RoomIQ",
+    lead: "Here is the method, week by week, with RoomIQ's Free plan.",
     phases: [
-      { t: "Week 1: four things, once", b: "You connect your job software, give Google profile access, send one team photo and approve your texting details. You approve your messages once; our team does the setup." },
-      { t: "Requests start", b: "Email requests start once your software is connected. Texts follow once carrier registration clears, usually about a week." },
-      { t: "Every week after", b: "Every completed job asked, with one reminder, then we stop. Every review answered. An alert the day a hard review posts, so you can call the customer first." },
-      { t: "Day 30: your first monthly report", b: "Requests sent, reviews in, replies posted, and calls from your Google profile. Take the scorecard again and compare." }
+      { t: "Week 1: the forecast on your address", b: "Run the free forecast on the house. Read the formula under the number, the support and confidence labels, and how far away the comps sit." },
+      { t: "Week 2: the rooms nearby", b: "Open comparable properties in the Property Analyzer: rent and occupancy by bath type and size, and their 7, 30 and 90-day windows." },
+      { t: "Week 3: the competition and the seasons", b: "Check the co-living properties within about 3 miles on the map, and when occupancy and fill speed peak, before you pick a launch month." },
+      { t: "Week 4: the mix and the math", b: "Re-run the forecast with the room mix you plan, carry it into cash flow under your own costs, size the cushion, then decide." }
     ],
-    yourStart: "For {business}, we'd start with {primary_bottleneck}. {fit_line}",
-    locations: "You run {profiles} Google profiles: each location gets its own requests and its own replies.",
-    paper: "Your jobs are on paper or in spreadsheets, so the first step is a call to work out how finished jobs reach us.",
-    monthlyTitle: "What you see every month",
-    monthly: "A report sent to you: requests sent, reviews in, replies posted, and calls from your Google profile.",
-    cta: "Pick a time for a 15-minute call, and we'll walk through this plan for {business}:",
-    ctaBooked: "Your call is booked: {day}, {window}. We'll walk through this plan for {business} then."
+    yourStart: "For your plan, we'd start with {primary_bottleneck}. {fit_line}",
+    locations: "",
+    paper: "You run more than ten houses, so the first step is a walkthrough to see what fits.",
+    monthlyTitle: "What the Free plan includes",
+    monthly: "One main market, 90 days of history, 5 Property Analyzer opens and 3 revenue estimates a month, with no card needed.",
+    cta: "Want to go through it together first? Book a 20-minute walkthrough on your address:",
+    ctaBooked: "Your walkthrough is booked: {day}, {window}. We'll go through this plan on your address then."
   }
 };

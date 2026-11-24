@@ -1,252 +1,222 @@
-// The PDF report's dynamic pages (Deliverable 3, docs/spec/3-report-dynamic-content.md). Each page shows one variant,
-// chosen from the answers and the public profile by lib/report-model.mjs. Words in braces are fields (the field
-// dictionary is at the end of the spec, and in lib/report-model.mjs).
+// The PDF report's dynamic pages (spec 3, docs/spec/3-report-dynamic-content.md). Each page shows one variant, chosen
+// from the answers by lib/report-model.mjs. Words in braces are fields (the field dictionary is at the end of the spec,
+// and in lib/report-model.mjs). The checks page's words are content/checks.mjs.
+import CHECKS from "./checks.mjs";
+
 export default {
-  title: "The Invisible Work Scorecard Report",
+  title: "The First Deal Risk Scorecard Report",
 
   cover: {
-    title: "The Invisible Work Scorecard Report",
-    subtitle: "How much of {business}'s work a homeowner can see on Google. Scored across four areas of how your shop asks for and answers reviews, next to the three shops a homeowner sees first near you.",
+    title: "The First Deal Risk Scorecard Report",
+    subtitle: "How much of the plan for your {deal} rests on evidence you can check, scored across five areas, with your first six months priced from your own numbers.",
     preparedFor: "Prepared for",
-    prepared: "{first_name} {last_name}, {business}, {city}",
-    preparedNoLast: "{first_name}, {business}, {city}",
-    checked: "Checked by {checker_first_name} at Rempo"
+    prepared: "{first_name} {last_name}, {market}",
+    preparedNoLast: "{first_name}, {market}",
+    checked: "Checked by {checker_first_name} at RoomIQ"
   },
 
   overview: {
     title: "Your Report Overview",
-    heading: "Thank you for taking the Invisible Work Scorecard",
-    intro: "Your report scores {business} in four areas of how your shop asks for and answers Google reviews. A low score is not a verdict on your work: it means a habit or a system has gaps, and those are fixable. A high score means most of your customers get the chance to vouch for you, where the next homeowner looks. Next come your Visibility Score, the work that never reaches Google, and how you compare with the top three near you. Then your strongest and weakest areas, and a 30-day plan you can run yourself.",
-    sub: "We have scored you against the following key areas"
+    heading: "Thank you for taking the First Deal Risk Scorecard",
+    intro: "Your report scores your plan in five areas: where your rent comes from, how fast rooms fill, the competition nearby, the room mix and your reserves. A low score isn't a verdict on the deal: it means a number is borrowed, and borrowed numbers can be checked before an offer. A high score means the plan rests on evidence. Next come your Deal Readiness Score and your first six months.",
+    sub: "Your five areas"
   },
 
+  // Your First Six Months: the lease-up gap (spec 1, section 4), one variant per kind
   invisible: {
-    title: "Your Invisible Work",
-    known: {
-      h: "{unasked} customers a year never get asked",
-      body: "You told us you finish {jobs_band} jobs a week, and that {asked_band} of your last 10 customers were asked for a review. At the low end of those ranges, at least {unasked} customers a year finish a job with you without the chance to vouch for you on Google.",
-      value: "At a {ticket} ticket, that is at least {work_value} of finished work with nothing on Google to show for it."
-    },
-    all: {
-      h: "Every customer gets asked",
-      body: "You told us all 10 of your last 10 customers were asked for a review. That puts you ahead on the part that matters most: every happy customer gets the chance to vouch for you. The rest of this page checks how that shows up on your public profile."
-    },
-    unsure: {
-      h: "The number we measured for you",
-      body: "You weren't sure how many of your customers get asked. Most owners aren't, because nobody counts it. So we measured what we could from your public profile, below. Start counting this week, and take the scorecard again in 30 days."
-    },
-    // Not worded in the spec: jobs "Not sure" with a known asked count. The same idea, about the jobs
-    jobsUnsure: {
-      h: "The number we measured for you",
-      body: "You weren't sure how many jobs you finish in a typical week. Most owners have to look it up, because nobody counts it. So we measured what we could from your public profile, below. Count this week's jobs, and take the scorecard again in 30 days."
-    },
+    title: "Your First Six Months",
+    gap: { h: "Your reserves run out {uncovered_months} early", body: "You expect the rooms to take {fill_months} to fill, and your reserves carry {reserve_months} of costs. At {cost} a month, the {uncovered_months} your reserves don't cover come to at least {gap}." },
+    exact: { h: "Your reserves just cover your plan", body: "You expect the rooms to take {fill_months} to fill, and your reserves carry {reserve_months} of costs, with nothing to spare. Each month past your plan costs at least {cost}." },
+    covered: { h: "Your reserves cover your plan", body: "You expect the rooms to take {fill_months} to fill, and your reserves carry {reserve_months} of costs: {spare_months} to spare. Each month past your plan costs at least {cost}." },
+    costOnly: { h: "Your lease-up costs at least {exposure}", body: "You expect the rooms to take {fill_months} to fill, at {cost} a month before rent comes in. You weren't sure how long your reserves would last, so check them against that number." },
+    perMonth: { h: "Every empty month costs at least {cost}", body: "That's what the house costs each month before rent comes in. Your plan doesn't say yet how many months lease-up will take, and the Fill Speed guide shows how to find out." },
+    monthsShort: { h: "Your reserves cover {reserve_months} of {fill_months}", body: "You expect the rooms to take {fill_months} to fill, and your reserves carry {reserve_months} of costs. Work out your monthly carrying cost next: it turns the other {uncovered_months} into dollars." },
+    monthsCovered: { h: "Your reserves cover your lease-up months", body: "You expect the rooms to take {fill_months} to fill, and your reserves carry {reserve_months} of costs. Work out your monthly carrying cost next: it turns months into dollars." },
+    none: { h: "The number to find first", body: "You're not sure yet what the house will cost each month while rooms fill, or how long that takes. That's common on a first deal. The Lease-up Reserves guide starts there." },
     box: {
       title: "How we worked it out",
-      line1: "{jobs} jobs a week × 50 working weeks × {not_asked} of 10 customers not asked = {unasked} customers a year.",
-      line2: "{unasked} customers × a {ticket} ticket = {work_value}.",
-      line3: "We used the low end of every range you picked, so the real figures are at least this large.",
-      line4: "You weren't sure of your ticket, so we used the average job value for {service} from Angi, {ticket}.",
-      line5: "This is the value of work you have already done. It is not a forecast, and it is not a promise of anything."
+      cost: "Monthly carrying cost: {cost}, the low end of the range you picked.",
+      fill: "Months to fill: {fill_months}, as you expect them.",
+      reserves: "Reserves: {reserve_months} of costs, the high end of the range you picked.",
+      gap: "{cost} × ({fill_months} minus {reserve_months}) = {gap}.",
+      exposure: "{cost} × {fill_months} = {exposure}.",
+      low: "Costs at the low end and reserves at the high end, so the real figure is at least this large."
     },
-    rate: {
-      title: "Your reviews per 100 jobs",
-      line1: "In the last 90 days you finished about {jobs_90} jobs, and {reviews_90} Google reviews came in. That is about {rate} reviews per 100 jobs.",
-      line2: "Over the same 90 days, the top three near you received {top3_reviews_90} reviews each, on average.",
-      behind: "You finish the work. Fewer of your customers get the chance to say so where homeowners look.",
-      level: "You're keeping pace with the top three on recent reviews. The next gains are in your replies and in keeping the pace through busy season.",
-      jobsUnknown: "Over the last 90 days, {reviews_90} Google reviews came in, against {top3_reviews_90} each for the top three near you, on average.",
-      footnote: "Reviews per 100 jobs counts public Google reviews against the jobs you told us you finish. It measures how many customers vouch for you, not how good the work was."
-    },
-    months: {
-      title: "Your reviews, month by month",
-      caption: "Google reviews that came in each month over the last 12 months, from your public profile.",
-      dipD5: "You told us asking drops off when you're slammed. Your reviews show the same pattern: {low_months} were among your quietest months on Google. If those were busy months for you, the weeks with the most customers were the weeks the fewest got asked.",
-      dip: "{low_months} were among your quietest months on Google. If those were busy months for you, that is usually when asking slips.",
-      steady: "Your reviews come in at a fairly even pace through the year. Keep it that way through your next busy season, when asking is most likely to slip.",
-      away: "You told us asking slows down or stops when the person who handles it is out. During a two-week absence, about {jobs_x2} customers would go unasked."
+    strip: "Your first six months, as you plan them",
+    legend: { covered: "Lease-up, covered by reserves", uncovered: "Lease-up, not covered", unknown: "Lease-up", full: "Rooms full, as planned" },
+    // The slower case: the same plan with lease-up taking twice as long (the playbook's own slower case)
+    slowerTitle: "The slower case",
+    slower: "If lease-up took twice as long as you expect, {slower_months}, your reserves would leave at least {slower_gap} uncovered.",
+    slowerCovered: "If lease-up took twice as long as you expect, {slower_months}, your reserves would still cover it.",
+    means: {
+      title: "What this number is, and what it isn't",
+      body: "It's your own plan, priced: what the house costs while rooms fill, against the cushion you hold. It isn't a forecast. It treats each lease-up month as a month the house costs its full carrying cost; rooms that fill sooner bring rent in sooner."
     }
   },
 
+  // Three checks RoomIQ can't do for you (content/checks.mjs)
+  checks: CHECKS,
+
+  // Next to the top three: the template's enrichment page, off in this funnel (site.enrichment false), never shown
   top3: {
-    title: "Next to the Top Three",
-    h: "{business}, next to the top three for {service} in {city}",
-    intro: "We searched {service} in {city} on {search_date} and read the three companies that came up first. Here is how your public profile compares, measure by measure. Run the same search yourself to check it.",
-    columns: { measure: "Measure", you: "{business}", them: "Top three average", read: "Read" },
-    measures: {
-      rating: "Star rating",
-      count: "Total Google reviews",
-      reviews90: "Reviews in the last 90 days",
-      newest: "Newest review",
-      replies: "Replies on the last 30 reviews",
-      profile: "Profile completeness (5 checks)"
-    },
-    reads: {
-      rating: {
-        ahead: "Your rating is at or above theirs. Asking every customer is how it stays honest and current.",
-        behind: "Your rating is below theirs. The only way to change it within Google's rules is to ask every customer, not only the happy ones."
-      },
-      count: {
-        ahead: "You have as many reviews as they do, or more.",
-        behind: "Their review count is higher. A count like theirs builds from asking after every job, week after week."
-      },
-      reviews90: {
-        ahead: "Your recent pace matches or beats theirs.",
-        behind: "They are adding reviews faster right now. This is the gap a homeowner notices first."
-      },
-      newest: {
-        ahead: "Your newest review is as recent as theirs.",
-        behind: "Their newest reviews are more recent. 74% of consumers look for reviews from the last three months (BrightLocal 2026)."
-      },
-      replies: {
-        ahead: "You reply as often as they do, or more.",
-        behind: "They reply to more of their reviews. 80% of consumers are more likely to use a business that replies to all its reviews (BrightLocal 2026)."
-      },
-      profile: {
-        ahead: "Your profile shows everything theirs does.",
-        behind: "Your profile is missing {missing_items}, which theirs show."
-      }
-    },
-    // Chips in the table: a status never shows by colour alone
+    title: "Next to the Market",
+    h: "",
+    intro: "",
+    columns: { measure: "Measure", you: "You", them: "Market", read: "Read" },
+    measures: {},
+    reads: {},
     chips: { ahead: "Ahead or level", behind: "Behind" },
-    // The five profile checks, in the words the "missing" line uses
-    profileChecks: {
-      hours: "your hours",
-      services: "your services",
-      photos: "photos from the last 90 days",
-      description: "a description",
-      categories: "your categories"
-    },
-    themesTitle: "Complaint themes",
-    themesFound: "{theme_count} of your last 30 reviews mention {theme}.",
-    themesNone: "No complaint theme repeats in your last 30 reviews.",
-    themesRule: "We report themes and counts only, never a reviewer's name or words.",
-    cushionTitle: "Your star cushion",
-    cushionAbove: "Your star cushion: {k} one-star reviews would take your rating under 4.5. 31% of consumers only use businesses rated 4.5 stars or higher, up from 17% (BrightLocal 2026). The more customers you ask, the bigger that cushion can grow.",
-    cushionBelow: "You are {m} five-star reviews in a row from a 4.5 rating. 31% of consumers only use businesses rated 4.5 stars or higher, up from 17% (BrightLocal 2026). Whether a customer leaves a review is up to them; asking every one of them is the part you control.",
-    footnote: "Public profile facts only, read on {search_date}.",
-    pending: "Your public profile is read by a person before this page is filled in."
+    profileChecks: {},
+    themesTitle: "",
+    themesFound: "",
+    themesNone: "",
+    themesRule: "",
+    cushionTitle: "",
+    cushionAbove: "",
+    cushionBelow: "",
+    footnote: "",
+    pending: "Not used in this funnel."
   },
 
   overall: {
     title: "Your Overall Score",
-    paragraph: "Your Visibility Score is the average of your four area scores, each out of 100. It measures how your shop asks for and answers Google reviews, not the quality of your work and not your star rating. Under 30 means most of your work leaves no public trace. From 30 to 54, customers get asked on some days and not others. From 55 to 74, the habit is in place with one or two clear gaps. At 75 and above, almost every customer gets the chance to vouch for you, and the job is to keep it that way.",
+    paragraph: "Your Deal Readiness Score is the average of your five area scores, each out of 100. It measures how much of your plan rests on evidence you can check, not the house, the market or what the deal will return. Under 40, the plan leans on borrowed numbers. From 40 to 69, part of it rests on evidence. At 70 and above, the plan rests on evidence, and the open question is whether it holds for this address.",
     deepenerYes: "Updated with your {n} extra answers.",
-    deepenerNo: "Based on your 10 answers. Add 8 more for a sharper score: {deepener_link}",
+    deepenerNo: "Based on your {n_main} answers. Add {n} more for a sharper score: {deepener_link}",
     interpretation: {
-      openbook: "Your shop does what most don't: it asks almost every customer and answers what they say. Homeowners who look you up can see the work, and see that you listen. The risk now is quiet erosion: a new office manager, a software update or a slammed July can stop asking without anyone noticing. Your area scores show which part is strongest and which deserves a weekly check. Use the 30-day plan as a maintenance routine, not a rebuild. Take the scorecard again each quarter to make sure the number holds.",
-      nearly: "You're close. Most of your customers get asked, and the habit is real. One or two areas lag the others, and in a chain like this the weakest link sets the pace for the rest. That is a process gap, not a problem with your work, and it is usually the cheapest one to close. Your lowest area, {primary_bottleneck}, is where to start. Fix it this month and your next score will reflect it.",
-      somedays: "Your customers vouch for you when they're asked. The trouble is the days nobody asks, and in a busy shop that is most days. Asking that depends on memory produces reviews in bursts, then long quiet stretches that make a busy shop look slow. Replies follow the same pattern: they go out when someone has a free minute. None of this is about the quality of your work. It is a system gap, and your weakest area, {primary_bottleneck}, is the link to fix first.",
-      secret: "Your work is good, and almost none of it reaches Google. Right now asking happens when someone remembers, which on a busy day means it doesn't happen at all. That makes your shop a best-kept secret: the people who used you know, and the next homeowner can't see it. This is not a skill problem, and it is not about your crews. It is the absence of a system, and a system can be set up in a week. Start with {primary_bottleneck}, and follow the 30-day plan from day one."
+      beginner: "Your plan leans on estimates more than evidence. That's normal for a first deal, and it's fixable before the offer. The rent per room and the fill time are the numbers every other one rests on, and right now at least one of them is borrowed. Start with {primary_bottleneck}, follow the 30-day plan from day one, and take the scorecard again on day 30.",
+      intermediate: "You have part of the picture. Some of your numbers rest on evidence, and the gaps left are the ones that decide whether rooms fill. Your lowest area, {primary_bottleneck}, is where to start. Close it before the offer, and your next score will show it.",
+      advanced: "You underwrite like an operator: your numbers rest on evidence most first deals skip. The open question is whether that evidence holds for this specific address. Recheck rents, fill speed and supply the week you make the offer, and keep the slower case in your deal math."
     },
     urgency: {
-      critical: "At your numbers this touches at least {unasked} customers a year, so it is the first thing to fix, this month.",
-      criticalUnknown: "This is the first thing to fix, this month.",
-      significant: "It touches at least {unasked} customers a year, so it is worth fixing this month.",
-      // Significant with the count unknown (not worded in the spec): the urgency words alone
-      significantUnknown: "Worth fixing this month.",
-      moderate: "Treat it as a refinement, when you have a week."
+      critical: "At your numbers, your reserves leave {uncovered_months} uncovered, so this is the first thing to fix, before you make an offer.",
+      criticalUnknown: "This is the first thing to fix, before you make an offer.",
+      significant: "At your numbers, your reserves leave {uncovered_months} uncovered, so it's worth fixing before you make an offer.",
+      significantUnknown: "Worth fixing before you make an offer.",
+      moderate: "Treat it as a refinement, while you compare houses."
     },
-    areasTitle: "Your four areas"
+    areasTitle: "Your five areas"
   },
 
   // Section labels used on the strongest and weakest area pages
-  labels: { means: "What This Means", next: "Your Immediate Next Step", impact: "The Impact on Your Strategy", quickWins: "Your quick wins, from your answers", checks: "Your weekly checks, from your answers" },
+  labels: { means: "What This Means", next: "Your Immediate Next Step", impact: "Why It Matters for the Deal", quickWins: "Your quick wins, from your answers", checks: "Your checks, from your answers" },
 
-  /* ---------- High score pages: the strongest area. Every one ends section 2 with a maintenance warning ---------- */
+  /* ---------- High score pages: the strongest area ---------- */
   high: {
-    coverage: {
-      h: "Your Ask Coverage Is Your Strongest Asset",
-      means: { lead: "Most of your finished jobs end with the customer being asked for a review. That's the step most shops skip, and everything else on this report depends on it.",
-        bullets: ["Customers get asked after most jobs, not only the memorable ones", "Asking reaches customers on busy days as well as quiet ones", "The same request goes to everyone, so no one is singled out", "Your job records carry a phone number or email for most customers"] },
-      next: { lead: "Strengths like this erode quietly, usually when a new person joins or the software changes. Keep it by counting it.",
-        bullets: ["Every Friday, compare jobs closed with requests sent; the two numbers should match", "Check that new jobs are saved with a mobile number or email", "After any software update, close a test job and confirm the request arrives"] },
-      impact: { lead: "Coverage is upstream of everything else on this report. Because customers get asked, your freshness and your standing next to the top three have something to build on.",
-        bullets: ["Every week, recent customers get the chance to review, which is what keeps a profile current", "You have a habit to build on: one reminder or faster replies is a small step from here", "When a homeowner compares you with the top three, they read customers who were asked, not a lucky few"] }
+    rent: {
+      h: "Your Rent Evidence Is Your Strongest Asset",
+      means: { lead: "Your rent per room comes from rooms nearby that filled. That's the evidence most first deals skip, and every other number in the plan rests on it.",
+        bullets: ["Your rent comes from rooms near the house, not a calculator", "Rooms are priced by bath type and size", "Only rooms that actually filled count", "You can show the rooms your rent rests on"] },
+      next: { lead: "Rents move with new supply and the seasons. Keep the evidence current.",
+        bullets: ["Recheck five rooms near the house once a month", "Recheck the whole list the week you make the offer", "Keep the asking rents apart from the rooms that filled"] },
+      impact: { lead: "Rent is upstream of everything else in the plan. Because yours rests on evidence, the deal math and the reserves have something real to work with.",
+        bullets: ["Your cash flow starts from rents the street supports", "Your bath mix can be priced from the same list", "A lender or partner can see what the rent rests on"] }
     },
-    system: {
-      h: "Your Ask System Is Your Strongest Asset",
-      means: { lead: "Asking at your shop runs on a system rather than on memory. It follows up once and keeps going when someone is out, which is the hardest part to build.",
-        bullets: ["Requests go out when a job closes, not when someone remembers", "A customer who misses the first request hears from you once more, then you stop", "Asking continues when the person who handles it is away", "Busy weeks don't switch it off"] },
-      next: { lead: "Systems fail quietly, so the job now is noticing early. Five minutes a week is enough.",
-        bullets: ["Every Friday, check requests sent against jobs closed", "Once a month, close a test job with your own phone number and confirm the request arrives", "Name who checks the numbers, and who covers when they're out"] },
-      impact: { lead: "A system that runs on its own gives every other area a steady base. It is what separates a review habit from a review program.",
-        bullets: ["Coverage holds in your busiest weeks, when you have the most customers to ask", "Freshness follows, because requests go out every week", "The time someone spent remembering goes to replies and to the customers who need a call"] }
+    fill: {
+      h: "Your Fill Speed Is Your Strongest Asset",
+      means: { lead: "Your fill time comes from how comparable rooms nearby actually filled. That makes your lease-up months something you can defend.",
+        bullets: ["Your lease-up months come from rooms you watched or checked", "Occupancy comes from comparable rooms, not a rule of thumb", "Your launch month follows the seasons", "A slow lease-up is in the plan, not a surprise"] },
+      next: { lead: "Fill speed changes with the season and with new supply. Recheck it before the offer.",
+        bullets: ["Recheck a few rooms nearby before the offer", "Keep a slower case beside your plan", "Note which months rooms fill fastest"] },
+      impact: { lead: "Your first months are when the costs run before the rent does: the costs start on day one, and rent arrives room by room. Knowing the fill speed makes that stretch plannable.",
+        bullets: ["Your reserves can be sized from evidence", "Your launch can be timed to the faster months", "Your deal math starts from observed occupancy"] }
     },
-    freshness: {
-      h: "Your Freshness Is Your Strongest Asset",
-      means: { lead: "Homeowners who look you up see recent proof of your work. 74% of consumers look for reviews from the last three months (BrightLocal 2026), and yours are there.",
-        bullets: ["Your newest review is recent", "Reviews keep arriving in busy weeks as well as quiet ones", "Recent reviews also show on your website", "Your profile looks as busy as your shop is"] },
-      next: { lead: "Freshness is the first thing to slip when the shop gets busy. Protect it before your next peak season.",
-        bullets: ["Note the date of your newest review every Friday", "Before your next busy season, decide who sends requests when the phones are ringing", "If your website shows reviews, make sure it shows recent ones rather than a fixed set"] },
-      impact: { lead: "Fresh reviews tell a homeowner you are active right now, which matters most for urgent jobs like no heat or a burst pipe. They also give your replies a steady flow of customers to answer.",
-        bullets: ["Your profile stays current through your busy seasons", "Recent reviews answer the first question a homeowner with no heat asks: are they still good?", "Every recent review is another chance to show that you reply"] }
+    supply: {
+      h: "Your Read on Nearby Supply Is Your Strongest Asset",
+      means: { lead: "You know the competition: how many co-living homes compete within about 3 miles, and roughly how full they are.",
+        bullets: ["You counted the homes near the house", "You know roughly how many rooms are open", "You watch for new homes and rent cuts", "You can tell a busy pocket from a crowded one"] },
+      next: { lead: "Supply keeps changing after you buy. Keep the count current.",
+        bullets: ["Count again once a month", "Note new homes and rent cuts", "Count again the week you make the offer"] },
+      impact: { lead: "Supply sets how hard rooms are to fill and what they can ask. Because you know it, your rent and fill plans rest on the street as it is.",
+        bullets: ["Your rent is set against real competition", "Your lease-up months account for the open rooms nearby", "You get early warning when the pocket gets crowded"] }
     },
-    replies: {
-      h: "Your Replies Are Your Strongest Asset",
-      means: { lead: "You answer the reviews customers leave, and homeowners can see it. 80% of consumers are more likely to use a business that replies to all its reviews (BrightLocal 2026).",
-        bullets: ["Reviews get a reply within days, not weeks", "Replies are written for what each customer said", "Hard reviews get a calm, public answer", "You hear about a bad review soon after it posts"] },
-      next: { lead: "Reply quality slips when volume rises or a hard review lands in a busy week. Keep both in check.",
-        bullets: ["Keep review notifications on, and read every new review the day it posts", "Before replying to a hard review, call the customer if you can", "Once a month, re-read your last ten replies and retire any phrase that repeats"] },
-      impact: { lead: "Replies are the part of your profile that shows how you treat people after the job. They turn every review, good or hard, into a second impression.",
-        bullets: ["A calm reply to a 3-star review shows the next homeowner how you handle a problem", "Personal replies matter: 50% of consumers are put off by generic or templated replies (BrightLocal 2026)", "When more customers are asked, your reply habit is ready for whatever they write"] }
+    mix: {
+      h: "Your Room Mix Is Your Strongest Asset",
+      means: { lead: "Your bath mix and room count come from what private and shared-bath rooms nearby rent for. That's the structural part of the plan most first deals guess.",
+        bullets: ["The bath mix is priced from rooms nearby", "The house is priced both ways before any work", "The room count is checked against rents nearby", "The garage or extra space is priced both ways"] },
+      next: { lead: "Before the offer, check the room count against the city's rule too.",
+        bullets: ["Read the city's rule on unrelated adults sharing a home", "Get a quote before you book any work", "Recheck private and shared-bath rents before the offer"] },
+      impact: { lead: "Private-bath supply and shared-bath pressure are structural revenue drivers. Because your mix is priced from evidence, the biggest lever in the plan rests on rooms you can show.",
+        bullets: ["Two houses with the same bedrooms can earn very different money, and yours is priced", "Work gets booked for what pays, not for what seems worth it", "The forecast can be run with the mix you plan"] }
+    },
+    reserves: {
+      h: "Your Lease-up Reserves Are Your Strongest Asset",
+      means: { lead: "Your reserves are sized from how comparable launches nearby filled, which is how experienced operators plan.",
+        bullets: ["Reserves are sized in months of cost", "A slower lease-up is in the plan", "The deal math runs on your own costs and rooms nearby", "Empty rooms are counted once"] },
+      next: { lead: "Keep the cushion honest as the plan changes.",
+        bullets: ["Rerun the slower case when rents or supply change", "Keep the reserves apart from the money for the work", "Check the cushion monthly until the rooms are full"] },
+      impact: { lead: "A sized cushion makes a slow lease-up part of the plan instead of a surprise.",
+        bullets: ["Your plan has room to hold rents while rooms fill, instead of cutting them first", "A lender or partner can see the cushion and what it rests on", "The first six months are planned, month by month"] }
     }
   },
 
-  /* ---------- Low score pages: the primary bottleneck. Every area 75 or higher: the refinement headline, no urgency ---------- */
+  /* ---------- Low score pages: the area to fix first. Every area 75 or higher: the refinement headline, no urgency ---------- */
   low: {
-    coverage: {
-      h: "Your Ask Coverage Has the Most Room to Grow",
-      refinement: "Your Ask Coverage Is Your Next Refinement",
-      means: { lead: "Most of your finished jobs end without anyone asking the customer for a review. That's a process gap, not a sign customers aren't happy: on a busy day the next call wins, and the ask never happens.",
-        bullets: ["The review link goes out only when someone has a free minute", "Busy days, late jobs and weekend calls are the ones that get skipped", "Some job records have no mobile number or email, so there's no way to ask", "Nobody counts jobs against requests, so the gap stays out of sight"] },
-      next: { lead: "This week, make one change: every finished job with a phone or email gets one request, the same way for everyone.",
-        bullets: ["Get your direct review link from your Google Business Profile and save it where the office can paste it in one step", "Write one short, honest request and use it for every customer: thank them, ask for an honest review, include the link", "Send it when the job is marked complete, not at the end of the day", "On Friday, count jobs closed and requests sent, and write both numbers down"] },
-      impact: { lead: "Coverage is upstream of everything else. Fix it and the other three areas have something to work with.",
-        bullets: ["At your numbers, at least {unasked} customers a year go unasked today; every one you add is a new chance to be seen", "Freshness follows: recent customers who are asked are the ones who can make your profile look current", "It's fixable in a week, because your jobs are already logged and the request is the same every time"],
-        // The first bullet needs the count; without it, this one stands in (not worded in the spec)
-        bulletNoCount: "Every customer who goes unasked today is a chance to be seen that never comes; every one you add counts" }
+    rent: {
+      h: "Your Rent Evidence Has the Most Room to Grow",
+      refinement: "Your Rent Evidence Is Your Next Refinement",
+      means: { lead: "Your rent per room is borrowed: a guess, a calculator, a whole-home rent split by bedrooms, or asking rents. Every figure after it inherits the guess.",
+        bullets: ["The rent doesn't come from rooms near the house that filled", "Every room may have the same rent, whatever its bath", "Asking rents are counted as rents", "Nobody can say how many rooms the number rests on"] },
+      next: { lead: "This week, build a list of ten rooms near the house, by bath type and size.",
+        bullets: ["List ten rooms for rent within about 3 miles", "Note each weekly rent, bath type and room size", "Split them by bath type and note the middle rent of each group", "Recheck in two weeks and keep the rooms that filled"] },
+      impact: { lead: "Rent is upstream of everything. Fix it and the bath mix, the deal math and the reserves have evidence to work with.",
+        bullets: ["A guessed rent inflates the cash flow, the deal math and the offer", "A rent the street supports is the base the rest of the plan needs", "It's fixable this week: the rooms are listed near the house right now"] }
     },
-    system: {
-      h: "Your Ask System Has the Most Room to Grow",
-      refinement: "Your Ask System Is Your Next Refinement",
-      means: { lead: "Asking at your shop depends on someone remembering, with no follow-up. That's a system gap: the habit works on quiet days and stops on busy ones.",
-        bullets: ["Requests go out at the end of the day, if there's time", "A customer who misses the first request never hears from you again", "When the person who handles it is out, asking stops", "Your busiest weeks, with the most customers, end up your quietest on Google"] },
-      next: { lead: "This week, move the ask out of anyone's memory and into the moment the job closes.",
-        bullets: ["Find out whether your job software can send a review request when a job is marked complete, and switch it on", "Add one reminder three to five days later, then stop; more can feel like pressure", "Name one person who checks the numbers every Friday, rather than one person who sends every request", "Write down who covers it during vacations and sick days"] },
-      impact: { lead: "A system turns asking from a good intention into something that happens every time. It's the difference between a habit and a program.",
-        bullets: ["Coverage holds in busy weeks, when you have the most customers to ask", "One reminder reaches customers who meant to review and forgot", "It's fixable this week: the trigger already exists in your workflow, the moment a job is marked complete"] }
+    fill: {
+      h: "Your Fill Speed Has the Most Room to Grow",
+      refinement: "Your Fill Speed Is Your Next Refinement",
+      means: { lead: "You don't know how fast rooms fill near the house, so your lease-up months are a guess. An assumed vacancy rate can't tell you whether filling takes three weeks or three months.",
+        bullets: ["Lease-up months are a hope, not a count", "Occupancy is a rule of thumb or an average", "The launch month is whenever the work ends", "A slow lease-up isn't in the plan"] },
+      next: { lead: "This week, start a two-week fill watch on rooms like yours.",
+        bullets: ["Pick five room listings near the house with the bath types you plan", "Check every few days which ones are still listed", "Note any rent cuts", "After two weeks, set your lease-up months from what filled"] },
+      impact: { lead: "Fill speed decides your first months of cash flow. Fix it and your reserves can be sized from evidence.",
+        bullets: ["At your numbers, each month lease-up runs long costs at least {cost}", "Your reserves are only as good as the lease-up months behind them", "It's fixable in two weeks of watching rooms near the house"],
+        // A bullet whose number is unknown gives way to this one
+        bulletNoCount: "Every month lease-up runs long costs the full monthly carrying cost" }
     },
-    freshness: {
-      h: "Your Freshness Has the Most Room to Grow",
-      refinement: "Your Freshness Is Your Next Refinement",
-      means: { lead: "A homeowner looking you up today sees reviews that are weeks or months old. 74% of consumers look for reviews from the last three months (BrightLocal 2026), so a busy shop can look quiet. That's a timing gap, and it follows from how often customers get asked.",
-        bullets: ["Asking stops in your busiest weeks, so your newest reviews date from slow periods", "Nobody watches the date of your newest review", "Your website shows old or hand-picked reviews, or none", "Weeks pass between reviews, then a few arrive at once"] },
-      next: { lead: "This week, start a steady rhythm: every finished job asked, every week, busy or slow.",
-        bullets: ["Look up your own profile tonight and note the date of your newest review", "Send requests for this week's finished jobs before Friday, and do it again next week", "Put the Friday check on the calendar: newest review date, jobs closed, requests sent", "Plan for your next busy season now: decide who sends requests when the phones are ringing"] },
-      impact: { lead: "Freshness is a symptom, so you fix it upstream. When asking runs every week, recent customers keep getting the chance to review.",
-        bullets: ["32% of consumers look for reviews from the last two weeks (BrightLocal 2026), so a weekly rhythm matters", "Steady asking also gives your replies a steady flow to answer", "It's fixable without new tools: a weekly routine and a calendar reminder are enough to start"] }
+    supply: {
+      h: "Your Read on Nearby Supply Has the Most Room to Grow",
+      refinement: "Your Read on Nearby Supply Is Your Next Refinement",
+      means: { lead: "You don't know how many co-living homes compete near the house, or how full they are. Supply nearby decides how hard your rooms will be to fill and what they can ask.",
+        bullets: ["Nobody counted the co-living homes within about 3 miles", "There's no read on how many rooms are open", "New homes and rent cuts nearby go unnoticed", "A crowded pocket can look like a busy one"] },
+      next: { lead: "This week, count the competition within about 3 miles.",
+        bullets: ["List every co-living home with rooms for rent within about 3 miles", "Note how many rooms each has open", "Note any new homes and rent cuts", "Write down your read, with the date"] },
+      impact: { lead: "Supply sets the ceiling on rent and the pace of the fill. Fix it and your rent and lease-up plans rest on the street as it is.",
+        bullets: ["Many open rooms nearby mean a lower rent or a slower lease-up", "Few open rooms and steady rents leave room for one more home", "It's fixable in an afternoon of counting"] }
     },
-    replies: {
-      h: "Your Replies Have the Most Room to Grow",
-      refinement: "Your Replies Are Your Next Refinement",
-      means: { lead: "Most of your reviews have no reply, so the next homeowner can't see that you listen. That's a habit gap, not a sign you don't care: replies wait for a free minute, and a free minute rarely comes.",
-        bullets: ["Reviews sit unanswered for weeks, or never get a reply", "Hard reviews get no reply, or a defensive one", "Replies reuse the same few lines; 50% of consumers are put off by generic or templated replies (BrightLocal 2026)", "You find out about a bad review days after it posts"] },
-      next: { lead: "This week, answer your five most recent reviews, then keep a two-day rule.",
-        bullets: ["Turn on review notifications in your Google Business Profile settings so each new review reaches you the day it posts", "Reply to your five most recent unanswered reviews, two or three sentences each, in your own words", "For a hard review, call the customer first if you can, then reply calmly in public without job or personal details", "From now on, every review gets a reply within two days"] },
-      impact: { lead: "Replies are the fastest area to show visible progress, because the reviews are already there. Every reply you post is read by the next homeowner.",
-        bullets: ["80% of consumers are more likely to use a business that replies to all its reviews (BrightLocal 2026)", "A calm answer to a hard review shows how you handle a problem", "It's fixable this week: a backlog of recent reviews is an afternoon's work"] }
+    mix: {
+      h: "Your Room Mix Has the Most Room to Grow",
+      refinement: "Your Room Mix Is Your Next Refinement",
+      means: { lead: "Your bath mix and room count aren't priced from rooms nearby yet. Private-bath and shared-bath rooms rent and fill differently, so the mix is the biggest lever you control.",
+        bullets: ["The bath mix isn't decided, or was decided on a hunch", "The house hasn't been priced both ways", "The room count isn't checked against the city's rule", "The garage or extra space isn't priced both ways"] },
+      next: { lead: "This week, price the house both ways from rooms nearby.",
+        bullets: ["Note the middle weekly rent of private-bath and shared-bath rooms nearby", "Weekly rent × rooms × 4.35 for the house as it is", "The same with one more private bath", "Get a quote before you decide on any work"] },
+      impact: { lead: "The room mix multiplies every rent in the plan. Fix it and the work you book is work that pays for itself in rent.",
+        bullets: ["Two houses with the same bedrooms can earn very different money", "A bathroom added on a hunch can cost more than it brings in", "It's fixable before the offer, from the rent list you already need"] }
     },
-    // Shown when the rule flag is set (D1 = "Customers who seemed happy")
+    reserves: {
+      h: "Your Lease-up Reserves Have the Most Room to Grow",
+      refinement: "Your Lease-up Reserves Are Your Next Refinement",
+      means: { lead: "Your reserves and deal math aren't sized for a slow lease-up. If rooms take longer to fill than you expect, the costs keep running while the rent doesn't.",
+        bullets: ["Reserves are a few weeks, or not planned", "The plan for a slow start is cutting rents", "The deal math runs on defaults or estimates", "There's no slower case beside the plan"] },
+      next: { lead: "This week, size the cushion from your own numbers.",
+        bullets: ["Write down your monthly carrying cost", "Set your lease-up months, and a slower case twice as long", "Multiply: monthly cost × the slower case's months", "Compare it with the cash you'll hold after the down payment and the work"] },
+      impact: { lead: "The cushion decides whether a slow start is a plan or a scramble. Fix it and the first six months are planned, month by month.",
+        bullets: ["At your numbers, your reserves leave at least {gap} of lease-up costs uncovered", "A room cut to fill faster keeps the lower rent after it fills", "It's fixable before the offer: it's arithmetic on numbers you already have"],
+        bulletNoCount: "Every month your reserves don't cover gets paid from somewhere else" }
+    },
+    // Shown when the rule flag is set (the deepener: the city's rule not confirmed)
     ruleNote: {
-      title: "A note on asking",
-      body: "You told us customers who seemed happy are the ones who get asked. Google's review policy doesn't allow asking only some customers. Ask every customer the same way; it's also the only way your reviews show all of your work."
+      title: "A note on the city's rule",
+      body: "You haven't confirmed your city's rule on unrelated adults sharing a home. It decides whether the plan is allowed at all, and it differs by city. Read it in the city code, then confirm it with the city or an attorney. Not legal advice."
     },
-    cascade: "Your Freshness score is low because of your {cause} score."
+    // Kept for the template's shape: the cascade line comes from content/scorecard.mjs cascadeLines
+    cascade: "Your {effect} score follows from your {cause} score."
   },
 
   // Small furniture
   page: "Page {n}",
-  footer: "The Invisible Work Scorecard Report · {business}",
+  footer: "The First Deal Risk Scorecard Report · {first_name}",
   scoreOf: "{score} of 100",
   notRead: "Not read yet"
 };

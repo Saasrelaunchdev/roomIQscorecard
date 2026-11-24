@@ -84,7 +84,8 @@ const DATA = {
   sc: { ...scRest, notes: { report: notes.report, call: {} } },
   site: {
     endpoints: SITE.endpoints, booking: SITE.booking, offer: SITE.offer, legal: SITE.legal, noticeVersion: SITE.noticeVersion,
-    metaPixelId: SITE.metaPixelId, clarityId: SITE.clarityId, trackingConsent: SITE.trackingConsent, masterUrl: SITE.masterUrl, reportTurnaround: SITE.reportTurnaround, reportDelivery: SITE.reportDelivery
+    metaPixelId: SITE.metaPixelId, clarityId: SITE.clarityId, trackingConsent: SITE.trackingConsent, masterUrl: SITE.masterUrl, reportTurnaround: SITE.reportTurnaround, reportDelivery: SITE.reportDelivery,
+    forecastUrl: SITE.forecastUrl || null, metaEvents: SITE.metaEvents || null
   },
   ui: LANDING.quiz,
   results: RESULTS,

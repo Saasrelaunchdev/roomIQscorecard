@@ -135,7 +135,7 @@ carrying cost; rooms that fill sooner bring rent in sooner. The report says so.
 | G5 | `reserves` | If no rent came in, how many months of costs could your reserves carry? | see section 4 | M |
 
 Help lines: G1 "Pick the closest." G3 "Loan payment, taxes, insurance and utilities, with every room empty. A range is
-fine." G4 "From the day the first room is ready to rent." G5 "Cash set aside for this house, after the down payment and
+fine." G4 "Counted from the day rooms are ready to rent." G5 "Cash set aside for this house, after the down payment and
 the work."
 
 The contact step (S11), last: "Where should we send your report?" First name (required), email (required), and a

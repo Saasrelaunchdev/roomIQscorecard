@@ -1,208 +1,258 @@
-// The scoring engine against Deliverable 1 (docs/spec/1-assessment-logic.md): the worked example on screen and in the
-// report, the branching, the invisible work cases, urgency, the bottleneck and its cascade, quick wins, the rule flag,
-// fit, routing and the GTM gap score. If one of these fails, the scorecard no longer does what the spec says.
+// The scoring engine against spec 1 (docs/spec/1-assessment-logic.md): the worked example on screen and in the report,
+// the branching, every lease-up gap variant, urgency, the bottleneck and its two-effect cascade, quick wins, the rule
+// flag, fit, routing and the covered markets. If one of these fails, the scorecard no longer does what the spec says.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import SC from "../../content/scorecard.mjs";
 import {
   evaluate, areaScores, roundHalfUp, invisibleOf, urgencyOf, bottleneckOf, strongestOf, quickWinsOf, deepenerShown,
-  cleanDeepener, fitOf, routeOf, gtmGapScoreOf, tierOf, bandOf, fill, money
+  cleanDeepener, fitOf, routeOf, gtmGapScoreOf, tierOf, bandOf, fill, money, months, gapVars, coveredOf
 } from "../../lib/scoring.mjs";
 
-// The worked example (section 3): an HVAC shop, 16 to 40 jobs a week, tickets of $300 to $750, jobs in job software,
-// one location
-const HERO = { trade: "hvac", jobs: "16to40", asked10: "1to3", asks: "remember", newest: "1to3", replies: "some", ticket: "300to750", records: "fieldsoftware", profiles: "1" };
-const DEEP = { d1: "most", d2: "most", d3: "nothing", d4: "stops", d5: "drops", d6: "no", d7: "week", d8: "standard" };
+// The worked example (spec 1, section 11): Jordan, a made-up first-time investor looking at houses in Atlanta
+const HERO = { stage: "looking", market: "atlanta", rentsource: "listings", fillsource: "vacancy", supply: "counted", bathmix: "notyet", slowplan: "weeks", carry: "2to3k", fillmonths: "m3", reserves: "m1" };
+const DEEP = { rentperroom: "split", rentcomps: "few", occsource: "rule", launch: "whenever", newsupply: "think", pricedrops: "unsure", roomcount: "max", garage: "na", dealmath: "mine", stress: "vacancy", zoning: "notyet", financing: "wholehome" };
 const area = (r) => Object.fromEntries(Object.entries(r.areas).map(([k, v]) => [k, v.score]));
 
-test("worked example, on screen: 25, 25, 50, 50 and a Visibility Score of 38 (37.5 rounded half up)", () => {
+test("worked example, on screen: 50, 25, 50, 0, 50 and a Deal Readiness Score of 35, Beginner", () => {
   const r = evaluate(SC, HERO);
   assert.equal(r.ok, true);
-  assert.deepEqual(area(r), { coverage: 25, system: 25, freshness: 50, replies: 50 });
-  assert.equal(r.scoreExact, 37.5);
-  assert.equal(r.score, 38);
-  assert.equal(r.tier, "somedays");
-  assert.equal(r.tierName, "The Some-Days Shop");
-  // The tie between Coverage and System at 25 goes upstream first
-  assert.equal(r.bottleneck.primary, "coverage");
-  assert.equal(r.bottleneck.secondary, "system");
-  assert.equal(r.bottleneck.line, SC.bottleneckLines.coverage);
+  assert.deepEqual(area(r), { rent: 50, fill: 25, supply: 50, mix: 0, reserves: 50 });
+  assert.equal(r.scoreExact, 35);
+  assert.equal(r.score, 35);
+  assert.equal(r.tier, "beginner");
+  assert.equal(r.tierName, "Beginner: underwriting on assumptions");
+  assert.deepEqual(Object.fromEntries(Object.entries(r.areas).map(([k, v]) => [k, v.band])), { rent: "medium", fill: "low", supply: "medium", mix: "low", reserves: "medium" });
+  // Room Mix is lowest, but it follows from the two borrowed numbers: the lower of them, Fill Speed, is fixed first
+  assert.equal(r.bottleneck.primary, "fill");
+  assert.deepEqual(r.bottleneck.cascade, { effect: "mix", cause: "fill" });
+  assert.equal(r.bottleneck.secondary, "mix");
+  assert.equal(r.bottleneck.lineKey, "fillVacancy");
+  assert.equal(r.bottleneck.line, "An assumed vacancy rate isn't fill speed. Check how fast comparable rooms near the house actually filled.");
+  assert.equal(r.bottleneck.cascadeLine, "Your Room Mix score follows from your Fill Speed score: a bath mix is priced from what rooms rent for and how fast they fill, by bath type.");
 });
 
-test("worked example, invisible work: 560 customers a year and $168,000 (section 4)", () => {
+test("worked example, the lease-up gap: $2,000 x (3 minus 1) = $4,000; the lease-up costs $6,000", () => {
   const iw = evaluate(SC, HERO).invisible;
-  assert.equal(iw.kind, "known");
-  assert.equal(iw.jobs, 16);
-  assert.equal(iw.notAsked, 7);
-  assert.equal(iw.ticket, 300);
-  assert.equal(iw.unasked, 560);
-  assert.equal(iw.workValue, 168000);
-  assert.equal(money(iw.workValue), "$168,000");
+  assert.equal(iw.kind, "gap");
+  assert.equal(iw.cost, 2000);
+  assert.equal(iw.fill, 3);
+  assert.equal(iw.reserves, 1);
+  assert.equal(iw.uncovered, 2);
+  assert.equal(iw.unasked, 2);
+  assert.equal(iw.workValue, 4000);
+  assert.equal(iw.exposure, 6000);
+  assert.equal(money(iw.workValue), "$4,000");
+  assert.deepEqual(gapVars(iw), { gap: "$4,000", cost: "$2,000", exposure: "$6,000", fill_months: "3 months", reserve_months: "1 month", uncovered_months: "2 months", spare_months: "0 months" });
 });
 
-test("worked example, with the deepener: 50, 13, 38, 50; still 38; the bottleneck becomes Ask System (section 3)", () => {
+test("worked example, with the deepener: 46, 25, 33, 10, 46 and 32; Room Mix leaves D8's maximum out", () => {
   const r = evaluate(SC, HERO, DEEP);
   assert.equal(r.deepened, true);
-  assert.deepEqual(area(r), { coverage: 50, system: 13, freshness: 38, replies: 50 });
-  assert.equal(r.areas.system.exact, 12.5);
-  assert.equal(r.areas.freshness.exact, 37.5);
-  assert.equal(r.score, 38);
-  assert.equal(r.tier, "somedays");
-  assert.equal(r.bottleneck.primary, "system");
-  assert.equal(r.bottleneck.secondary, "freshness");
-  assert.equal(r.bottleneck.cascade, null);
+  assert.deepEqual(area(r), { rent: 46, fill: 25, supply: 33, mix: 10, reserves: 46 });
+  assert.equal(r.areas.rent.exact, 45.833333333);
+  assert.equal(r.areas.supply.exact, 33.333333333);
+  assert.equal(r.areas.mix.max, 20);
+  assert.equal(r.areas.mix.earned, 2);
+  assert.equal(r.scoreExact, 32);
+  assert.equal(r.score, 32);
+  assert.equal(r.tier, "beginner");
+  assert.equal(r.bottleneck.primary, "fill");
+  assert.equal(r.bottleneck.secondary, "mix");
+  assert.deepEqual(r.bottleneck.cascade, { effect: "mix", cause: "fill" });
+  // The metric asks no deepener question, so it does not change
+  assert.equal(r.invisible.workValue, 4000);
 });
 
-test("worked example, section 12 output: the three quick wins, critical urgency and the verdict line", () => {
-  const r = evaluate(SC, HERO, DEEP);
-  assert.deepEqual(r.quickWins.map((q) => q.key), ["asks", "d3", "d5"]);
-  assert.equal(r.quickWins[0].text, "Move the ask out of memory: send it when the job closes in your software");
-  assert.equal(r.quickWins[1].text, "Add one reminder three to five days later, then stop");
-  assert.ok(r.quickWins[2].text.startsWith("Keep sending requests in your busiest weeks"));
-  assert.equal(r.urgency, "critical");
-  assert.equal(r.verdict, "Your biggest gap is your Ask System: asking depends on someone remembering, and it stops when you're busiest. This is the first thing to fix, this month.");
+test("worked example, section 11 output: quick wins, critical urgency and the verdict line", () => {
+  const screen = evaluate(SC, HERO);
+  assert.deepEqual(screen.quickWins.map((q) => `${q.key}:${q.v}`), ["fillsource:vacancy", "bathmix:notyet", "rentsource:listings"]);
+  assert.equal(screen.urgency, "critical");
+  assert.equal(screen.verdict, "Your biggest gap is your Fill Speed: your plan assumes a vacancy rate instead of how fast rooms nearby fill. This is the first thing to fix, before you make an offer.");
+  const report = evaluate(SC, HERO, DEEP);
+  assert.deepEqual(report.quickWins.map((q) => `${q.key}:${q.v}`), ["zoning:notyet", "fillsource:vacancy", "occsource:rule"]);
+  assert.equal(report.quickWins[0].flag, true);
+  assert.equal(report.quickWins[0].text, "Read your city's rule on unrelated adults sharing a home, then confirm it with the city or an attorney");
+  assert.equal(report.ruleFlag, true);
+  assert.deepEqual(report.notes.report.map((n) => `${n.key}:${n.area}`), ["stress:reserves", "roomcount:mix"]);
+  assert.deepEqual(report.notes.call.map((n) => n.key), ["zoning", "financing", "stress"]);
 });
 
-test("rounding is half up, at the end (section 3)", () => {
+test("rounding is half up, at the end", () => {
   assert.equal(roundHalfUp(12.5), 13);
   assert.equal(roundHalfUp(37.5), 38);
-  assert.equal(roundHalfUp(2.5), 3);
-  assert.equal(roundHalfUp((100 * 7) / 12), 58);
-  // 0.145 x 100 is 14.499999999999998 in floating point; the true value is 14.5, which rounds up
+  assert.equal(roundHalfUp((100 * 11) / 24), 46);
+  assert.equal(roundHalfUp((100 * 8) / 24), 33);
   assert.equal(roundHalfUp(0.145 * 100), 15);
 });
 
-test("branching: Q1 All 10 hides D1; Q2 'We don't really ask' hides D3 and D4; Q4 Never hides D8 (section 10)", () => {
-  assert.deepEqual(deepenerShown(SC, HERO).map((d) => d.id), ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"]);
-  assert.deepEqual(deepenerShown(SC, { ...HERO, asked10: "all" }).map((d) => d.id), ["D2", "D3", "D4", "D5", "D6", "D7", "D8"]);
-  assert.deepEqual(deepenerShown(SC, { ...HERO, asks: "none" }).map((d) => d.id), ["D1", "D2", "D5", "D6", "D7", "D8"]);
-  assert.deepEqual(deepenerShown(SC, { ...HERO, replies: "never" }).map((d) => d.id), ["D1", "D2", "D3", "D4", "D5", "D6", "D7"]);
+test("branching: 'I don't have one yet' hides D1 and D2; the checklist always shows", () => {
+  assert.deepEqual(deepenerShown(SC, HERO).map((d) => d.id), ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "C1", "C2"]);
+  assert.deepEqual(deepenerShown(SC, { ...HERO, rentsource: "none" }).map((d) => d.id), ["D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "C1", "C2"]);
   // A hidden question's answer is dropped, never counted
-  const { deepener } = cleanDeepener(SC, { ...HERO, asks: "none" }, DEEP);
-  assert.equal("d3" in deepener, false);
-  assert.equal("d4" in deepener, false);
+  const { deepener } = cleanDeepener(SC, { ...HERO, rentsource: "none" }, DEEP);
+  assert.equal(deepener.rentperroom, undefined);
+  assert.equal(deepener.zoning, "notyet");
 });
 
-test("a skipped question leaves both the score and the maximum (section 3)", () => {
-  const hero = { ...HERO, asks: "none" };
-  const a = areaScores(SC, hero, { d1: "most", d2: "most", d5: "drops", d6: "no", d7: "week", d8: "standard" });
-  // Ask System: only Q2 is shown (0 of 12), not 0 of 24
-  assert.equal(a.system.max, 12);
-  assert.equal(a.system.score, 0);
-  const b = areaScores(SC, { ...HERO, asked10: "all" }, { d2: "every" });
-  // Ask Coverage: Q1 12 + D2 4 = 16 of 16 (D1 hidden)
-  assert.equal(b.coverage.max, 16);
-  assert.equal(b.coverage.score, 100);
+test("a skipped question, or an answer with no points, leaves both the score and the maximum", () => {
+  // Rent Evidence with D1 and D2 hidden: only Q1 (0 of 12)
+  const a = areaScores(SC, { ...HERO, rentsource: "none" }, { occsource: "observed" });
+  assert.equal(a.rent.max, 12);
+  assert.equal(a.rent.score, 0);
+  // Room Mix: Q4 12 + D7 8; D8 "There's no garage or extra space" counts for neither
+  const b = areaScores(SC, { ...HERO, bathmix: "modeled" }, { roomcount: "checked", garage: "na" });
+  assert.equal(b.mix.max, 20);
+  assert.equal(b.mix.score, 100);
+  // The checklist never touches a score
+  const c = areaScores(SC, HERO, { zoning: "confirmed", financing: "cash" });
+  assert.deepEqual(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v.max])), { rent: 12, fill: 12, supply: 12, mix: 12, reserves: 12 });
 });
 
-test("invisible work: every case of section 4", () => {
-  assert.equal(invisibleOf(SC, { ...HERO, asked10: "all" }).kind, "all");
-  assert.equal(invisibleOf(SC, { ...HERO, asked10: "unsure" }).kind, "unsure");
-  assert.equal(invisibleOf(SC, { ...HERO, jobs: "unsure" }).kind, "jobsUnsure");
-  const avg = invisibleOf(SC, { ...HERO, ticket: "unsure" });
-  assert.equal(avg.kind, "average");
-  assert.equal(avg.ticket, 350);
-  assert.equal(avg.workValue, 196000);
-  assert.equal(invisibleOf(SC, { ...HERO, trade: "plumbing", ticket: "unsure" }).ticket, 338);
-  const count = invisibleOf(SC, { ...HERO, trade: "other", ticket: "unsure" });
-  assert.equal(count.kind, "count");
-  assert.equal(count.unasked, 560);
-  assert.equal(count.workValue, null);
-  // Fewer than 5 jobs uses 2; more than 40 uses 41; the count rounds down to the nearest 10
-  assert.equal(invisibleOf(SC, { ...HERO, jobs: "lt5", asked10: "none" }).unasked, 100);
-  assert.equal(invisibleOf(SC, { ...HERO, jobs: "over40", asked10: "7to9" }).unasked, 200);
-  // The value rounds down to the nearest $1,000: 70 customers x $150 = $10,500 -> $10,000
-  assert.equal(invisibleOf(SC, { ...HERO, jobs: "lt5", asked10: "1to3", ticket: "lt300" }).workValue, 10000);
+test("the lease-up gap: every variant of spec 1, section 4", () => {
+  const k = (o) => invisibleOf(SC, { ...HERO, ...o });
+  // Costs at the low end, "Under $2,000" at half the cap; "4 months or more" at 4; reserves at the high end
+  assert.equal(k({ carry: "lt2k" }).workValue, 2000);
+  assert.equal(k({ carry: "over4k", fillmonths: "m4", reserves: "none" }).workValue, 16000);
+  assert.equal(k({ fillmonths: "m4", reserves: "m3" }).workValue, 2000);
+  const exact = k({ fillmonths: "m1", reserves: "m1" });
+  assert.equal(exact.kind, "exact");
+  assert.equal(exact.workValue, 0);
+  assert.equal(exact.unasked, 0);
+  const covered = k({ fillmonths: "m2", reserves: "m6" });
+  assert.equal(covered.kind, "covered");
+  assert.equal(covered.spare, 4);
+  assert.equal(covered.exposure, 4000);
+  const costOnly = k({ reserves: "unsure" });
+  assert.equal(costOnly.kind, "costOnly");
+  assert.equal(costOnly.exposure, 6000);
+  assert.equal(costOnly.workValue, null);
+  assert.equal(costOnly.unasked, null);
+  const perMonth = k({ fillmonths: "unsure" });
+  assert.equal(perMonth.kind, "perMonth");
+  assert.equal(perMonth.cost, 2000);
+  assert.equal(perMonth.exposure, null);
+  const short = k({ carry: "unsure" });
+  assert.equal(short.kind, "monthsShort");
+  assert.equal(short.unasked, 2);
+  assert.equal(short.workValue, null);
+  assert.equal(k({ carry: "unsure", reserves: "m3" }).kind, "monthsCovered");
+  assert.equal(k({ carry: "unsure", reserves: "unsure" }).kind, "none");
+  assert.equal(k({ carry: "unsure", fillmonths: "unsure" }).kind, "none");
+  assert.equal(months(1), "1 month");
+  assert.equal(months(4), "4 months");
 });
 
-test("urgency (section 11): critical, significant, moderate", () => {
-  const iw = (unasked, kind = "known") => ({ unasked, kind });
-  assert.equal(urgencyOf(SC, iw(560), 25), "critical");
-  assert.equal(urgencyOf(SC, iw(500), 25), "critical");
-  assert.equal(urgencyOf(SC, iw(499), 25), "significant");
-  assert.equal(urgencyOf(SC, iw(150), 50), "significant");
-  assert.equal(urgencyOf(SC, iw(140), 25), "moderate");
-  // Ask Coverage 75 or higher is moderate whatever the count
-  assert.equal(urgencyOf(SC, iw(200), 75), "moderate");
-  // Count unknown: critical at Ask Coverage 25 or lower
-  assert.equal(urgencyOf(SC, { unasked: null, kind: "unsure" }, 0), "critical");
-  assert.equal(urgencyOf(SC, { unasked: null, kind: "jobsUnsure" }, 25), "critical");
-  assert.equal(urgencyOf(SC, { unasked: null, kind: "jobsUnsure" }, 50), "significant");
-  assert.equal(urgencyOf(SC, { unasked: null, kind: "all" }, 100), "moderate");
+test("urgency: uncovered months first, then Rent Evidence", () => {
+  const iw = (unasked, kind = "gap") => ({ unasked, kind });
+  assert.equal(urgencyOf(SC, iw(2), 100), "critical");
+  assert.equal(urgencyOf(SC, iw(4), 50), "critical");
+  assert.equal(urgencyOf(SC, iw(1), 100), "significant");
+  // No gap: Rent Evidence decides
+  assert.equal(urgencyOf(SC, iw(0, "covered"), 25), "critical");
+  assert.equal(urgencyOf(SC, iw(0, "covered"), 50), "significant");
+  assert.equal(urgencyOf(SC, iw(0, "exact"), 100), "moderate");
+  // No count at all: the same fallback
+  assert.equal(urgencyOf(SC, { unasked: null, kind: "costOnly" }, 0), "critical");
+  assert.equal(urgencyOf(SC, { unasked: null, kind: "perMonth" }, 50), "significant");
+  assert.equal(urgencyOf(SC, { unasked: null, kind: "none" }, 100), "moderate");
 });
 
-test("cascade: Freshness lowest with Coverage or System under 75 makes the lower of those two the primary", () => {
-  const areas = (c, s, f, r) => ({ coverage: { exact: c }, system: { exact: s }, freshness: { exact: f }, replies: { exact: r } });
-  const b = bottleneckOf(SC, areas(50, 75, 25, 100));
-  assert.equal(b.primary, "coverage");
-  assert.deepEqual(b.cascade, { effect: "freshness", cause: "coverage" });
-  assert.equal(b.secondary, "freshness");
-  const b2 = bottleneckOf(SC, areas(75, 50, 25, 100));
-  assert.equal(b2.primary, "system");
-  // Both upstream areas strong: Freshness itself is the primary
-  const b3 = bottleneckOf(SC, areas(75, 75, 25, 100));
-  assert.equal(b3.primary, "freshness");
+test("cascade: Room Mix and Lease-up Reserves follow from Rent Evidence and Fill Speed", () => {
+  const areas = (rent, fillA, supply, mix, reserves) => ({ rent: { exact: rent }, fill: { exact: fillA }, supply: { exact: supply }, mix: { exact: mix }, reserves: { exact: reserves } });
+  const b = bottleneckOf(SC, areas(50, 100, 50, 0, 50));
+  assert.equal(b.primary, "rent");
+  assert.deepEqual(b.cascade, { effect: "mix", cause: "rent" });
+  assert.equal(b.secondary, "mix");
+  const b2 = bottleneckOf(SC, areas(100, 50, 100, 100, 25));
+  assert.equal(b2.primary, "fill");
+  assert.deepEqual(b2.cascade, { effect: "reserves", cause: "fill" });
+  // Ties between the causes go to Rent Evidence
+  assert.equal(bottleneckOf(SC, areas(50, 50, 100, 0, 100)).primary, "rent");
+  // Both causes strong: the effect itself is the primary
+  const b3 = bottleneckOf(SC, areas(100, 75, 100, 25, 100));
+  assert.equal(b3.primary, "mix");
   assert.equal(b3.cascade, null);
-  // Ties go upstream first: Coverage, System, Replies, Freshness
-  assert.equal(bottleneckOf(SC, areas(50, 50, 50, 50)).primary, "coverage");
-  assert.equal(bottleneckOf(SC, areas(100, 100, 50, 50)).primary, "replies");
+  // Nearby Supply is a fact of the street, never an effect
+  const b4 = bottleneckOf(SC, areas(50, 50, 0, 100, 100));
+  assert.equal(b4.primary, "supply");
+  assert.equal(b4.cascade, null);
+  // Ties go upstream: rent, fill, supply, mix, reserves
+  assert.equal(bottleneckOf(SC, areas(50, 50, 50, 50, 50)).primary, "rent");
+  assert.equal(bottleneckOf(SC, areas(100, 100, 50, 100, 50)).primary, "supply");
 });
 
-test("all strong: Maintenance, the refinement area, and checks instead of quick wins", () => {
-  const hero = { ...HERO, asked10: "7to9", asks: "software", newest: "week", replies: "most" };
+test("all strong: maintenance, the refinement area, and checks instead of quick wins", () => {
+  const hero = { ...HERO, rentsource: "comps", fillsource: "observed", supply: "known", bathmix: "modeled", slowplan: "sized" };
   const r = evaluate(SC, hero);
-  assert.deepEqual(area(r), { coverage: 75, system: 75, freshness: 100, replies: 75 });
+  assert.deepEqual(area(r), { rent: 100, fill: 100, supply: 100, mix: 100, reserves: 100 });
+  assert.equal(r.score, 100);
+  assert.equal(r.tier, "advanced");
   assert.equal(r.bottleneck.maintenance, true);
-  assert.equal(r.bottleneck.primary, "coverage");
+  assert.equal(r.bottleneck.primary, "rent");
   assert.equal(r.bottleneck.lineKey, "none");
   assert.equal(r.quickWins.length, 3);
   assert.ok(r.quickWins.every((q) => q.check));
-  assert.equal(r.tier, "openbook");
+  assert.equal(r.verdict, SC.verdict.maintenance);
 });
 
-test("the rule flag puts 'Ask every customer the same way' first, whatever the area scores", () => {
-  const r = evaluate(SC, HERO, { ...DEEP, d1: "happy" });
-  assert.equal(r.ruleFlag, true);
-  assert.equal(r.quickWins[0].key, "d1");
-  assert.equal(r.quickWins[0].flag, true);
-  assert.ok(r.quickWins[0].text.startsWith("Ask every customer the same way"));
-  assert.equal(r.quickWins.length, 3);
+test("the rule flag puts the zoning check first for 'Not yet', 'I asked around' and 'I read a summary online'", () => {
+  for (const v of ["notyet", "asked", "summary"]) {
+    const r = evaluate(SC, HERO, { ...DEEP, zoning: v });
+    assert.equal(r.ruleFlag, true);
+    assert.equal(r.quickWins[0].key, "zoning");
+    assert.equal(r.quickWins.length, 3);
+  }
+  for (const v of ["code", "confirmed"]) {
+    const r = evaluate(SC, HERO, { ...DEEP, zoning: v });
+    assert.equal(r.ruleFlag, false);
+    assert.notEqual(r.quickWins[0].key, "zoning");
+  }
 });
 
-test("the Ask System line has a software variant when requests already go out", () => {
-  const r = evaluate(SC, { ...HERO, asked10: "all", asks: "software", newest: "week", replies: "all" }, { d2: "every", d3: "nothing", d4: "stops", d5: "yes", d6: "current", d7: "sameday", d8: "personal" });
-  assert.equal(r.bottleneck.primary, "system");
-  assert.equal(r.bottleneck.lineKey, "systemSoftware");
+test("line variants: a calculator or a whole-home rent on Rent Evidence; an assumed vacancy rate on Fill Speed", () => {
+  const strongFill = { fillsource: "observed", supply: "known", bathmix: "modeled", slowplan: "sized" };
+  assert.equal(evaluate(SC, { ...HERO, ...strongFill, rentsource: "calculator" }).bottleneck.lineKey, "rentCalculator");
+  assert.equal(evaluate(SC, { ...HERO, ...strongFill, rentsource: "divide" }).bottleneck.lineKey, "rentDivide");
+  assert.equal(evaluate(SC, { ...HERO, ...strongFill, rentsource: "none" }).bottleneck.lineKey, "rent");
+  assert.equal(evaluate(SC, { ...HERO, rentsource: "comps", fillsource: "none" }).bottleneck.lineKey, "fill");
 });
 
 test("the strongest area: the highest score, ties in report order", () => {
-  const areas = (c, s, f, r) => ({ coverage: { exact: c }, system: { exact: s }, freshness: { exact: f }, replies: { exact: r } });
-  assert.equal(strongestOf(SC, areas(50, 50, 75, 75)), "freshness");
-  assert.equal(strongestOf(SC, areas(100, 100, 100, 100)), "coverage");
+  const areas = (rent, fillA, supply, mix, reserves) => ({ rent: { exact: rent }, fill: { exact: fillA }, supply: { exact: supply }, mix: { exact: mix }, reserves: { exact: reserves } });
+  assert.equal(strongestOf(SC, areas(50, 50, 100, 100, 25)), "supply");
+  assert.equal(strongestOf(SC, areas(100, 100, 100, 100, 100)), "rent");
 });
 
-test("fit and routing (section 10)", () => {
+test("fit, routing and covered markets (spec 1, section 10)", () => {
   assert.equal(fitOf(SC, HERO), "qualified");
-  assert.equal(fitOf(SC, { ...HERO, jobs: "lt5" }), "under-floor");
-  assert.equal(fitOf(SC, { ...HERO, records: "paper" }), "no-software");
+  assert.equal(fitOf(SC, { ...HERO, stage: "learning" }), "learning");
+  assert.equal(fitOf(SC, { ...HERO, market: "other" }), "outside");
+  assert.equal(fitOf(SC, { ...HERO, market: "undecided" }), "outside");
   assert.deepEqual(routeOf(SC, HERO), { callOnly: false, why: null });
-  assert.deepEqual(routeOf(SC, { ...HERO, records: "paper" }), { callOnly: true, why: "records" });
-  assert.deepEqual(routeOf(SC, { ...HERO, profiles: "3to9" }), { callOnly: true, why: "profiles" });
+  assert.deepEqual(routeOf(SC, { ...HERO, stage: "scaling" }), { callOnly: true, why: "stage" });
+  for (const m of ["dfw", "houston", "atlanta", "orlando", "jacksonville", "phoenix", "lasvegas"]) assert.equal(coveredOf(SC, { market: m }), true);
+  assert.equal(coveredOf(SC, { market: "other" }), false);
+  assert.equal(coveredOf(SC, { market: "undecided" }), false);
+  const r = evaluate(SC, { ...HERO, stage: "operator", market: "other" });
+  assert.equal(r.qualified, false);
+  assert.equal(r.covered, false);
+  assert.equal(r.service, "next deal");
+  assert.equal(r.trade, "operator");
 });
 
-test("the GTM gap score keeps the old points, with the top-three reading 'unchecked' (15) until the report fills it", () => {
-  assert.equal(gtmGapScoreOf(SC, HERO), 20 + 14 + 8 + 12 + 15);
-  assert.equal(gtmGapScoreOf(SC, HERO, "behind"), 20 + 14 + 8 + 12 + 18);
-  assert.equal(evaluate(SC, HERO).gtmGapScore, 69);
+test("no outbound gap score for this scorecard", () => {
+  assert.equal(gtmGapScoreOf(SC, HERO), null);
+  assert.equal(evaluate(SC, HERO).gtmGapScore, null);
 });
 
-test("tiers and bands", () => {
-  assert.equal(tierOf(SC, 0).key, "secret");
-  assert.equal(tierOf(SC, 29).key, "secret");
-  assert.equal(tierOf(SC, 30).key, "somedays");
-  assert.equal(tierOf(SC, 54).key, "somedays");
-  assert.equal(tierOf(SC, 55).key, "nearly");
-  assert.equal(tierOf(SC, 75).key, "openbook");
+test("tiers and bands: the GTM's three tiers", () => {
+  assert.equal(tierOf(SC, 0).key, "beginner");
+  assert.equal(tierOf(SC, 39).key, "beginner");
+  assert.equal(tierOf(SC, 40).key, "intermediate");
+  assert.equal(tierOf(SC, 69).key, "intermediate");
+  assert.equal(tierOf(SC, 70).key, "advanced");
+  assert.equal(tierOf(SC, 100).key, "advanced");
   assert.equal(bandOf(SC, 25).key, "low");
   assert.equal(bandOf(SC, 50).key, "medium");
   assert.equal(bandOf(SC, 75).key, "high");
@@ -210,12 +260,20 @@ test("tiers and bands", () => {
 });
 
 test("an unanswered hero question is reported, not scored as zero", () => {
-  const { jobs, ...rest } = HERO;
+  const { carry, ...rest } = HERO;
   const r = evaluate(SC, rest);
   assert.equal(r.ok, false);
-  assert.deepEqual(r.missing, ["jobs"]);
-  const bad = evaluate(SC, { ...HERO, asks: "made-up" });
-  assert.deepEqual(bad.missing, ["asks"]);
+  assert.deepEqual(r.missing, ["carry"]);
+  const bad = evaluate(SC, { ...HERO, bathmix: "made-up" });
+  assert.deepEqual(bad.missing, ["bathmix"]);
+});
+
+test("the quick wins never repeat words, and the rule flag needs the deepener", () => {
+  const r = evaluate(SC, { ...HERO, rentsource: "none", fillsource: "none", supply: "none", bathmix: "notyet", slowplan: "none" });
+  const texts = r.quickWins.map((q) => q.text);
+  assert.equal(new Set(texts).size, texts.length);
+  assert.equal(r.ruleFlag, false);
+  assert.equal(quickWinsOf(SC, r.answers, null, r.bottleneck).length, 3);
 });
 
 test("fill leaves unknown placeholders alone", () => {

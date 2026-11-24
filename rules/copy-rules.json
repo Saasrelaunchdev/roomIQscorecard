@@ -1,82 +1,87 @@
 {
-  "_note": "Rempo's claim rules, copied from the landing page repository (RempoLandingPage meta/rules/copy-rules.json, which mirrors the go-to-market build's landing-page/copy-rules.json). Applied to every visitor-facing word in content/ by tools/copy-lint.mjs on each build and in npm test. refusalOk: the words may appear only in a sentence that refuses them (no, not, never, don't, won't...). allow: a content key (a prefix match) where a rule is waived, with the reason. budgets: word budgets; the hero-quiz variant's h1 and lead are errors over budget (the Meta page's rule), everything else a warning.",
-  "sources": [
-    "BrightLocal",
-    "Angi",
-    "ACHR News",
-    "Census",
-    "IBISWorld"
-  ],
+  "_note": "RoomIQ's claim rules, from the go-to-market (Saasrelaunchdev/roomIQGTMBuild GTM-BRIEF.md Section 5, the do-not-write table and the banned list; deliverables/scorecard_spec.docx Section 5) and the production landing page's non-negotiables. Applied to every visitor-facing word in content/ by tools/copy-lint.mjs on each build and in npm test. refusalOk: the words may appear only in a sentence that refuses them (no, not, never, don't, isn't...). allow: a content key (a prefix match) where a rule is waived, with the reason. budgets: word budgets; the hero-quiz variant's h1 and lead are errors over budget, everything else a warning. Always on: no em or en dashes, and a percentage needs its source in the same sentence.",
+  "sources": [],
   "rules": [
     {
-      "id": "more-reviews",
-      "re": "\\b(get|gets|getting|more|extra|new) (more )?reviews\\b(?! in)|\\breviews? a month\\b",
-      "msg": "Never promise reviews: describe the asking, not the result",
+      "id": "accuracy",
+      "re": "\\b(accurate|accuracy|predicts?|predicted|investor-grade|lender-ready|calibrated|error rate)\\b",
+      "msg": "No accuracy claim before the 90-day backtest: say the estimate shows its working (decision 8)",
       "refusalOk": true
     },
     {
-      "id": "ranking",
-      "re": "\\b(rank|ranks|ranking|rankings) (higher|better|up|first)\\b|\\bhigher ranking\\b|\\btop of google\\b",
-      "msg": "Never promise rankings",
+      "id": "income",
+      "re": "\\b(cash-?flowing deals?|passive income|guaranteed (income|returns?|rent)|(high|higher|better|bigger) returns?|boost (your )?(cash|returns?|income|rent)|how much (you|your house|it) (could|will|can) (earn|make)|you('ll| will) (earn|make))\\b",
+      "msg": "No income, return or yield promise; the deal math is informational, not financial or lending advice",
+      "refusalOk": true
+    },
+    {
+      "id": "return-figure",
+      "re": "\\b\\d+(\\.\\d+)?% (returns?|yield|cash-on-cash|roi|cap rate)\\b",
+      "msg": "No return, yield or cash-on-cash figure"
+    },
+    {
+      "id": "best-markets",
+      "re": "\\bbest (markets?|cities|places|neighborhoods) (to|for) (invest|buy)",
+      "msg": "Write 'markets ranked by RoomIQ's Market Score', never 'the best markets to invest in'"
+    },
+    {
+      "id": "collected",
+      "re": "\\b(real|actual) occupancy\\b|\\brent(s)? collected\\b|\\bcollected rents?\\b|\\brental income data\\b",
+      "msg": "It is observed listing data: 'observed rents and occupancy, not collected payments'",
+      "refusalOk": true
+    },
+    {
+      "id": "named-platform",
+      "re": "\\b(padsplit|airbnb|vrbo|zillow|bigger ?pockets|dealcheck|pillow ?markets|mashvisor|rentometer|rentcast|attom|furnished finder|craigslist|ccl properties|coliving ?pro)\\b",
+      "msg": "No named platform, data source or competitor: categories only"
+    },
+    {
+      "id": "partnership",
+      "re": "\\bpowered by\\b|\\bofficial (data|partner)\\b|\\bpartner(ed)? (of|with)\\b|\\bendorsed by\\b",
+      "msg": "No implied partnership or endorsement"
+    },
+    {
+      "id": "only",
+      "re": "\\b(the only|the first|the leading|#1|number one) (room|co-?living|rent-by-the-room|underwriting|analytics|tool|platform|app|software)\\b",
+      "msg": "No 'only', 'first' or 'leading' claim"
+    },
+    {
+      "id": "price-compare",
+      "re": "\\bcheaper than\\b|\\bbest value\\b|\\blowest price\\b|\\bcosts? less than\\b",
+      "msg": "No price comparison: publish the plans as they are"
+    },
+    {
+      "id": "time-saved",
+      "re": "\\b(underwrite|analy[sz]e|forecast|check) (a |any |your )?(deal|house|address|market)s? in (minutes|seconds)\\b|\\bsaves? (you )?(hours|days|time)\\b",
+      "msg": "No time-saved figure: nobody has timed the product flow"
+    },
+    {
+      "id": "offer-terms",
+      "re": "\\$\\d+ (a|per) month\\b|\\b\\d+-day (pro )?trial\\b|\\bfree trial\\b|\\bdiscount(ed)?\\b|\\bpromo code\\b",
+      "msg": "No price, trial or term in the funnel: the next step is the Free plan"
+    },
+    {
+      "id": "determination",
+      "re": "\\b(zoning check|compliance check|you('re| are) compliant|insurance-ready|flood risk assessment|legal advice|lending advice|financial advice)\\b",
+      "msg": "RoomIQ makes no zoning, compliance, insurance or flood determination and gives no advice",
       "refusalOk": true
     },
     {
       "id": "guarantee",
       "re": "\\bguarantee",
-      "msg": "The 7-day guarantee is PLANNED; no guarantees of results",
+      "msg": "No guarantee of any outcome",
       "refusalOk": true
     },
     {
-      "id": "lift",
-      "re": "\\b(personali[sz]ed|photo) (requests? )?(get|gets|drive|drives|boost|boosts|raise|raises)\\b",
-      "msg": "No lift claimed for the personalized request"
-    },
-    {
-      "id": "hyper",
-      "re": "\\bhyper-?personali[sz]",
-      "msg": "Say 'personalized request'"
-    },
-    {
-      "id": "instant",
-      "re": "\\binstant(ly)?\\b|\\bautomatic(ally)?\\b|\\bautopilot\\b",
-      "msg": "Approval mode is unconfirmed: no 'instant', 'automatic' or 'autopilot'"
-    },
-    {
-      "id": "always-on",
-      "re": "24/7",
-      "msg": "'24/7 Support' is dropped"
-    },
-    {
-      "id": "old-names",
-      "re": "google search boost|geotag|ai employee",
-      "msg": "Dropped names and claims"
-    },
-    {
-      "id": "rep-mgmt",
-      "re": "\\breputation management\\b",
-      "msg": "Name what is included instead"
-    },
-    {
-      "id": "remove",
-      "re": "\\bremov\\w* (bad |negative )?reviews?\\b",
-      "msg": "Only as a refusal: Rempo does not remove reviews",
+      "id": "advice",
+      "re": "\\b(you should buy|buy this house|safe investment|risk-free|can't lose|sure thing)\\b",
+      "msg": "Nothing that reads as investment advice",
       "refusalOk": true
     },
     {
-      "id": "gating",
-      "re": "\\b(catch|filter|screen)\\w* (out )?unhappy\\b",
-      "msg": "Only as a refusal: no review gating",
-      "refusalOk": true
-    },
-    {
-      "id": "offer",
-      "re": "\\$\\s?\\d|month to month|money back|free trial|start free",
-      "msg": "The Run 2 offer is PLANNED: no prices or terms on the page"
-    },
-    {
-      "id": "works-with",
-      "re": "\\bworks with (jobber|housecall|servicetitan)|\\bintegrates with\\b",
-      "msg": "Name no job software as supported until product confirms it"
+      "id": "hype",
+      "re": "\\b(leverage|unlock|seamless|robust|streamline|cutting-edge|empower)\\w*\\b",
+      "msg": "Banned words (GTM-BRIEF.md Section 5, mechanics)"
     }
   ],
   "off": [],
@@ -87,21 +92,5 @@
     "faqAnswerWords": 35,
     "sentenceWords": 28
   },
-  "allow": [
-    {
-      "key": "scorecard.steps.G3.options",
-      "rule": "offer",
-      "reason": "The ticket options are the owner's own job ticket, not Rempo's price (Deliverable 1, section 14: allow the ticket keys)."
-    },
-    {
-      "key": "scorecard.invisible",
-      "rule": "offer",
-      "reason": "The invisible work dollar figure is the value of the owner's own finished work, not Rempo's price (Deliverable 1, section 14)."
-    },
-    {
-      "key": "scorecard.notes.call",
-      "rule": "offer",
-      "reason": "The call notes are for the team only, never shown to a visitor; the figures are the owner's own ticket band."
-    }
-  ]
+  "allow": []
 }

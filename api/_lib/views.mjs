@@ -12,9 +12,11 @@ export function publicResult(r) {
     score: r.score, tier: r.tier, tierName: r.tierName, tierDescriptor: r.tierDescriptor,
     areas: Object.fromEntries(Object.entries(r.areas).map(([k, a]) => [k, { score: a.score, band: a.band }])),
     invisible: r.invisible,
-    bottleneck: { primary: r.bottleneck.primary, maintenance: r.bottleneck.maintenance, lineKey: r.bottleneck.lineKey, line: r.bottleneck.line, cascade: r.bottleneck.cascade },
+    bottleneck: { primary: r.bottleneck.primary, maintenance: r.bottleneck.maintenance, lineKey: r.bottleneck.lineKey, line: r.bottleneck.line, cascade: r.bottleneck.cascade, cascadeLine: r.bottleneck.cascadeLine || null },
     strongest: r.strongest,
-    callOnly: r.callOnly, service: r.service, trade: r.trade, qualified: r.qualified
+    callOnly: r.callOnly, service: r.service, trade: r.trade, qualified: r.qualified,
+    // The market (a metro, never an address) chooses the free forecast card or "Look up my market", and the city's rule
+    covered: r.covered !== false, market: r.market || null
   };
 }
 
