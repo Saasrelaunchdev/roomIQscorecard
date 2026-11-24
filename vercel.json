@@ -1,0 +1,58 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node tools/build.mjs",
+  "outputDirectory": "public",
+  "functions": {
+    "api/scorecard.mjs": { "maxDuration": 60, "includeFiles": "node_modules/@sparticuz/chromium/bin/**" },
+    "api/track.mjs": { "maxDuration": 10 },
+    "api/admin.mjs": { "maxDuration": 60, "includeFiles": "node_modules/@sparticuz/chromium/bin/**" },
+    "api/report.mjs": { "maxDuration": 60, "includeFiles": "node_modules/@sparticuz/chromium/bin/**" },
+    "api/cron.mjs": { "maxDuration": 30 },
+    "api/resend-webhook.mjs": { "maxDuration": 10 }
+  },
+  "rewrites": [
+    { "source": "/invisible", "destination": "/invisible/index.html" },
+    { "source": "/start", "destination": "/start/index.html" },
+    { "source": "/results/:token", "destination": "/results/index.html" },
+    { "source": "/sharpen/:token", "destination": "/sharpen/index.html" },
+    { "source": "/unsubscribe/:token", "destination": "/unsubscribe/index.html" },
+    { "source": "/report/:token/pdf", "destination": "/api/report?token=:token&format=pdf" },
+    { "source": "/report/:token", "destination": "/api/report?token=:token" },
+    { "source": "/admin", "destination": "/admin/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(results|sharpen|unsubscribe|report)/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/admin(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "same-origin" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
+  ],
+  "crons": [{ "path": "/api/cron", "schedule": "7 16 * * 1-5" }]
+}

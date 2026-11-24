@@ -1,0 +1,7 @@
+# What Vercel does not upload: the tests, the docs and the local data. The build (tools/) and its sources stay: Vercel
+# runs node tools/build.mjs.
+/tests/
+/docs/
+/.local/
+/.claude/
+CLAUDE.md
