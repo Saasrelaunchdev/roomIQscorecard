@@ -1,71 +1,82 @@
 # Running the scorecard: the team's routine
 
-Every owner gets their report by email the moment they finish the scorecard: the PDF, built from their answers, with
-the Visible Work Method and how Rempo runs it (the owner's request of 2026-11-22). Within one business day a person reads
-their public Google profile and the top three, and sends the update (Deliverable 3's "checked by a person"). This is
-the routine.
+Every investor gets their report by email the moment they finish the scorecard: the PDF, built from their answers,
+with the Room-by-Room Underwrite and a 30-day plan. Nothing waits on the team (instant delivery, no outside data), so
+the routine is the walkthroughs, the follow-ups and a weekly look at the numbers.
 
-## Each weekday morning
+## Each weekday
 
-The digest (Slack or email, from `/api/cron`) says how many reports are waiting for the top three and how old the
-oldest is. Open `/admin`, filter by status, and work oldest first. A call booked for today comes first; Insights, "Leads
-to call first", lists the qualified leads without a call, the most invisible work first.
+1. **Open `/admin`, Leads**, filtered to the last few days. New scorecards arrive with status New; the team's notice
+   (email or Slack) says the same thing as it happens.
+2. **Walkthroughs first.** A lead with a booking shows it in the Call column and on its page (day, window, phone,
+   address if given). The confirmation email told them: "We'll email you a video link before then, and call {phone} if
+   the link doesn't work." The funnel does not send that link: **email the video link the day before**, from the
+   address the scorecard's emails come from.
+3. **Insights, "Leads to call first"** lists qualified investors without a walkthrough, the largest lease-up gap first.
+   They agreed to emails about their score and report, not to calls: the follow-up is the day 2, 5 and 8 emails in
+   Loops, not a phone call.
 
-## Building one report (about 15 minutes)
+## Before a walkthrough (about 10 minutes)
 
-1. **Open the scorecard** in the admin. The left card is the result: the on-screen score, the report score (with the
-   deepener, if answered), the four areas, fix first, urgency, the invisible work, the verdict line, the quick wins and
-   the call notes. The right card is every answer in words with the seconds it took (a long pause on a question is
-   worth asking about), and the call if one is booked. Below: where they are (approximate), on what, from which source,
-   how long they took; the report they have, how often they opened it, and each email with whether it was delivered,
-   opened or clicked.
-2. **Run the search.** Search the owner's main service in their town in a private browser window (for example
-   "HVAC Austin"). The three companies that come up first are the top three. Put the service, the town and today's date
-   in the profile form: they print on the report, so the owner can repeat the search.
-3. **Read the owner's Google profile** and fill in:
-   - rating (as shown) and total reviews;
-   - reviews in the last 90 days (count them by date);
-   - how many days ago the newest review came in;
-   - replies: of the last 30 reviews (or all of them, if fewer), how many have an owner reply, and how many you read;
-   - the five checks: hours, services, photos from the last 90 days, a description, categories;
-   - reviews by month for the last 12 months, oldest first, ending with this month.
-4. **Read the top three** the same way (rating, total, last 90 days, newest, replies, the five checks). Their averages
-   are worked out for you.
-5. **Complaint themes.** If a complaint repeats in the owner's last 30 reviews, write the theme in plain words and the
-   count ("a call that was not returned", 3). Themes and counts only: never a reviewer's name or words.
-6. **Save the profile**, then check the two suggestions: the busy-season read (auto, or set dip, steady or none if the
-   months say otherwise) and the top-three reading for the GTM gap score.
-7. **Add a note if it helps** ("This lead's report"): a line for this owner, printed under the letter, and the sections
-   this report carries. The claim rules check the words before they save.
-8. **Preview the report** (Live preview). Read the invisible work page, the top three page, the weakest area page and
-   "Where they stand on each step" against the profile. If something reads wrong, fix the profile, save, preview again.
-9. **Approve and send the update.** Put your first name in "Checked by" (it prints on the cover). The PDF is printed
-   first; if it prints, the report is kept as it is and the owner gets the update email with the new PDF attached.
+1. **Open the lead.** The left card is the result: the score, the five areas, fix first, urgency, the lease-up gap,
+   the verdict and the quick wins. The right card is every answer in words with the seconds it took (a long pause is
+   worth asking about), the deepener's answers if given, and the checklist (the city's rule, financing).
+2. **Run the free forecast** on the address they gave, in RoomIQ, so the walkthrough starts from the estimate, its
+   formula, its comps and its confidence label. No address: ask for one at the start, or walk through the market.
+3. **Read their report's weakest-area page** and "Where your plan stands on each step": that is the walkthrough's
+   agenda, in the method's order (rent, fill, supply, room mix, reserves).
 
-## After sending
+## During the walkthrough (20 minutes)
 
-- The owner's link shows the report as it was last emailed. To change a sent report: Reopen, edit, send again (the owner
-  keeps the report they have in between).
-- "Send again" re-sends the score email (with the report), the call email or the report email, each with its PDF (never
-  to an address that unsubscribed or marked an email as spam).
-- If a lead's PDF did not print (the lead's page says "the link only"), the owner still got the report's link; "Send
-  again" sends it with the PDF once printing works.
-- Before a call: the call notes say what to bring up (higher-value ticket, paper records, 3+ locations, asks only happy
-  customers, contact details missing on jobs, no website).
+- Show what the evidence covers and what it doesn't. Thin evidence is labeled Thin; say so.
+- Say it plainly: an estimate shows its working; it doesn't guarantee rent, occupancy or a return. The deal math is
+  informational only, not financial or lending advice.
+- Zoning, financing and insurance sit outside RoomIQ: the city or an attorney, a lender, an insurer.
+- No prices or trials unless the offer is published; the Free plan (three forecasts a month, no card) is the next step.
+
+## After it
+
+Set the lead's status in the admin (its page, "Review and send"), and add a line in "Notes for the team" (never shown to
+the lead). To send a lead a report with a personal note: "This lead's report", write the note (the claim rules check
+it), Preview, then "Approve and send the update"; the PDF is printed first, and the investor gets the update email with
+it attached.
+
+"Send again" re-sends the score email (with the report), the walkthrough email or the report email, each with its PDF,
+never to an address that unsubscribed or marked an email as spam.
+
+## Each week
+
+- **Insights**, last 7 days: completions and completion rate by landing page (the split test), drop-off question by
+  question, sources and campaigns, walkthroughs booked. Compare the cost per completion with the Meta launch plan's
+  target (Events Manager counts ScorecardComplete once per completion).
+- **Emails**: bounces and spam complaints in Insights, "Emails". A rising bounce rate means the sender's domain needs a
+  look in Resend.
+
+## Each month, or when the facts change
+
+- **Covered markets.** When the weekly coverage check publishes its list, set `markets.covered` in
+  `content/scorecard.mjs` (the free forecast card shows only there), build and merge.
+- **The city's rules.** The checks quote each preset city's rule on unrelated adults as GTM-BRIEF.md's External
+  constraints published it (checked in November 2026). Recheck them, update `content/checks.mjs` and its "checked in"
+  date, build and merge.
+- **The founding cohort.** The day 8 email's version 1 runs only while seats are left and the number is published
+  (spec 2, section 10).
 
 ## Data rules (from the GTM)
 
-- Public profile facts only, as counts, dates and themes. Never a reviewer's name or words, never a personal detail.
-- No promise of reviews, ratings, rankings, calls or jobs, anywhere, including in emails you write by hand.
-- No incentives tied to reviews, for taking the scorecard or anywhere else.
-- Asking is the shop's; reviewing is the customer's choice.
+- RoomIQ's numbers are observed listing data: "observed rents and occupancy, not collected payments".
+- No accuracy, income, return or yield claims, anywhere, including emails written by hand and the walkthrough.
+- No named platform, competitor or data source: categories only.
+- The market is a metro; an address is kept only when the investor gives one for the walkthrough, and only with that
+  lead. Never share one lead's answers with another.
+- Not legal, lending, insurance or investment advice.
 
 ## Settings
 
 `/admin`, Settings: the letter at the front of every report and who signs it, the sections every report carries, who on
 the team hears about leads (and whether the PDF goes with the new-lead email), and "Send a test", which emails the sample
-report (a made-up shop) to you the way an owner gets it. "Preview with the sample shop" shows the report with the
-settings in force.
+report (a made-up investor) to you the way an investor gets it. "Preview with the sample investor" shows the report with
+the settings in force.
 
 ## When something is not set up
 

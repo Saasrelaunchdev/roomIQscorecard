@@ -1,5 +1,5 @@
 -- =====================================================================================================================
--- The Invisible Work Scorecard: where it keeps its scorecards, its analytics, its emails and its settings, in Supabase.
+-- The First Deal Risk Scorecard (RoomIQ): where it keeps its scorecards, its analytics, its emails and its settings, in Supabase.
 -- =====================================================================================================================
 --
 -- Run it in the SAME Supabase project as the landing page: SQL Editor > New query > paste this whole file > Run.
@@ -70,7 +70,7 @@ create table if not exists public.scorecard_assessments (
   notes           text,
   unsubscribed_at timestamptz
 );
-comment on table public.scorecard_assessments is 'scorecard v2: one row per completed Invisible Work Scorecard, written by the scorecard''s server (sql/schema.sql).';
+comment on table public.scorecard_assessments is 'scorecard v2: one row per completed First Deal Risk Scorecard, written by the scorecard''s server (sql/schema.sql).';
 
 -- Version 1 tables gain what version 2 adds
 alter table public.scorecard_assessments add column if not exists last_name text;

@@ -160,7 +160,8 @@ export function webhookData(row, ev, links) {
     result: {
       score: ev.score, tier: ev.tier, tier_name: ev.tierName, deepened: Boolean(ev.deepened),
       areas: Object.fromEntries(SC.areas.map((a) => [a.key, ev.areas[a.key].score])),
-      bottleneck: ev.bottleneck.primary, maintenance: ev.bottleneck.maintenance, urgency: ev.urgency,
+      bottleneck: ev.bottleneck.primary, bottleneck_name: (SC.areas.find((a) => a.key === ev.bottleneck.primary) || {}).name || null,
+      maintenance: ev.bottleneck.maintenance, urgency: ev.urgency,
       invisible: ev.invisible, quick_wins: (ev.quickWins || []).map((q) => q.text), verdict: ev.verdict,
       fit: ev.fit, call_only: ev.callOnly, covered: ev.covered !== false
     },

@@ -1,7 +1,8 @@
 # This project started from the scorecard funnel template
 
 The Scorecard Funnel Creator skill copied this codebase from its template and then rewrote what belongs to this project.
-Until it has, the template's worked example (Rempo's Invisible Work Scorecard) is what you see.
+It has: every project file in the left column now holds RoomIQ's First Deal Risk Scorecard. The template's worked
+example (Rempo's Invisible Work Scorecard) is kept only in the skill.
 
 | Belongs to the project (the skill rewrites it) | Shared infrastructure (kept as it is) |
 |---|---|

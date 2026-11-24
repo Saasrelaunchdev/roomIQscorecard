@@ -46,7 +46,7 @@ request open and say so plainly.
 | 2026-11-24 | The First Deal Risk Scorecard is RoomIQ's scorecard funnel, built from the go-to-market with the Scorecard Funnel Creator: the strategy in `docs/scorecard-strategy.md`, the spec in `docs/spec/` | `docs/`, `content/` |
 | 2026-11-24 | The scorecard is idea I1, First Deal Risk, from Path 1 (a quiz) of the Roomiqscorecards proposal, for investors before or during their first rent-by-the-room deal, picked by the client | `docs/scorecard-strategy.md`, `content/` |
 | 2026-11-24 | The funnel lives in Saasrelaunchdev/roomIQscorecard, its own repository, built with the Scorecard Funnel Creator as RoomIQ's own ScoreApp-style funnel | the repository |
-| 2026-11-24 | Built and tested, stopped before deploy: the owner sets up Vercel, Supabase and Resend from docs/OPERATIONS.md | `docs/OPERATIONS.md` |
+| 2026-11-24 | Built and tested, stopped before deploy: the owner sets up Vercel, Supabase and Resend from README.md, "Deploy" | `README.md` |
 
 Choices made where the spec was silent are in `docs/DECISIONS.md`, waiting for the owner's confirmation; once confirmed,
 move them into this table.

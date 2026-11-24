@@ -142,3 +142,15 @@ test("Supabase: the secret key only; create through scorecard_submit(); reads, u
   reply = () => ({ status: 404, body: JSON.stringify({ message: "function not found" }) });
   await assert.rejects(store.create({ email: "a@b.co" }), /run sql\/schema\.sql/);
 });
+
+test("the webhook carries the weakest area's name, so a follow-up email can print it without a lookup", async () => {
+  const { webhookData } = await import("../../api/_lib/messages.mjs");
+  const { evaluate } = await import("../../lib/scoring.mjs");
+  const SCORECARD = (await import("../../content/scorecard.mjs")).default;
+  const { ROW, HERO, DEEP } = await import("../../lib/sample.mjs");
+  const d = webhookData(ROW, evaluate(SCORECARD, HERO, DEEP, {}), { results: "https://x.test/results/T" });
+  assert.equal(d.result.bottleneck, "fill");
+  assert.equal(d.result.bottleneck_name, "Fill Speed");
+  assert.equal(d.deal.market_label, "Atlanta");
+  assert.equal(d.result.covered, true);
+});
