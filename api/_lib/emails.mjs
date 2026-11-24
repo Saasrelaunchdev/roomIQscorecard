@@ -39,7 +39,7 @@ export function compose(tpl, vars, { buttonUrl, buttonLabel } = {}) {
   const subject = filled(tpl.subject, vars);
   const preheader = tpl.preheader ? filled(tpl.preheader, vars) : "";
   const text = [...lines, EMAILS.signoff, "", ...footer].join("\n\n").replace(/\n{3,}/g, "\n\n");
-  const para = (l) => `<p style="margin:0 0 16px;font:16px/1.55 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:${K.ink}">${esc(l).replace(URL_RE, (u) => `<a href="${u}" style="color:${K.link}">${u}</a>`)}</p>`;
+  const para = (l) => `<p style="margin:0 0 16px;font:16px/1.55 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:${K.ink}">${esc(l).replace(URL_RE, (u) => `<a href="${u}" style="color:${K.link};word-break:break-all">${u}</a>`)}</p>`;
   const button = buttonUrl && !hasHoles(buttonUrl)
     ? `<p style="margin:8px 0 22px"><a href="${esc(buttonUrl)}" style="display:inline-block;padding:13px 22px;border-radius:12px;background:${K.accent};color:${K.onAccent};font:600 16px/1 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;text-decoration:none">${esc(buttonLabel || "Open")}</a></p>`
     : "";
@@ -51,7 +51,7 @@ export function compose(tpl, vars, { buttonUrl, buttonLabel } = {}) {
 <div style="padding:26px 24px;border-radius:16px;background:#FFFFFF;border:1px solid ${K.line}">
 ${lines.slice(0, 1).map(para).join("")}${button}${lines.slice(1).map(para).join("")}${para(EMAILS.signoff)}
 </div>
-${footer.map((f) => `<p style="margin:14px 4px 0;font:13px/1.5 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:${K.muted}">${esc(f).replace(URL_RE, (u) => `<a href="${u}" style="color:${K.muted}">${u}</a>`)}</p>`).join("")}
+${footer.map((f) => `<p style="margin:14px 4px 0;font:13px/1.5 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:${K.muted}">${esc(f).replace(URL_RE, (u) => `<a href="${u}" style="color:${K.muted};word-break:break-all">${u}</a>`)}</p>`).join("")}
 </div></body></html>`;
   return { subject, preheader, text, html };
 }

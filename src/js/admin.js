@@ -290,7 +290,7 @@
       `<label class="fld"><span>Notes for the team (never shown to the lead)</span><textarea name="notes" rows="3">${esc(row.notes || "")}</textarea></label>` +
       `<div class="acts"><button class="btn ghost" data-save>Save</button><a class="btn ghost" href="${esc(d.links.report)}?live=1" target="_blank" rel="noopener">Preview the report</a>` +
       (sent ? `<button class="btn ghost" data-reopen>Reopen to edit</button><span class="tag st-sent">Sent ${esc(fmtDate(row.sent_at))}</span>` : `<button class="btn" data-send>${instant ? "Approve and send the update" : "Approve and send"}</button>`) + `</div>` +
-      `${d.report.top3Available ? "" : `<p class="warn">The public profile is empty: the report's Top Three page stays out until it is filled in.</p>`}</section>`;
+      `${d.report.top3Available === false ? `<p class="warn">The public profile is empty: the report's Top Three page stays out until it is filled in.</p>` : ""}</section>`;
   }
   function readProfile(form) {
     const pd = { search: {}, business: { checks: {} }, top3: [0, 1, 2].map(() => ({ checks: {} })), themes: [{}, {}, {}], months: [] };
@@ -343,7 +343,7 @@
       send.disabled = true; send.textContent = "Printing the PDF and sending...";
       try {
         await api("save", { method: "POST", body: { id, checker: f.checker, last_name: f.last_name, notes: f.notes } });
-        const r = await api("send", { method: "POST", body: { id, checker: f.checker, withoutProfile: !d.report.top3Available && confirm("The public profile is empty. Send without the Top Three page?") } });
+        const r = await api("send", { method: "POST", body: { id, checker: f.checker, withoutProfile: d.report.top3Available === false && confirm("The public profile is empty. Send without the Top Three page?") } });
         toast(r.emailed ? "Sent: the investor has the report." : "Approved. The email did not go: check Settings.", !r.emailed);
         reload();
       } catch (err) { toast(err.message, true); send.disabled = false; send.textContent = label; }
@@ -485,7 +485,7 @@
       `<h3>Tiers</h3>${tableOf(["Tier", "Leads", "Booked", "Booked rate", "Deepened", `Median ${metric().name.toLowerCase()}`], p.byTier.map((t) => [esc(t.label), t.count, t.booked, pct(t.bookedRate), t.deepened, t.medianValue !== null ? esc(money(t.medianValue)) : ""]))}</section>` +
       `<section class="card"><h2>What to fix first</h2>${hbars(p.bottlenecks.map((b) => ({ label: b.name, count: b.count })), { total: p.count, order: "rank" })}` +
       `<h3>Average score by area</h3><div class="mlist">${areasList().map(([k, n]) => meterRow(n, p.areas[k] || 0, 100, p.areas[k] === null || p.areas[k] === undefined ? "n/a" : String(p.areas[k]), `${p.areas[k] ?? "n/a"} of 100\n${n}, average`)).join("")}</div>` +
-      `<h3>Fit <span class="muted">what Meta is told</span></h3>${hbars(Object.entries(p.fit).map(([k, c]) => ({ label: k, count: c })), { total: p.count, order: "rank" })}<h3>Route</h3>${hbars(Object.entries(p.routes).map(([k, c]) => ({ label: k, count: c })), { total: p.count, order: "rank" })}</section></div>`;
+      `<h3>Fit <span class="muted">qualified: the walkthrough first, and Schedule on booking</span></h3>${hbars(Object.entries(p.fit).map(([k, c]) => ({ label: k, count: c })), { total: p.count, order: "rank" })}<h3>Route</h3>${hbars(Object.entries(p.routes).map(([k, c]) => ({ label: k, count: c })), { total: p.count, order: "rank" })}</section></div>`;
     // 8. Who: the segments (content/scorecard.mjs segments)
     const segs = (p.bySegment || []).filter((s) => s.groups && s.groups.length);
     if (segs.length) out += `<section class="card"><h2>Who takes it <span class="muted">and who books</span></h2><div class="grid3">` +
@@ -498,7 +498,7 @@
       : `<p class="muted">No emails sent in this period.</p>`) + `<p class="muted small-note">Opens and clicks need open and click tracking turned on for the domain in Resend; Apple Mail can count an open without one.</p></section>`;
     // 11. The leads to call
     out += `<section class="card"><h2>Leads to call first <span class="muted">qualified, no call booked yet, the highest ${esc(metric().name.toLowerCase())} first</span></h2>` + (p.hotLeads.length
-      ? tableOf(["Business", "Score", metric().name, "Opened the report", "Came in"], p.hotLeads.map((h) => [`<a href="#lead=${esc(h.id)}">${esc(h.company)}</a> <span class="muted">${esc(h.city)} · ${esc(h.first_name)}</span>`, esc(h.score), h.value !== null ? esc(money(h.value)) : "", h.viewed ? "Yes" : "Not yet", esc(fmtDate(h.created_at))]))
+      ? tableOf(["Lead", "Score", metric().name, "Opened the report", "Came in"], p.hotLeads.map((h) => [`<a href="#lead=${esc(h.id)}">${esc(h.company || h.first_name || "A lead")}</a>${h.city ? ` <span class="muted">${esc(h.city)}</span>` : ""}`, esc(h.score), h.value !== null ? esc(money(h.value)) : "", h.viewed ? "Yes" : "Not yet", esc(fmtDate(h.created_at))]))
       : `<p class="muted">Nobody waiting.</p>`) + `</section>`;
     // 12. The split test
     out += `<section class="card"><h2>Landing pages <span class="muted">the split test</span></h2>` +

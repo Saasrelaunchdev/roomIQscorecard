@@ -117,7 +117,7 @@ async function lead(req, id) {
       views: Number(row.report_views) || 0, downloads: Number(row.pdf_downloads) || 0, lastViewed: row.report_viewed_at || null },
     options: { note: own.note || "", sections: own.sections || {}, effective: sectionsFor(settings, own), defaults: settings.report.sections },
     report: {
-      result: model.result, compare: model.compare, compareSuggested: model.compareSuggested, top3Available: model.top3.available,
+      result: model.result, compare: model.compare, compareSuggested: model.compareSuggested, top3Available: SITE.enrichment === false ? null : model.top3.available,
       strongest: model.strongest.area, weakest: model.weakest.area, refinement: model.weakest.refinement,
       quickWins: model.result.quickWins, verdict: model.result.verdict, callNotes: model.result.notes.call.map((n) => n.text), reportNotes: model.result.notes.report
     },
