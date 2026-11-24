@@ -335,6 +335,7 @@ export default {
       callOnly: "You run more than ten houses, so we'll start with a walkthrough to see what fits."
     },
     pick: "Or book a 20-minute walkthrough on your address:",
+    pickLinkText: "pick a time",
     booked: "Your walkthrough is booked: {day}, {window}. We'll email you a video link.",
     master: "Run the free forecast:",
     masterLink: "roomiq.io",

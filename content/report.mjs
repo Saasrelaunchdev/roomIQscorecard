@@ -18,7 +18,7 @@ export default {
   overview: {
     title: "Your Report Overview",
     heading: "Thank you for taking the First Deal Risk Scorecard",
-    intro: "Your report scores your plan in five areas: where your rent comes from, how fast rooms fill, the competition nearby, the room mix and your reserves. A low score isn't a verdict on the deal: it means a number is borrowed, and borrowed numbers can be checked before an offer. A high score means the plan rests on evidence. Next come your Deal Readiness Score and your first six months.",
+    intro: "Your report scores your plan in the five areas below. A low score isn't a verdict on the deal: it means a number is borrowed, and borrowed numbers can be checked before an offer. A high score means the plan rests on evidence. Next come your Deal Readiness Score and your first six months.",
     sub: "Your five areas"
   },
 
@@ -82,7 +82,8 @@ export default {
     title: "Your Overall Score",
     paragraph: "Your Deal Readiness Score is the average of your five area scores, each out of 100. It measures how much of your plan rests on evidence you can check, not the house, the market or what the deal will return. Under 40, the plan leans on borrowed numbers. From 40 to 69, part of it rests on evidence. At 70 and above, the plan rests on evidence, and the open question is whether it holds for this address.",
     deepenerYes: "Updated with your {n} extra answers.",
-    deepenerNo: "Based on your {n_main} answers. Add {n} more for a sharper score: {deepener_link}",
+    deepenerNo: "Based on your {n_main} answers. Add {n} more for a sharper score:",
+    deepenerLinkText: "sharpen your report",
     interpretation: {
       beginner: "Your plan leans on estimates more than evidence. That's normal for a first deal, and it's fixable before the offer. The rent per room and the fill time are the numbers every other one rests on, and right now at least one of them is borrowed. Start with {primary_bottleneck}, follow the 30-day plan from day one, and take the scorecard again on day 30.",
       intermediate: "You have part of the picture. Some of your numbers rest on evidence, and the gaps left are the ones that decide whether rooms fill. Your lowest area, {primary_bottleneck}, is where to start. Close it before the offer, and your next score will show it.",

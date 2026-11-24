@@ -84,7 +84,8 @@ test("the overall page: the tier's interpretation names the bottleneck; the urge
   assert.equal(m.overall.urgency, "At your numbers, your reserves leave 2 months uncovered, so this is the first thing to fix, before you make an offer.");
   assert.equal(m.overall.deepenerNote, "Updated with your 12 extra answers.");
   const noDeep = build({ deepener: null, deepened_at: null });
-  assert.equal(noDeep.overall.deepenerNote, "Based on your 10 answers. Add 12 more for a sharper score: https://x.test/sharpen/T");
+  assert.equal(noDeep.overall.deepenerNote, "Based on your 10 answers. Add 12 more for a sharper score:");
+  assert.equal(noDeep.overall.deepenerLink, "https://x.test/sharpen/T");
   // Covered: no months to name; Rent Evidence (50) decides: significant
   assert.equal(screenOnly({ reserves: "m6" }).overall.urgency, "Worth fixing before you make an offer.");
   // Unknown reserves with a weak Rent Evidence: critical, without a count
@@ -115,11 +116,13 @@ test("the strongest and weakest pages: never the same area; the refinement headl
   assert.equal(reserves.weakest.impact.bullets[0], "Every month your reserves don't cover gets paid from somewhere else");
 });
 
-test("the rule flag adds the note on the city's rule to the weakest page", () => {
+test("the rule flag puts the city's rule first among the quick wins, and says it once", () => {
   const m = build({ deepener: { ...DEEP, zoning: "asked" } });
-  assert.equal(m.weakest.ruleNote.title, "A note on the city's rule");
   assert.ok(m.weakest.quickWins[0].text.startsWith("Read your city's rule on unrelated adults"));
-  assert.equal(build({ deepener: { ...DEEP, zoning: "confirmed" } }).weakest.ruleNote, null);
+  assert.equal(m.weakest.ruleNote, null);
+  const confirmed = build({ deepener: { ...DEEP, zoning: "confirmed" } });
+  assert.ok(!confirmed.weakest.quickWins.some((q) => q.flag));
+  assert.equal(confirmed.weakest.ruleNote, null);
 });
 
 test("the cascade: a weakest Room Mix or Lease-up Reserves is reported as the effect of the weaker borrowed number", () => {

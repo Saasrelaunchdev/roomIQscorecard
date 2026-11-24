@@ -58,9 +58,10 @@ export default {
   intro: {
     kicker: "The Room-by-Room Underwrite",
     h1: "What an evidence-first underwrite looks like",
-    lead: "A first deal goes wrong at the numbers nobody checked. The Room-by-Room Underwrite checks them in order, from the rent per room to the cushion, before the offer.",
-    outcomeTitle: "The outcome",
-    outcome: "An offer where every number rests on evidence you can check: the rent per room, how fast rooms fill, the competition, the room mix and the reserves.",
+    lead: "A first deal goes wrong at the numbers nobody checked. The Room-by-Room Underwrite checks them in order, from the rent per room to the cushion, so every number in the offer rests on evidence you can check.",
+    // The template's outcome box: left out here (the lead says it), so the five steps and the recheck fit one page
+    outcomeTitle: null,
+    outcome: null,
     stepsTitle: "Five steps, in this order",
     chain: "The order matters. The rent and the fill time are the numbers every other one rests on. The competition sets how hard rooms are to fill. The room mix is priced from rents and fill, and the cushion is sized from all of them.",
     rhythmTitle: "And one recheck before the offer",
@@ -219,7 +220,7 @@ export default {
         "A count of the co-living homes within about 3 miles",
         "Your own deal math, with a slower case"
       ],
-      note: "Rather do it by hand? The plan works, and it's yours to keep."
+      note: null
     },
     service: {
       title: "Run it with RoomIQ",
@@ -229,7 +230,7 @@ export default {
         { t: "Pick your market.", b: "The Free plan covers one main market." },
         { t: "Type the address.", b: "Add the bedrooms, the baths and which rooms get a private bath." },
         { t: "Run the forecast.", b: "Read the formula, the comps and the confidence label." },
-        { t: "Carry it into the deal math.", b: "Cash flow under your own costs. Informational only." }
+        { t: "Carry it into the deal math.", b: "Cash flow, cash-on-cash, DSCR and cap rate under your own costs. Informational only." }
       ],
       listTitle: "What you see",
       list: [
@@ -237,8 +238,7 @@ export default {
         "Support and confidence labels, and how far away the comps are",
         "Rent and occupancy by bath type and size for comparable properties",
         "Active co-living properties within about 3 miles, mapped",
-        "When occupancy and fill speed peak in the market",
-        "Cash flow, cash-on-cash, DSCR and cap rate under your own assumptions"
+        "When occupancy and fill speed peak in the market"
       ]
     },
     wontTitle: "What RoomIQ doesn't do",
@@ -267,6 +267,7 @@ export default {
     monthlyTitle: "What the Free plan includes",
     monthly: "One main market, 90 days of history, 5 Property Analyzer opens and 3 revenue estimates a month, with no card needed.",
     cta: "Want to go through it together first? Book a 20-minute walkthrough on your address:",
+    ctaLinkText: "pick a time",
     ctaBooked: "Your walkthrough is booked: {day}, {window}. We'll go through this plan on your address then."
   }
 };
