@@ -473,7 +473,7 @@ function checksCard(r) {
   const m = r.market || "other";
   const zoning = K.zoning.byMarket[m] || K.zoning.byMarket.other;
   const ins = (K.insurance.byMarket && K.insurance.byMarket[m]) || "";
-  const item = (title, body, ask) => `<li><h3>${esc(title)}</h3><p>${esc(body)}</p><p class="ask">${esc(ask)}</p></li>`;
+  const item = (title, body, ask) => `<li><h3>${esc(title)}</h3><p>${esc(body)}</p><p class="chk-ask">${esc(ask)}</p></li>`;
   return `<section class="card checks" aria-labelledby="checks-h"><h2 class="h3" id="checks-h">${esc(K.title)}</h2><p class="muted">${esc(K.lead)}</p><ol class="checks-l">` +
     item(K.zoning.title, zoning, K.zoning.ask) + item(K.financing.title, K.financing.body, K.financing.ask) + item(K.insurance.title, [K.insurance.body, ins].filter(Boolean).join(" "), K.insurance.ask) +
     `</ol><p class="small">${esc(K.zoning.asOf)} ${esc(K.notAdvice)}</p></section>`;

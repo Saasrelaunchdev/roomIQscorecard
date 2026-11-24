@@ -339,7 +339,7 @@ body.sheet-open{overflow:hidden}
 .houses{width:100%;height:auto}
 .houses-l{font:600 14px/1.3 var(--f-text);color:var(--c-accent-text)}
 .lease{display:grid;gap:10px}
-.months-strip{width:100%;height:auto;font-family:var(--f-display)}
+.months-strip{display:block;width:100%;max-width:440px;height:auto;font-family:var(--f-display)}
 .lease-key{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;padding:0;list-style:none;font:500 13.5px/1.35 var(--f-text);color:var(--c-text-2)}
 .lease-key li{display:inline-flex;align-items:center;gap:7px}
 .lease-key i{width:14px;height:14px;border-radius:4px;flex:none}
@@ -354,7 +354,7 @@ body.sheet-open{overflow:hidden}
 .checks-l li::marker{font:700 15px var(--f-display);color:var(--c-accent-text)}
 .checks-l h3{font:700 17px/1.3 var(--f-display);color:var(--c-heading);margin:0 0 4px}
 .checks-l p{margin:0 0 4px;font-size:15.5px;line-height:1.5}
-.checks-l .ask{font-weight:600;color:var(--c-heading)}
+.checks-l .chk-ask{font-weight:600;color:var(--c-heading)}
 .fix{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px 16px;border-radius:16px;background:color-mix(in srgb,var(--c-signal) 13%,var(--c-bg));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c-signal) 40%,transparent);font:500 16px/1.5 var(--f-text);color:var(--c-heading)}
 .fix b{font-weight:700}
 .fix .ic{width:22px;height:22px;color:var(--c-signal-text);stroke-width:2.2;margin-top:2px}
@@ -385,6 +385,7 @@ body.sheet-open{overflow:hidden}
 .cta-card{display:grid;gap:10px;padding:20px 18px;border-radius:var(--r-card);background:var(--c-surface);box-shadow:inset 0 0 0 1px var(--c-line);scroll-margin-top:16px}
 .cta-card.main{background:var(--c-bg);box-shadow:0 0 0 2px var(--c-accent),0 30px 60px -36px color-mix(in srgb,var(--c-primary-500) 60%,transparent)}
 .cta-card .cta-top{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center}
+.cta-card .cta-top:not(:has(img)){grid-template-columns:minmax(0,1fr)}
 .cta-card img{width:72px;height:72px;object-fit:contain}
 .cta-card h3{font:700 21px/1.2 var(--f-display)}
 .cta-row{display:flex;flex-wrap:wrap;gap:10px}
