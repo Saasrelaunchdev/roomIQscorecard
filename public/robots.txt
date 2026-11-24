@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /results/
+Disallow: /sharpen/
+Disallow: /report/
+Disallow: /unsubscribe/
+Disallow: /admin
+Disallow: /api/

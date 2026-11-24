@@ -12,19 +12,19 @@ export default {
   // grounds in the footer; the mark alone on the report (cover, section kickers, the toolbar). width and height are the
   // lockup's viewBox, so the page reserves its space before it loads.
   logo: {
-    lockup: "rempo-lockup-on-light.svg",
-    lockupOnDark: "rempo-lockup-on-dark.svg",
-    mark: "rempo-mark.svg",
-    width: 211.2,
-    height: 64
+    lockup: "roomiq-first-deal-lockup-on-light.svg",
+    lockupOnDark: "roomiq-first-deal-lockup-on-dark.svg",
+    mark: "roomiq-first-deal-mark.svg",
+    width: 134,
+    height: 30
   },
 
   // Self-hosted fonts in src/assets/fonts/: one file per role (a variable woff2 covers every weight). The family
   // names must match --f-display and --f-text in src/styles/tokens.css. A role whose file is missing falls back to
   // the system font.
   fonts: {
-    display: { family: "Outfit", file: "display.woff2", weight: "100 900" },
-    text: { family: "Geist", file: "text.woff2", weight: "100 900" }
+    display: { family: "Bricolage Grotesque", file: "display.woff2", weight: "200 800" },
+    text: { family: "Instrument Sans", file: "text.woff2", weight: "400 700" }
   },
 
   // The report's pictures, embedded in the PDF: slot -> "<name>-<width>" in src/assets/img/ (a .webp). A slot left
@@ -41,23 +41,21 @@ export default {
   // to the tokens: ink = --c-heading, text = --c-text, muted = --c-ink-600, link = --c-accent-text, accent =
   // --c-accent, onAccent = --c-on-accent, canvas = --c-ink-50, line = --c-ink-100, tint = --c-primary-100.
   colors: {
-    ink: "#0A1A33",
-    text: "#040F22",
-    muted: "#5F7699",
-    link: "#0057B3",
-    accent: "#1F86FF",
-    accent2: "#70ADFF",
-    onAccent: "#040F22",
-    canvas: "#F3F7FC",
-    line: "#E8EFF9",
-    tint: "#E4F0FF",
-    // The drawings' roles (lib/icons.mjs PAL): line2 = --c-ink-200, ink300/400/500 = --c-ink-300/400/500, signal =
-    // --c-signal (the warm accent), star = the rating stars, chart = the one-hue charts' color
-    line2: "#D3DFF1",
-    ink300: "#B7C9E5",
-    ink400: "#94ACD2",
-    ink500: "#7990B5",
-    signal: "#F5A524",
+    ink: "#03045E",
+    text: "#010041",
+    muted: "#456CD6",
+    link: "#00667B",
+    accent: "#00B4D8",
+    accent2: "#0077B6",
+    onAccent: "#FFFFFF",
+    canvas: "#F3F7FF",
+    line: "#E7EFFF",
+    tint: "#D9F4FC",
+    line2: "#CFDEFF",
+    ink300: "#AEC7FF",
+    ink400: "#83A8FF",
+    ink500: "#5E88F5",
+    signal: "#F2B442",
     star: "#F9CE14",
     chart: "#2A78D6"
   }

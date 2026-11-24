@@ -1,10 +1,14 @@
 /* ============================================================
-   The Invisible Work Scorecard: the pages. Built from the landing page's components (RempoLandingPage meta/src/styles/
-   page.css): its type, buttons, option tiles, chips, fields, cards, FAQ, sheet and footer, set for a phone first. Every
-   colour is a token, white, or a mix of the two. Brand blue means "under control" and every action; amber (the signal)
-   marks the one thing that needs the owner's eye: the gap. The area colours go on marks only, never on text.
+   The First Deal Risk Scorecard: the pages. Built from the template's components: type, buttons, option tiles, chips,
+   fields, cards, FAQ, sheet and footer, set for a phone first. Every colour is a token, white, or a mix of the two.
+   RoomIQ's navy-to-blue means every action (as on the landing page's light theme); cyan marks what is chosen; amber (the
+   signal) marks the one thing that needs the buyer's eye: the lease-up gap. The area colours go on marks only, never on
+   text.
    ============================================================ */
 :root{
+  /* RoomIQ's primary button, as on the production landing page (light theme): navy to blue, white text. The generated
+     tokens give the solid blue end (brand.json light.accent-fill); the gradient starts at the ink. */
+  --c-grad-forward:linear-gradient(135deg,#03045E 0%,#0077B6 100%);
   --ease-out:cubic-bezier(.22,1,.36,1);
   --ease-in-out:cubic-bezier(.77,0,.175,1);
   --ease-drawer:cubic-bezier(.32,.72,0,1);

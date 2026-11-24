@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Unsubscribe | RoomIQ</title>
+<meta name="description" content="How much of your work can a homeowner see on Google? Ten quick taps, about a minute, free. Your Visibility Score shows right away; your full report comes by email.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="/assets/favicon.svg?v=8c5e11c87b" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/display.woff2?v=a79fdb52d4" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/text.woff2?v=2ee17598a9" as="font" type="font/woff2" crossorigin>
+
+<style>@font-face{font-family:"Bricolage Grotesque";src:url(/assets/fonts/display.woff2?v=a79fdb52d4) format("woff2");font-weight:200 800;font-display:swap}@font-face{font-family:"Instrument Sans";src:url(/assets/fonts/text.woff2?v=2ee17598a9) format("woff2");font-weight:400 700;font-display:swap}:root {
+--c-ink-25: #FAFCFF;
+--c-ink-50: #F3F7FF;
+--c-ink-100: #E7EFFF;
+--c-ink-200: #CFDEFF;
+--c-ink-300: #AEC7FF;
+--c-ink-400: #83A8FF;
+--c-ink-500: #5E88F5;
+--c-ink-600: #456CD6;
+--c-ink-700: #2D50B7;
+--c-ink-800: #18359A;
+--c-ink-900: #081980;
+--c-ink-950: #03045E;
+--c-ink-975: #010041;
+--c-primary-25: #F7FDFF;
+--c-primary-50: #ECFAFE;
+--c-primary-100: #D9F4FC;
+--c-primary-200: #B6E8F7;
+--c-primary-300: #83D5EE;
+--c-primary-400: #00B4D8;
+--c-primary-500: #009FBF;
+--c-primary-600: #00829D;
+--c-primary-700: #00667B;
+--c-primary-800: #004B5B;
+--c-primary-900: #003440;
+--c-primary-950: #00212A;
+--c-primary-975: #001219;
+--c-neutral-25: #FAFCFF;
+--c-neutral-50: #F4F7FE;
+--c-neutral-100: #EBEEF6;
+--c-neutral-200: #DADEE6;
+--c-neutral-300: #C3C7D1;
+--c-neutral-400: #A6ABB5;
+--c-neutral-500: #8A8F9A;
+--c-neutral-600: #6F747F;
+--c-neutral-700: #565B65;
+--c-neutral-800: #3E424C;
+--c-neutral-900: #2A2E36;
+--c-neutral-950: #191D24;
+--c-neutral-975: #0D0F16;
+--c-signal-25: #FFFBF5;
+--c-signal-50: #FFF5E7;
+--c-signal-100: #FFECCE;
+--c-signal-200: #FCD89F;
+--c-signal-300: #F2B442;
+--c-signal-400: #DE9D00;
+--c-signal-500: #BB8300;
+--c-signal-600: #996B00;
+--c-signal-700: #785300;
+--c-signal-800: #593C00;
+--c-signal-900: #3E2900;
+--c-signal-950: #291A00;
+--c-signal-975: #180D00;
+--c-grad-forward: linear-gradient(135deg, #0077B6 0%, #0077B6 100%);
+--c-grad-ink: linear-gradient(160deg, #18359A 0%, #081980 45%, #010041 100%);
+--f-display: "Bricolage Grotesque",system-ui,sans-serif;
+--f-text: "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+--f-stretch: 100%;
+--f-stretch-sm: 100%;
+--r-card: 20px;
+--r-screen: 28px;
+--r-btn: 999px;
+}
+:root, [data-theme="light"] {
+color-scheme: light;
+--c-bg: #FFFFFF;
+--c-surface: #FAFCFF;
+--c-surface-2: #F4F7FE;
+--c-line: #EBEEF6;
+--c-line-strong: #DADEE6;
+--c-heading: #03045E;
+--c-text: #010041;
+--c-text-2: #565B65;
+--c-accent: #00B4D8;
+--c-accent-text: #00667B;
+--c-signal-text: #785300;
+--c-device: #010041;
+--c-shadow: #03045E;
+--c-signal: #F2B442;
+--c-screen: #FFFFFF;
+--c-focus: #00667B;
+--c-accent-fill: #0077B6;
+--c-on-accent: #FFFFFF;
+--c-on-signal: #010041;
+--c-logo-ink: #03045E;
+--c-logo-accent: #00B4D8;
+--c-accent-fill-2: #0077B6;
+--c-grad-canvas: radial-gradient(60% 50% at 85% 0%, #D9F4FC 0%, transparent 70%), radial-gradient(50% 45% at 0% 100%, #F4F7FE 0%, transparent 70%), #FFFFFF;
+}
+:root {
+--c-star: #F9CE14;
+}
+:root{
+--c-grad-forward:linear-gradient(135deg,#03045E 0%,#0077B6 100%);
+--ease-out:cubic-bezier(.22,1,.36,1);
+--ease-in-out:cubic-bezier(.77,0,.175,1);
+--ease-drawer:cubic-bezier(.32,.72,0,1);
+--t-press:140ms;--t-exit:150ms;--t-ui:200ms;--t-open:280ms;
+--gutter:20px;
+--pad-l:max(var(--gutter),env(safe-area-inset-left,0px));
+--pad-r:max(var(--gutter),env(safe-area-inset-right,0px));
+--lead:var(--c-neutral-700);
+--field-line:var(--c-neutral-400);
+--shadow-card:0 0 0 1px var(--c-line),0 30px 60px -36px color-mix(in srgb,var(--c-shadow) 55%,transparent);
+--focus:var(--c-focus);
+}
+@media (min-width:900px){:root{--gutter:28px}}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--c-bg);-webkit-tap-highlight-color:transparent;scroll-padding-top:16px}
+body{margin:0;background:var(--c-bg);color:var(--c-text);font:400 17px/1.55 var(--f-text);-webkit-font-smoothing:antialiased;overflow-x:clip}
+img,svg,video{display:block;max-width:100%}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+p{margin:0;text-wrap:pretty}
+ul,ol{margin:0;padding:0;list-style:none}
+figure{margin:0}
+fieldset{min-width:0;margin:0;padding:0;border:0}
+legend{padding:0}
+h1,h2,h3,h4{margin:0;font-family:var(--f-display);color:var(--c-heading);letter-spacing:-.012em;text-wrap:balance}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
+.narrow{max-width:760px}
+.ic{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
+a,button,summary,label,select,input{touch-action:manipulation}
+.btn,.gc-opt,.chip-opt,.faq summary{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.skip-link{position:absolute;left:12px;top:-60px;z-index:100;padding:10px 14px;border-radius:10px;background:var(--c-heading);color:var(--c-bg);font-weight:600;text-decoration:none}
+.skip-link:focus{top:12px}
+.story{background:var(--c-grad-canvas)}
+.tint{background:var(--c-surface)}
+.ink{background:var(--c-grad-ink);color:var(--c-neutral-200)}
+.ink h2,.ink h3{color:#fff}
+.display{font-size:clamp(34px,8.6vw,60px);line-height:1.02;font-weight:800}
+.display.long{font-size:clamp(31px,7.4vw,54px)}
+.h2{font-size:clamp(29px,7vw,46px);line-height:1.06;font-weight:800}
+.h3{font-size:clamp(20px,5.2vw,23px);line-height:1.22;font-weight:700}
+.lead{font-size:clamp(17px,4.5vw,20px);line-height:1.5;color:var(--lead)}
+.eyebrow{font:600 14px/1.4 var(--f-text);color:var(--c-accent-text);letter-spacing:.02em}
+.muted{color:var(--c-text-2)}
+.small{font-size:14px;line-height:1.5;color:var(--c-text-2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:var(--r-btn);border:0;font:650 17px/1.2 var(--f-text);text-decoration:none;cursor:pointer;transition:transform var(--t-press) var(--ease-out),background-color var(--t-ui) ease,opacity var(--t-ui) ease}
+.btn .ic{width:20px;height:20px;stroke-width:2}
+.btn-primary{position:relative;background:var(--c-grad-forward);color:var(--c-on-accent);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--c-primary-100) 60%,transparent)}
+.btn-primary::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 12px 30px -12px color-mix(in srgb,var(--c-primary-400) 85%,transparent);opacity:0;transition:opacity var(--t-ui) var(--ease-out);pointer-events:none}
+.btn-line{background:var(--c-bg);color:var(--c-heading);box-shadow:inset 0 0 0 1.5px var(--c-line-strong)}
+.btn-white{background:#fff;color:var(--c-ink-950)}
+.btn-block{width:100%}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.55;cursor:default}
+@media (hover:hover) and (pointer:fine){
+.btn-primary:not([disabled]):hover{transform:translateY(-1px)}
+.btn-primary:not([disabled]):hover::after{opacity:1}
+.btn-line:hover{background:color-mix(in srgb,var(--c-heading) 5%,var(--c-bg))}
+}
+.btn:active:not([disabled]){transform:scale(.97)}
+.link-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;border:0;background:none;font:600 15px/1.2 var(--f-text);color:var(--c-accent-text);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.hdr{padding:14px 0 6px}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hdr .brand{display:inline-flex;align-items:center;color:var(--c-logo-ink)}
+.hdr .brand svg,.hdr .brand img{height:32px;width:auto}
+.brand .wordmark{font:700 22px/1 var(--f-display);color:inherit;letter-spacing:-.01em}
+@media (min-width:900px){.hdr{padding:22px 0 8px}.hdr .brand svg,.hdr .brand img{height:36px}}
+.pill{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 11px;border-radius:999px;background:color-mix(in srgb,var(--c-accent) 11%,var(--c-bg));color:var(--c-primary-700);font:600 14px/1.25 var(--f-text);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c-accent) 22%,transparent)}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--c-accent) 22%,transparent)}
+.hero{padding:10px 0 56px}
+.hero-grid{display:grid;gap:22px}
+.hero-copy{display:grid;gap:14px;align-content:start}
+.hero .lead{max-width:36em}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 16px;font:500 14.5px/1.35 var(--f-text);color:var(--c-text-2)}
+.trust li{display:inline-flex;align-items:center;gap:7px}
+.trust .ic{width:18px;height:18px;color:var(--c-accent-text);stroke-width:2.2}
+.chips-u{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:4px}
+.chips-u li{display:inline-flex;align-items:center;gap:8px;font:600 14.5px/1.3 var(--f-text);color:var(--c-heading)}
+.chips-u .icn{width:30px;height:30px}
+@media (min-width:900px){
+.hero{padding:28px 0 96px}
+.hero-grid{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);column-gap:56px;align-items:center}
+.hero.quiz .hero-grid{grid-template-rows:auto 1fr;align-items:start}
+.hero:not(.quiz) .hero-grid.no-vis{grid-template-columns:minmax(0,1fr);max-width:780px;margin-inline:auto;text-align:center}
+.hero:not(.quiz) .hero-grid.no-vis .pill,.hero:not(.quiz) .hero-grid.no-vis .hero-cta{justify-self:center}
+.hero.quiz .hero-grid.no-vis{grid-template-rows:auto;align-items:center}
+.hero.quiz .hero-grid.no-vis .hero-card{grid-row:1}
+.hero.quiz .hero-copy{grid-column:1;grid-row:1;padding-top:24px}
+.hero.quiz .hero-card{grid-column:2;grid-row:1 / span 2}
+.hero.quiz .hero-vis{grid-column:1;grid-row:2;max-width:620px}
+}
+.scene{position:relative}
+.scene img.pic{width:100%;height:auto}
+.scene::before{content:"";position:absolute;left:14%;right:14%;bottom:1%;height:10%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--c-shadow) 20%,transparent),transparent);filter:blur(8px);pointer-events:none}
+.pin{position:absolute;z-index:3;left:var(--x);top:var(--y);transform:translate(-50%,-50%)}
+.ask{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--c-ink-300)}
+.ask.on{background:var(--c-accent);box-shadow:0 0 0 3px #fff,0 8px 16px -8px color-mix(in srgb,var(--c-primary-700) 80%,transparent)}
+.ask .ic{width:16px;height:16px;color:var(--c-on-accent);stroke-width:3}
+.ask:not(.on) .ic{display:none}
+.scene-tag{position:absolute;z-index:3;left:var(--x);top:var(--y);transform:translate(-50%,0);display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--c-ink-900);color:#fff;font:600 12.5px/1 var(--f-text);white-space:nowrap}
+.scene-tag b{color:var(--c-primary-300)}
+.gc{position:relative;padding:18px 18px 20px;border-radius:var(--r-card);background:var(--c-bg);box-shadow:var(--shadow-card)}
+@media (min-width:600px){.gc{padding:24px 26px 26px}}
+.gc-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gc-label{display:inline-flex;align-items:center;gap:7px;font:700 13.5px/1.2 var(--f-text);color:var(--c-accent-text);letter-spacing:.01em}
+.gc-label .ic{width:17px;height:17px;stroke-width:2}
+.gc-count{font:600 13px/1.2 var(--f-text);color:var(--c-text-2);white-space:nowrap}
+.gc-bar{height:6px;margin:12px 0 4px;border-radius:999px;background:var(--c-ink-100);overflow:hidden}
+.gc-bar i{display:block;height:100%;width:var(--p,8%);border-radius:inherit;background:var(--c-grad-forward);transition:width var(--t-open) var(--ease-out)}
+.gc-frame{margin:10px 0 2px;font:500 15px/1.45 var(--f-text);color:var(--c-text-2)}
+.gc-step{display:grid;gap:14px;margin-top:14px}
+.gc-step[hidden]{display:none}
+.no-js .gc-step[hidden]{display:grid}
+.gc-q{font:700 clamp(20px,5.4vw,23px)/1.22 var(--f-display);color:var(--c-heading);text-wrap:balance;outline:none}
+.gc-hint{margin-top:-6px;font:400 14.5px/1.45 var(--f-text);color:var(--c-text-2)}
+.gc-opts{display:grid;gap:9px}
+.gc-opts.grid{grid-template-columns:1fr 1fr}
+.gc-opt{position:relative;display:block;cursor:pointer}
+.gc-opt input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.gc-opt span{display:flex;align-items:center;gap:12px;min-height:54px;height:100%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--field-line);background:var(--c-bg);font:600 16px/1.3 var(--f-text);color:var(--c-heading);transition:border-color var(--t-ui) ease,background-color var(--t-ui) ease,transform var(--t-press) var(--ease-out)}
+.gc-opt span::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--field-line);background:var(--c-bg);transition:box-shadow var(--t-ui) ease,background var(--t-ui) ease}
+.gc-opt:active span{transform:scale(.98)}
+.gc-opt input:checked + span{border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 9%,var(--c-bg));box-shadow:inset 0 0 0 1px var(--c-accent)}
+.gc-opt input:checked + span::before{box-shadow:inset 0 0 0 6px var(--c-accent);background:var(--c-bg)}
+.gc-opt input:focus-visible + span{outline:2px solid var(--focus);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){.gc-opt:hover span{border-color:var(--c-accent)}}
+.gc-opts[aria-invalid="true"] .gc-opt span{border-color:var(--c-signal)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip-opt{position:relative;display:inline-flex}
+.chip-opt input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.chip-opt span{display:inline-grid;align-content:center;justify-items:center;gap:1px;min-height:48px;min-width:52px;padding:6px 15px;border-radius:12px;border:1.5px solid var(--field-line);background:var(--c-bg);font:600 15.5px/1.2 var(--f-text);color:var(--c-heading);text-align:center;transition:border-color var(--t-ui) ease,background-color var(--t-ui) ease,transform var(--t-press) var(--ease-out)}
+.chip-opt small{font:500 12.5px/1.2 var(--f-text);color:var(--c-text-2)}
+.chip-opt:active span{transform:scale(.97)}
+.chip-opt input:checked + span{border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 11%,var(--c-bg));box-shadow:inset 0 0 0 1px var(--c-accent)}
+.chip-opt input:focus-visible + span{outline:2px solid var(--focus);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){.chip-opt:hover span{border-color:var(--c-accent)}}
+.chips[aria-invalid="true"] .chip-opt span{border-color:var(--c-signal)}
+.group-l{display:block;margin-bottom:8px;font:600 15px/1.35 var(--f-text);color:var(--c-heading)}
+.field{display:grid;gap:6px;align-content:start}
+.field label{font:600 15px/1.3 var(--f-text);color:var(--c-heading)}
+.field .help{font:400 13.5px/1.4 var(--f-text);color:var(--c-text-2);margin-top:-3px}
+.field input{width:100%;min-height:52px;padding:0 14px;border-radius:12px;border:1.5px solid var(--field-line);background:var(--c-bg);font-size:17px;color:var(--c-text)}
+.field input:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.field input[aria-invalid="true"]{border-color:var(--c-signal)}
+.phone-in{display:flex}
+.phone-in span{display:grid;place-items:center;min-height:52px;padding:0 13px;border-radius:12px 0 0 12px;border:1.5px solid var(--field-line);border-right:0;background:var(--c-surface-2);font:600 16px var(--f-text);color:var(--c-text)}
+.phone-in input{border-radius:0 12px 12px 0}
+.consent{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;font:400 15px/1.45 var(--f-text);color:var(--c-text);cursor:pointer}
+.consent input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--c-primary-500)}
+.err{color:var(--c-signal-text);font:600 14px/1.4 var(--f-text)}
+.err:empty{display:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.legal-note{margin:2px 0 0;font:400 13.5px/1.5 var(--f-text);color:var(--c-text)}
+.legal-note a{color:var(--c-accent-text);text-decoration:underline;text-underline-offset:2px}
+.gc-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px}
+.gc-nav .btn{min-height:50px;padding:0 20px}
+.gc-back{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 8px 0 2px;border:0;background:none;font:600 15px/1 var(--f-text);color:var(--c-text-2);cursor:pointer}
+.gc-back .ic{width:18px;height:18px;stroke-width:2}
+.gc-back[hidden]{display:none}
+.gc-next{margin-left:auto}
+.gc-step[data-kind="choice"]:not([data-answered]) .gc-next{display:none}
+.gc-step[data-kind="fields"] .gc-nav .btn{flex:1}
+.gc-sending .btn-primary{pointer-events:none}
+.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid color-mix(in srgb,var(--c-on-accent) 30%,transparent);border-top-color:var(--c-on-accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.motion .gc-step.enter{animation:stepIn 320ms var(--ease-out) both}
+@keyframes stepIn{from{opacity:0;transform:translateY(10px)}}
+.dlg{padding:0;border:0;margin:auto auto 0;width:100%;max-width:100%;max-height:100svh;height:100svh;border-radius:0;background:var(--c-bg);color:var(--c-text);overflow:hidden;
+transition:translate var(--t-open) var(--ease-drawer),display var(--t-open) allow-discrete,overlay var(--t-open) allow-discrete}
+.dlg:not([open]){translate:0 100%;transition-duration:var(--t-exit);transition-timing-function:var(--ease-out)}
+@starting-style{.dlg[open]{translate:0 100%}}
+.dlg::backdrop{background:color-mix(in srgb,var(--c-ink-975) 55%,transparent)}
+.dlg-in{height:100%;overflow-y:auto;overscroll-behavior:contain;padding:6px var(--pad-r) calc(24px + env(safe-area-inset-bottom)) var(--pad-l)}
+.dlg-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:10px 0 6px;background:var(--c-bg)}
+.dlg-head .brand svg,.dlg-head .brand img{height:28px;width:auto;color:var(--c-logo-ink)}
+.dlg-x{display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:var(--c-bg);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer}
+.dlg-x .ic{width:20px;height:20px;stroke-width:2}
+.dlg .gc{box-shadow:none;padding:6px 0 8px;max-width:560px;margin:0 auto}
+@media (min-width:900px){
+.dlg{margin:auto;width:min(620px,calc(100% - 48px));height:auto;max-height:92svh;border-radius:24px;box-shadow:0 40px 80px -30px color-mix(in srgb,var(--c-shadow) 70%,transparent)}
+.dlg:not([open]){translate:0 24px;opacity:0}
+@starting-style{.dlg[open]{translate:0 24px;opacity:0}}
+.dlg-in{max-height:92svh;padding:8px 32px 28px}
+}
+body.sheet-open{overflow:hidden}
+.sec{padding:72px 0}
+@media (min-width:900px){.sec{padding:104px 0}}
+.sec-head{display:grid;gap:14px;max-width:760px;margin-bottom:32px}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center;justify-items:center}
+@media (min-width:900px){.sec-head{margin-bottom:48px}}
+.sec-cta{margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.sec-cta.center{justify-content:center}
+.sec-cta .btn{min-width:min(100%,320px)}
+.two-col{display:grid;gap:32px;align-items:center}
+@media (min-width:900px){.two-col{grid-template-columns:1fr 1fr;gap:64px}}
+.beats{display:grid;gap:14px}
+.beat{display:grid;grid-template-columns:52px 1fr;gap:4px 14px;align-items:center;padding:16px 18px;border-radius:var(--r-card);background:color-mix(in srgb,#fff 6%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,#fff 12%,transparent)}
+.beat .icn{grid-row:1 / span 2;width:52px;height:52px;padding:6px;border-radius:14px;background:#fff}
+.beat b{font:700 18px/1.25 var(--f-display);color:#fff}
+.beat span{font-size:15.5px;color:var(--c-neutral-300)}
+.beat .n{display:none}
+@media (min-width:900px){.beats{grid-template-columns:repeat(3,1fr);gap:18px}.beat{grid-template-columns:1fr;align-content:start;padding:22px}.beat .icn{grid-row:auto;margin-bottom:6px}}
+.areas-grid{display:grid;gap:14px}
+@media (min-width:700px){.areas-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1100px){.areas-grid{grid-template-columns:repeat(4,1fr)}}
+.area-card{position:relative;display:grid;gap:10px;align-content:start;padding:22px 20px 22px;border-radius:var(--r-card);background:var(--c-bg);box-shadow:inset 0 0 0 1px var(--c-line)}
+.area-card::before{content:"";position:absolute;left:20px;right:20px;top:0;height:4px;border-radius:0 0 4px 4px;background:var(--a)}
+.area-card .icn{width:52px;height:52px}
+.area-card h3{font:700 21px/1.2 var(--f-display)}
+.area-card p{font-size:16px;color:var(--c-text-2)}
+.report-vis{position:relative;display:grid;place-items:center;padding:24px;border-radius:28px;background:var(--c-grad-canvas);box-shadow:inset 0 0 0 1px var(--c-line)}
+.report-vis img{width:min(100%,360px);height:auto}
+.report-vis:not(:has(img)){min-height:240px}
+.mini-rep{position:absolute;right:6%;bottom:8%;width:min(46%,220px);padding:14px;border-radius:16px;background:#fff;box-shadow:var(--shadow-card)}
+.mini-rep .bar-l{display:grid;grid-template-columns:1fr;gap:7px}
+.mini-rep i{display:block;height:7px;border-radius:999px;background:var(--a);width:var(--w)}
+.mini-rep .t{height:9px;width:62%;border-radius:999px;background:var(--c-ink-200);margin-bottom:10px}
+.ticks-l{display:grid;gap:10px;margin-top:16px}
+.ticks-l li{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:center;font:600 17px/1.4 var(--f-text);color:var(--c-heading)}
+.ticks-l .icn{width:30px;height:30px}
+.pts{display:grid;gap:16px}
+.pt{display:grid;gap:10px;padding:18px 18px 22px;border-radius:var(--r-card);background:var(--c-surface);box-shadow:inset 0 0 0 1px var(--c-line)}
+.pt-img{display:block;height:150px}
+.pt-img img{width:100%;height:100%;object-fit:contain}
+.pt h3{font:700 20px/1.25 var(--f-display)}
+.pt p{color:var(--c-text-2);font-size:16px}
+@media (min-width:900px){.pts{grid-template-columns:repeat(3,1fr);gap:20px}.pt-img{height:180px}}
+.faq{display:grid;border-top:1px solid var(--c-line);max-width:860px}
+.faq details{border-bottom:1px solid var(--c-line)}
+.faq summary{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 2px;cursor:pointer;list-style:none;font:700 17.5px/1.35 var(--f-text);color:var(--c-heading)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .ic{width:22px;height:22px;transition:transform var(--t-open) var(--ease-out);color:var(--c-accent-text)}
+.faq details[open] summary .ic{transform:rotate(180deg)}
+.faq .ans{padding:0 2px 20px;max-width:680px;color:var(--c-text-2);font-size:16.5px}
+.banner-cta{padding:56px 0;text-align:center}
+.banner-cta h2{max-width:20ch;margin:0 auto}
+.banner-cta p{margin-top:12px;font-size:18px;color:var(--c-neutral-300)}
+.banner-cta .btn{margin-top:24px;min-width:min(100%,320px)}
+.stack{display:grid;gap:10px;margin:22px 0 18px}
+.stack li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;font:700 clamp(18px,4.8vw,23px)/1.3 var(--f-display);color:var(--c-heading)}
+.stack li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c-signal);transform:translateY(-3px)}
+.foot{background:var(--c-grad-ink);padding:52px 0 120px;font-size:15px;color:var(--c-neutral-300);--c-logo-ink:#fff;--focus:var(--c-primary-300)}
+.foot .brand{color:#fff;display:inline-flex}
+.foot .brand svg,.foot .brand img{height:36px;width:auto}
+.foot-grid{display:grid;gap:18px}
+.foot p{max-width:46em}
+.foot a{color:#fff;font-weight:600}
+.foot-legal{display:flex;flex-wrap:wrap;gap:4px 20px;font-size:14px}
+.foot-legal a{font-weight:500;display:inline-flex;align-items:center;min-height:40px}
+.foot-btn{display:inline-flex;align-items:center;min-height:40px;padding:0;border:0;background:none;font:500 14px/1.2 var(--f-text);color:#fff;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.foot-small{margin-top:10px;padding-top:16px;border-top:1px solid color-mix(in srgb,var(--c-neutral-400) 22%,transparent);color:var(--c-neutral-400);font-size:13px}
+@media (min-width:900px){.foot{padding-bottom:56px}}
+.sticky-bar{position:fixed;z-index:45;left:0;right:0;bottom:0;display:flex;padding:10px var(--pad-r) calc(10px + env(safe-area-inset-bottom)) var(--pad-l);background:color-mix(in srgb,var(--c-bg) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--c-line);transform:translateY(110%);transition:transform .3s var(--ease-out)}
+.sticky-bar .btn{flex:1}
+.sticky-bar.show{transform:none}
+@media (min-width:900px){.sticky-bar{display:none}}
+.cookie{position:fixed;z-index:60;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:grid;gap:12px;max-width:560px;margin:0 auto;padding:16px 18px;border-radius:16px;background:var(--c-bg);color:var(--c-text);box-shadow:0 0 0 1px var(--c-line-strong),0 18px 40px -18px color-mix(in srgb,var(--c-shadow) 55%,transparent);font:400 14.5px/1.5 var(--f-text)}
+.cookie[hidden]{display:none}
+.cookie a{color:var(--c-accent-text)}
+.cookie-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cookie-btns .btn{min-height:46px;font-size:15.5px;padding:0 14px}
+@media (min-width:900px){.cookie{left:24px;right:auto;bottom:24px;margin:0}}
+.res{padding:8px 0 72px}
+.res-wrap{display:grid;gap:18px;max-width:880px;margin:0 auto}
+.res-head{display:grid;gap:6px;padding:6px 0 4px}
+.res-head .thanks{font:600 16px/1.3 var(--f-text);color:var(--c-accent-text)}
+.res-head h1{font-size:clamp(30px,7.6vw,46px);line-height:1.05;font-weight:800}
+.res-head p{color:var(--c-text-2);font-size:16px}
+.res-head h1:focus,.booked-t:focus,.done-card h2:focus{outline:none}
+.card{padding:20px 18px;border-radius:var(--r-card);background:var(--c-bg);box-shadow:var(--shadow-card)}
+@media (min-width:600px){.card{padding:26px 28px}}
+.score-top{display:grid;gap:18px;align-items:center}
+@media (min-width:640px){.score-top{grid-template-columns:auto 1fr;gap:26px}}
+.donut-n{font:800 46px var(--f-display);fill:var(--c-heading)}
+.tier-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;font:700 14.5px/1 var(--f-text);background:color-mix(in srgb,var(--c-signal) 18%,var(--c-bg));color:var(--c-signal-text);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c-signal) 45%,transparent)}
+.tier-chip.t-nearly,.tier-chip.t-openbook{background:color-mix(in srgb,var(--c-accent) 12%,var(--c-bg));color:var(--c-accent-text);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c-accent) 35%,transparent)}
+.score-label{margin-top:10px;font:700 17px/1.35 var(--f-text);color:var(--c-heading)}
+.score-desc{margin-top:2px;color:var(--c-text-2)}
+.score-intro{margin-top:16px;padding-top:16px;border-top:1px solid var(--c-line);font-size:15.5px;color:var(--c-text-2)}
+.iw{display:grid;gap:12px}
+.iw-big{font:700 clamp(19px,5vw,23px)/1.35 var(--f-display);color:var(--c-heading);text-wrap:pretty}
+.iw-big b{color:var(--c-primary-700)}
+.iw-math{font:500 14px/1.5 var(--f-text);color:var(--c-text-2)}
+.houses{width:100%;height:auto}
+.houses-l{font:600 14px/1.3 var(--f-text);color:var(--c-accent-text)}
+.fix{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px 16px;border-radius:16px;background:color-mix(in srgb,var(--c-signal) 13%,var(--c-bg));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c-signal) 40%,transparent);font:500 16px/1.5 var(--f-text);color:var(--c-heading)}
+.fix b{font-weight:700}
+.fix .ic{width:22px;height:22px;color:var(--c-signal-text);stroke-width:2.2;margin-top:2px}
+.fix.ok{background:color-mix(in srgb,var(--c-accent) 9%,var(--c-bg));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c-accent) 30%,transparent)}
+.fix.ok .ic{color:var(--c-accent-text)}
+.bars4{display:grid;gap:12px}
+.bars4 .row{display:grid;grid-template-columns:118px 1fr 40px;gap:12px;align-items:center;font:600 15px/1.2 var(--f-text);color:var(--c-heading)}
+.bars4 i{display:block;height:12px;border-radius:999px;background:var(--c-ink-100);overflow:hidden}
+.bars4 i span{display:block;height:100%;width:var(--w);border-radius:0 6px 6px 0;background:var(--a);transition:width 900ms var(--ease-out)}
+.bars4 .n{font:800 18px/1 var(--f-display);text-align:right;font-variant-numeric:tabular-nums}
+.res-summary{font-size:16px;color:var(--c-text-2)}
+.acards{display:grid;gap:14px}
+@media (min-width:760px){.acards{grid-template-columns:1fr 1fr}}
+.acard{position:relative;display:grid;gap:10px;align-content:start;padding:20px 18px 20px 20px;border-radius:var(--r-card);background:var(--c-bg);box-shadow:inset 0 0 0 1px var(--c-line)}
+.acard::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:var(--a)}
+.acard-h{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center}
+.acard-h .icn{width:44px;height:44px}
+.acard-h h3{font:700 19px/1.2 var(--f-display)}
+.acard-h .n{font:800 24px/1 var(--f-display);color:var(--c-heading);font-variant-numeric:tabular-nums}
+.band{justify-self:start;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font:600 12.5px/1.2 var(--f-text)}
+.band.low{background:color-mix(in srgb,var(--c-signal) 16%,var(--c-bg));color:var(--c-signal-text)}
+.band.medium{background:var(--c-surface-2);color:var(--c-text-2);box-shadow:inset 0 0 0 1px var(--c-line-strong)}
+.band.high{background:color-mix(in srgb,var(--c-accent) 11%,var(--c-bg));color:var(--c-accent-text)}
+.acard p{font-size:15.5px;color:var(--c-text)}
+.acard .rec{padding-left:12px;border-left:3px solid var(--a);font-size:15px;color:var(--c-text-2)}
+.acard .rec b{color:var(--c-heading)}
+.ctas{display:grid;gap:14px}
+.cta-card{display:grid;gap:10px;padding:20px 18px;border-radius:var(--r-card);background:var(--c-surface);box-shadow:inset 0 0 0 1px var(--c-line);scroll-margin-top:16px}
+.cta-card.main{background:var(--c-bg);box-shadow:0 0 0 2px var(--c-accent),0 30px 60px -36px color-mix(in srgb,var(--c-primary-500) 60%,transparent)}
+.cta-card .cta-top{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center}
+.cta-card img{width:72px;height:72px;object-fit:contain}
+.cta-card h3{font:700 21px/1.2 var(--f-display)}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px}
+.cta-row .btn{flex:1 1 200px}
+.cta-card p{font-size:16px;color:var(--c-text-2)}
+.cta-card .btn{justify-self:start;min-width:min(100%,260px)}
+.cta-card .done-l{display:flex;align-items:center;gap:8px;font:600 15px/1.4 var(--f-text);color:var(--c-accent-text)}
+.cta-card .done-l .ic{width:20px;height:20px;stroke-width:2.4}
+.rule{font:500 13.5px/1.45 var(--f-text);color:var(--c-text-2);text-align:center}
+.warn{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--c-signal) 13%,var(--c-bg));color:var(--c-signal-text);font:600 14.5px/1.45 var(--f-text)}
+.skeleton{display:grid;gap:14px}
+.skeleton i{display:block;height:18px;border-radius:8px;background:linear-gradient(90deg,var(--c-ink-50),var(--c-ink-100),var(--c-ink-50));background-size:200% 100%;animation:sk 1.2s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.book{display:grid;gap:14px;margin-top:4px;padding-top:14px;border-top:1px solid var(--c-line)}
+.book[hidden]{display:none}
+.book .row{display:grid;gap:14px}
+.booked{display:grid;gap:12px}
+.booked-h{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.done-ic{width:40px;height:40px;padding:8px;border-radius:50%;background:var(--c-accent);fill:none;stroke:var(--c-on-accent);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.booked-t{font:700 clamp(20px,5.4vw,23px)/1.2 var(--f-display);color:var(--c-heading);outline:none}
+.mini{padding:12px 0 72px}
+.mini .gc{max-width:600px;margin:0 auto}
+.done-card{display:grid;gap:14px;text-align:left}
+.done-card h2{font:800 clamp(24px,6vw,32px)/1.12 var(--f-display)}
+.motion .reveal{opacity:0;transform:translateY(14px);transition:opacity 600ms var(--ease-out),transform 600ms var(--ease-out)}
+.motion .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important}
+}
+.m-only{display:none}
+@media (max-width:599px){
+.m-hide{display:none!important}
+span.m-only{display:inline}
+p.m-only{display:block}
+.hero{padding-top:4px}
+.hero-grid{gap:16px}
+.hero-copy{gap:10px}
+.gc{padding:16px 16px 18px}
+.gc-bar{margin:10px 0 2px}
+.gc-step{margin-top:12px;gap:12px}
+.btn,.gc-nav .btn{min-height:56px}
+.gc-back{min-height:48px}
+.consent{grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:center}
+.consent input{width:32px;height:32px;margin:0}
+.sec-cta .btn,.hero-cta .btn{width:100%}
+.foot-legal a{min-height:48px}
+.pt{grid-template-columns:64px minmax(0,1fr);column-gap:14px;align-items:center;padding:16px 16px 18px}
+.pt-img{height:64px}
+.pt.no-img{grid-template-columns:minmax(0,1fr)}
+.pt p{grid-column:1 / -1}
+.bars4 .row{grid-template-columns:100px 1fr 34px;font-size:14.5px}
+.cta-card .btn{width:100%}
+.motion .reveal{opacity:1;transform:none;transition:none}
+}
+@media (max-width:359px){.gc-frame{font-size:14px}.gc-opts.grid{grid-template-columns:1fr}}:root{--a-coverage:#2A78D6;--a-system:#1BAF7A;--a-freshness:#EDA100;--a-replies:#6250D6;}</style>
+</head>
+<body data-page="unsubscribe" data-variant="">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><linearGradient id="g-forward" x1="1" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c-accent)"/><stop offset="1" style="stop-color:var(--c-primary-300)"/></linearGradient>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M10 9H8M16 13H8M16 17H8"/></symbol>
+<symbol id="i-van" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></symbol>
+<symbol id="i-starf" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4M3 7l2 2 4-4M13 6h8M13 12h8M13 18h8"/></symbol>
+<symbol id="i-plug" viewBox="0 0 24 24"><path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-reply" viewBox="0 0 24 24"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></symbol>
+
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3l14 9-14 9z"/></symbol>
+</svg>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="hdr"><div class="wrap"><a class="brand" href="https://roomiq.io"><img src="/assets/roomiq-first-deal-lockup-on-light.svg?v=760ce75543" alt="RoomIQ" width="134" height="30"></a></div></header><main id="main" class="mini"><div class="wrap"><div class="gc done-card" id="unsub" style="max-width:560px;margin:24px auto"><h2>Unsubscribe from Rempo&#39;s emails</h2><p class="muted">You won&#39;t get another email from us about your scorecard. If your report was on its way, we won&#39;t email it.</p><button type="button" class="btn btn-primary" data-unsubscribe>Unsubscribe</button><p class="err" role="alert"></p></div></div></main><footer class="foot"><div class="wrap foot-grid"><a class="brand" href="https://roomiq.io"><img src="/assets/roomiq-first-deal-lockup-on-dark.svg?v=d1a71527f6" alt="RoomIQ" width="134" height="30"></a><p>Rempo runs the review habit for HVAC and plumbing shops: a request after every completed job, a reply for every review, and a monthly report. <a href="https://roomiq.io">See how Rempo works</a></p><nav class="foot-legal" aria-label="Legal"><a href="https://rempo.io/legal/terms">Terms</a><a href="https://rempo.io/legal/privacy">Privacy</a><a href="https://rempo.io/legal/cookies">Cookies</a><a href="https://rempo.io/legal/sms">SMS terms</a><a href="https://rempo.io/legal/accessibility">Accessibility</a><a href="https://rempo.io/legal/privacy-choices">Do Not Sell or Share My Personal Information</a></nav><p class="foot-small">RoomIQ · roomiq.io</p></div></footer>
+<script type="application/json" id="sc-data">{"sc":{"id":"roomiq-first-deal","name":"The First Deal Risk Scorecard","scoreName":"Visibility Score","form":"scorecard-roomiq-first-deal","deepenerForm":"scorecard-deepener","callForm":"scorecard-call","areas":[{"key":"coverage","name":"Ask Coverage","color":"#2A78D6","description":"Measures how many of your finished jobs end with the customer being asked for a Google review."},{"key":"system","name":"Ask System","color":"#1BAF7A","description":"Evaluates whether asking runs on a system, with one follow-up, or depends on someone remembering on a busy day."},{"key":"freshness","name":"Freshness","color":"#EDA100","description":"Checks whether a homeowner looking you up today sees recent proof of your work, on Google and on your website."},{"key":"replies","name":"Replies","color":"#6250D6","description":"Assesses how quickly and how personally your shop answers the reviews customers leave, including the hard ones."}],"tieOrder":["coverage","system","replies","freshness"],"strongOrder":["coverage","system","freshness","replies"],"maxPoints":4,"strongAt":75,"steps":[{"id":"G1","key":"trade","kind":"gateway","type":"choice","layout":"grid","q":"What's your trade?","options":[{"v":"hvac","label":"HVAC","service":"HVAC"},{"v":"plumbing","label":"Plumbing","service":"plumbing"},{"v":"both","label":"HVAC and plumbing","service":"HVAC and plumbing"},{"v":"other","label":"Another home service","service":"home services"}]},{"id":"G2","key":"jobs","kind":"gateway","type":"choice","layout":"grid","q":"About how many jobs do you finish in a typical week?","options":[{"v":"lt5","label":"Fewer than 5"},{"v":"5to15","label":"5 to 15"},{"v":"16to40","label":"16 to 40"},{"v":"over40","label":"More than 40"},{"v":"unsure","label":"Not sure"}]},{"id":"Q1","key":"asked10","kind":"scored","type":"choice","area":"coverage","weight":3,"layout":"grid","q":"Think of your last 10 finished jobs. How many of those customers were asked for a Google review?","options":[{"v":"all","label":"All 10","points":4},{"v":"7to9","label":"7 to 9","points":3},{"v":"4to6","label":"4 to 6","points":2},{"v":"1to3","label":"1 to 3","points":1},{"v":"none","label":"None","points":0},{"v":"unsure","label":"Not sure","points":0}]},{"id":"Q2","key":"asks","kind":"scored","type":"choice","area":"system","weight":3,"q":"How do customers get asked for a Google review today?","options":[{"v":"tool","label":"A review tool sends a request after every job, plus a reminder","points":4},{"v":"software","label":"Our job software sends a request when the job closes","points":3},{"v":"techs","label":"Our techs ask in person at the end of the job","points":2},{"v":"remember","label":"Someone sends the link when they remember","points":1},{"v":"none","label":"We don't really ask","points":0}]},{"id":"Q3","key":"newest","kind":"scored","type":"choice","area":"freshness","weight":3,"q":"When did your most recent Google review come in?","options":[{"v":"week","label":"This week","points":4},{"v":"month","label":"Earlier this month","points":3},{"v":"1to3","label":"1 to 3 months ago","points":2},{"v":"over3","label":"More than 3 months ago","points":1},{"v":"unsure","label":"Not sure","points":0}]},{"id":"Q4","key":"replies","kind":"scored","type":"choice","area":"replies","weight":3,"q":"How often do you reply to your Google reviews?","options":[{"v":"all","label":"Every review, within two days","points":4},{"v":"most","label":"Most of them","points":3},{"v":"some","label":"Some of them","points":2},{"v":"rarely","label":"Rarely","points":1},{"v":"never","label":"Never","points":0}]},{"id":"G3","key":"ticket","kind":"gateway","type":"choice","layout":"grid","q":"What's a typical ticket for one of your jobs?","options":[{"v":"lt300","label":"Under $300"},{"v":"300to750","label":"$300 to $750"},{"v":"750to2000","label":"$750 to $2,000"},{"v":"over2000","label":"More than $2,000"},{"v":"unsure","label":"Not sure"}]},{"id":"G4","key":"records","kind":"gateway","type":"choice","q":"Where are your finished jobs recorded?","options":[{"v":"fieldsoftware","label":"Job software built for the trades"},{"v":"crm","label":"Another CRM or booking system with customer phone or email"},{"v":"paper","label":"Paper or spreadsheets"},{"v":"unsure","label":"Not sure"}]},{"id":"S9","key":"business","kind":"fields","type":"fields","q":"Which business should we look up?","fields":[{"name":"company","label":"Business name","help":"As it shows on Google.","autocomplete":"organization","required":true,"max":120},{"name":"city","label":"City or town","help":"Where your customers search for you.","autocomplete":"address-level2","required":true,"max":80}],"choice":{"key":"profiles","label":"How many Google profiles (locations) do you have?","options":[{"v":"1","label":"1"},{"v":"2","label":"2"},{"v":"3to9","label":"3 to 9"},{"v":"10plus","label":"10 or more"}]}},{"id":"S10","key":"contact","kind":"fields","type":"fields","last":true,"q":"Where should we send your report?","fields":[{"name":"firstName","label":"First name","autocomplete":"given-name","required":true,"max":60},{"name":"email","label":"Email","type":"email","autocomplete":"email","inputmode":"email","required":true,"max":254}],"consent":{"name":"consentEmail","label":"Email me my score and my report, and the occasional tip. Unsubscribe any time.","required":true},"button":"See my score"}],"deepener":[{"id":"D1","key":"d1","area":"coverage","weight":2,"q":"When customers do get asked, who usually gets asked?","hideIf":{"asked10":["all"]},"options":[{"v":"every","label":"Every customer with a phone or email","points":4},{"v":"most","label":"Most customers, except on busy days","points":3},{"v":"happy","label":"Customers who seemed happy with the job","points":1},{"v":"remember","label":"Whoever someone remembers","points":1},{"v":"hardly","label":"Hardly anyone","points":0}]},{"id":"D2","key":"d2","area":"coverage","weight":1,"q":"How many of your job records have the customer's mobile number or email?","options":[{"v":"every","label":"Every job","points":4},{"v":"most","label":"Most jobs","points":3},{"v":"half","label":"About half","points":2},{"v":"few","label":"Only a few","points":1},{"v":"unsure","label":"Not sure","points":0}]},{"id":"D3","key":"d3","area":"system","weight":2,"q":"If a customer doesn't leave a review after the first request, what happens next?","hideIf":{"asks":["none"]},"options":[{"v":"one","label":"One reminder a few days later, then we stop","points":4},{"v":"several","label":"Several reminders until they leave one","points":2},{"v":"resend","label":"Someone re-sends it if they remember","points":1},{"v":"nothing","label":"Nothing, or not sure","points":0}]},{"id":"D4","key":"d4","area":"system","weight":1,"q":"If the person who handles reviews is out for two weeks, what happens to asking?","hideIf":{"asks":["none"]},"options":[{"v":"runs","label":"It keeps running without them","points":4},{"v":"covers","label":"Someone else covers it","points":3},{"v":"slows","label":"It slows down","points":1},{"v":"stops","label":"It stops","points":0}]},{"id":"D5","key":"d5","area":"freshness","weight":2,"q":"In your busiest weeks, does asking keep up with the jobs?","options":[{"v":"yes","label":"Yes, every job is still asked","points":4},{"v":"mostly","label":"Mostly","points":3},{"v":"drops","label":"It drops off when we're slammed","points":1},{"v":"unsure","label":"Not sure","points":0}]},{"id":"D6","key":"d6","area":"freshness","weight":1,"q":"Does your website show your recent Google reviews?","options":[{"v":"current","label":"Yes, recent ones, and they stay current","points":4},{"v":"manual","label":"Yes, but someone updates them by hand","points":2},{"v":"no","label":"No","points":1},{"v":"nosite","label":"We don't have a website","points":1},{"v":"unsure","label":"Not sure","points":0}]},{"id":"D7","key":"d7","area":"replies","weight":2,"q":"When a 1, 2 or 3-star review posts, when do you usually find out?","options":[{"v":"sameday","label":"The same day","points":4},{"v":"week","label":"Within a week","points":2},{"v":"mention","label":"When a customer or someone on the team mentions it","points":1},{"v":"later","label":"Much later, or not sure","points":0}]},{"id":"D8","key":"d8","area":"replies","weight":1,"q":"When you do reply, how are replies written?","hideIf":{"replies":["never"]},"options":[{"v":"personal","label":"Each one written for what the customer said","points":4},{"v":"standard","label":"We reuse a few standard replies","points":2},{"v":"badonly","label":"We only reply to the bad ones","points":1},{"v":"unsure","label":"Not sure","points":0}]}],"tiers":[{"key":"secret","n":1,"min":0,"max":29,"name":"The Best-Kept Secret","descriptor":"Great work, almost none of it on Google.","trait":"Great work, almost none of it on Google. Asking runs on memory or not at all","tone":"Urgent, never shaming"},{"key":"somedays","n":2,"min":30,"max":54,"name":"The Some-Days Shop","descriptor":"Asked on good days, quiet on busy ones.","trait":"Customers get asked on good days, not busy ones; replies wait for a free minute","tone":"Concerned"},{"key":"nearly","n":3,"min":55,"max":74,"name":"The Nearly Visible Shop","descriptor":"A good habit with one or two clear gaps.","trait":"The habit is there; one or two clear gaps remain","tone":"Encouraging"},{"key":"openbook","n":4,"min":75,"max":100,"name":"The Open Book","descriptor":"Almost every job shows on Google.","trait":"Almost every job shows; the work is keeping it that way","tone":"Affirming"}],"bands":[{"key":"low","min":0,"max":39},{"key":"medium","min":40,"max":69},{"key":"high","min":70,"max":100}],"invisible":{"weeks":50,"jobs":{"lt5":2,"5to15":5,"16to40":16,"over40":41,"unsure":null},"asked":{"all":10,"7to9":9,"4to6":6,"1to3":3,"none":0,"unsure":null},"ticket":{"lt300":150,"300to750":300,"750to2000":750,"over2000":2000,"unsure":null},"averageTicket":{"hvac":350,"both":350,"plumbing":338,"other":null},"averageSource":"Angi"},"urgency":{"area":"coverage","countField":"unasked","critical":500,"criticalCoverage":25,"significant":150,"moderateCoverage":75,"unknownDefault":"significant","words":{"critical":"This is the first thing to fix, this month.","significant":"Worth fixing this month.","moderate":"A refinement, when you have a week."}},"bottleneckLines":{"coverage":"Most of your finished jobs end without anyone asking. One request after every job closes most of the gap.","system":"Asking depends on someone remembering, so it stops when you're busiest. Send it when the job closes instead.","systemSoftware":"Requests go out, but nobody runs them. Add one reminder and check the numbers weekly.","freshness":"Your newest reviews are older than homeowners look for. It follows from asking every week, busy or slow.","replies":"Homeowners can't see you answer. Reply to every review within two days, each in your own words.","none":"Nothing urgent. Your report shows how to keep it running."},"lineVariants":[{"area":"system","key":"systemSoftware","when":{"asks":["software","tool"]}}],"cascade":{"effect":"freshness","causes":["coverage","system"]},"segmentKey":"trade","metric":{"name":"Invisible work","count":"unasked customers a year","lead":["shop","shops"]},"segments":[{"field":"trade","label":"Trade"},{"field":"jobs","label":"Jobs a week"},{"field":"ticket","label":"Typical ticket"}],"defaultService":"home services","verdict":{"coverage":"most of your finished jobs end without anyone asking for a review","system":"asking depends on someone remembering, and it stops when you're busiest","systemSoftware":"requests go out, but nobody runs them","freshness":"your newest reviews are older than homeowners look for","replies":"homeowners can't see you answer","maintenance":"Every area is 75 or higher. Your work shows; a weekly five-minute check keeps it that way."},"cascadeLine":"Your Freshness score is low because of your {cause} score.","quickWins":{"asked10":{"1to3":"Send one request after every finished job this week, the same way for everyone, and count jobs against requests on Friday","none":"Send one request after every finished job this week, the same way for everyone, and count jobs against requests on Friday","unsure":"Send one request after every finished job this week, the same way for everyone, and count jobs against requests on Friday"},"d1":{"happy":"Ask every customer the same way; asking only the happy ones breaks Google's review policy","remember":"Tie the request to the moment the job is marked complete, not to anyone's memory","hardly":"Tie the request to the moment the job is marked complete, not to anyone's memory"},"d2":{"half":"Capture a mobile number or email at booking","few":"Capture a mobile number or email at booking"},"asks":{"remember":"Move the ask out of memory: send it when the job closes in your software","none":"Move the ask out of memory: send it when the job closes in your software","techs":"Keep the in-person thanks, and follow it with a text or email that has your review link"},"d3":{"nothing":"Add one reminder three to five days later, then stop","resend":"Add one reminder three to five days later, then stop"},"newest":{"over3":"Look up your own profile tonight, note the date of your newest review, and check it every Friday","unsure":"Look up your own profile tonight, note the date of your newest review, and check it every Friday"},"d5":{"drops":"Keep sending requests in your busiest weeks; that is when you have the most customers to ask","unsure":"Keep sending requests in your busiest weeks; that is when you have the most customers to ask"},"replies":{"rarely":"Reply to your five most recent reviews this week, each in your own words","never":"Reply to your five most recent reviews this week, each in your own words"},"d7":{"week":"Turn on review notifications on your Google Business Profile so a hard review reaches you the day it posts","mention":"Turn on review notifications on your Google Business Profile so a hard review reaches you the day it posts","later":"Turn on review notifications on your Google Business Profile so a hard review reaches you the day it posts"},"d8":{"standard":"Retire the template: write two sentences that answer what each customer actually said"}},"quickWinCount":3,"ruleFlag":{"key":"d1","v":"happy"},"checks":{"coverage":"Every Friday, compare jobs closed with requests sent; the two numbers should match","system":"Once a month, close a test job with your own phone number and confirm the request arrives","freshness":"Note the date of your newest review every Friday","replies":"Keep review notifications on, and read every new review the day it posts"},"fit":[{"key":"under-floor","when":{"jobs":["lt5"]}},{"key":"no-software","when":{"records":["paper"]}}],"qualifiedFit":"qualified","callOnly":{"records":["paper"],"profiles":["3to9","10plus"]},"gtm":{"asks":{"none":25,"remember":20,"techs":15,"software":8,"tool":3},"newest":{"week":0,"month":6,"1to3":14,"over3":20,"unsure":12},"replies":{"all":0,"most":4,"some":8,"rarely":12,"never":15},"jobs":{"lt5":3,"5to15":8,"16to40":12,"over40":15,"unsure":8},"compare":{"ahead":0,"even":8,"behind":18,"far":25,"unchecked":15}},"notes":{"report":{"d3":{"several":{"area":"system","text":"One reminder, then stop: more can feel like pressure, and anyone can reply STOP."}},"d8":{"standard":{"area":"replies","text":"50% of consumers are put off by generic or templated replies (BrightLocal 2026)."}}},"call":{}}},"site":{"endpoints":{"scorecard":"/api/scorecard","track":"/api/track","admin":"/api/admin"},"booking":{"days":5,"windows":[{"v":"morning","label":"Morning","hint":"8 to 11 am","start":8,"end":11},{"v":"midday","label":"Midday","hint":"11 am to 2 pm","start":11,"end":14},{"v":"afternoon","label":"Afternoon","hint":"2 to 5 pm","start":14,"end":17}],"minutes":15,"phone":{"name":"phone","label":"Best number to call","prefix":"+1","autocomplete":"tel-national","inputmode":"tel"},"consentPhone":{"name":"consentPhone","label":"Rempo may call me at this number about my report and Rempo's service.","required":true},"consentText":{"name":"consentText","label":"Rempo may text this number to confirm or move my call, up to 3 texts. Msg & data rates may apply. Reply STOP to opt out, HELP for help. Not required to book.","required":false}},"offer":{"decided":false,"checkoutUrl":null},"legal":{"hub":"https://rempo.io/legal","terms":"https://rempo.io/legal/terms","privacy":"https://rempo.io/legal/privacy","cookies":"https://rempo.io/legal/cookies","sms":"https://rempo.io/legal/sms","choices":"https://rempo.io/legal/privacy-choices","accessibility":"https://rempo.io/legal/accessibility"},"noticeVersion":"2026-11-08","metaPixelId":null,"clarityId":null,"trackingConsent":"opt-in","masterUrl":"https://roomiq.io","reportTurnaround":"within one business day","reportDelivery":"instant"},"ui":{"label":"Free Visibility Score","frame":"Ten quick taps, about a minute. Your score shows right after; your full report comes by email.","frameShort":"About a minute. Your score shows right after.","count":"Question {n} of {total}","back":"Back","next":"Next","close":"Close","pick":"Pick an answer to go on.","required":"Please fill this in.","email":"Please enter a valid email address.","consent":"Tick the box so we can email your score and your report.","profiles":"Pick how many Google profiles you have.","sending":"Working out your score","failed":"That didn't go through. Check your connection and try again.","stored":"Your score is below. We couldn't save your answers just now, so your report may take longer; reply to the email or try again later."},"results":{"header":{"thanks":"Thanks, {first_name}.","name":"Your Invisible Work Scorecard","email":"Your full report is on its way to {email} as a PDF. Next, someone on our team adds how you compare with the top three near you, within one business day.","returning":"Your report was emailed to you as a PDF. Someone on our team adds the top three near you within one business day."},"score":{"label":"Visibility Score: {score}/100, {tier}. Higher is better.","intro":"Your Visibility Score measures how your shop asks for and answers Google reviews. It does not grade your work: it shows how much of that work a homeowner can see when they look you up. A low score means most of your finished jobs leave no public record. A high score means almost every customer gets the chance to vouch for you."},"invisible":{"known":"At your numbers, at least {unasked} customers a year finish a job with you and are never asked for a review. That's at least {work_value} of your work with nothing on Google to show for it.","knownMath":"{jobs} jobs a week × 50 weeks × {not_asked} of 10 not asked × a {ticket} ticket. We used the low end of each range you picked.","average":"At your numbers, at least {unasked} customers a year finish a job with you and are never asked for a review. That's at least {work_value} of your work with nothing on Google to show for it.","averageMath":"{jobs} jobs a week × 50 weeks × {not_asked} of 10 not asked, at an average job value of {ticket} (Angi). We used the low end of each range you picked.","count":"At your numbers, at least {unasked} customers a year finish a job with you and are never asked for a review.","countMath":"{jobs} jobs a week × 50 weeks × {not_asked} of 10 not asked. We used the low end of each range you picked.","unsure":"You're not sure how many customers get asked. That's common, and it's the first thing your report measures: your reviews per 100 jobs, next to the top three.","jobsUnsure":"You're not sure how many jobs you finish in a week. That's common. Your report measures what your public profile shows: your recent Google reviews, next to the top three.","all":"Every customer gets asked. Your work shows. Your report checks the rest: how fresh your reviews look and how you compare with the top three.","fixFirst":"Fix first: {bottleneck}. {bottleneck_line}","strip":"Of your last 10 jobs, {asked} were asked.","stripUnsure":"Of your last 10 jobs: not sure how many were asked."},"summary":"Your four scores show where your work is slipping out of sight. Start with your lowest area: it is usually the cause of the others. Fixing one area well does more than nudging all four.","cards":{"coverage":{"low":"Most of your finished jobs end without anyone asking the customer for a review. That's not a choice anyone made: on a busy day, the next call wins. Every job that goes unasked is a happy customer the next homeowner never hears from. This is your fastest area to fix, because your jobs are already logged, and one request after each completed job closes most of the gap.","medium":"Some of your customers get asked and some don't. The ones who slip through are usually from your busiest days, which have the most customers to ask. Uneven asking means your reviews arrive in bursts, then go quiet. Asking after every job, the same way for everyone, turns the bursts into steady chances.","high":"Almost every customer gets asked, and that is rarer than most owners think. Your work has a real chance to show on Google. Watch for new staff, busy season and changes to your job software, since those are the moments asking quietly stops. Count jobs closed against requests sent once a week to keep it this way."},"system":{"low":"Asking depends on someone remembering, so it stops when your shop gets busy. That means your best weeks, with the most happy customers, are often your quietest weeks on Google. There's no follow-up either, so a customer who meant to review and forgot never hears from you again. The fix is to move the ask out of anyone's memory and into the moment the job closes.","medium":"Requests go out, but nobody runs them. A request with no follow-up reaches a customer once, on a busy day of their own, and is easy to miss. If one person handles it, asking stops when they're out. Add one reminder, then stop, and have someone check the numbers each week.","high":"Asking runs on a system, with a follow-up, and it keeps going when someone is out. That is the hardest part to build, and you have it. Watch for the quiet failures: a software update that switches requests off, or new jobs saved without a phone or email. A five-minute weekly check of requests sent catches both."},"freshness":{"low":"A homeowner checking you tonight sees reviews that are months old. 74% of consumers look for reviews from the last three months (BrightLocal 2026). Old reviews make a busy shop look quiet, even when the vans are out every day. Freshness follows asking: when every job is asked every week, recent customers get the chance to review.","medium":"Your newest reviews are recent enough, but they don't arrive every week. 32% of consumers look for reviews from the last two weeks (BrightLocal 2026). The gaps usually line up with busy season, when asking drops off. Keep asking at the same pace in your busiest weeks, and show your recent reviews on your website too.","high":"Homeowners who look you up see recent proof of your work. That matters: 74% of consumers look for reviews from the last three months (BrightLocal 2026). Keep the pace through busy season and slow weeks alike. If your website shows reviews, keep them current rather than a hand-picked set from years ago."},"replies":{"low":"Most of your reviews have no reply, so the next homeowner can't see that you listen. 80% of consumers are more likely to use a business that replies to all its reviews (BrightLocal 2026). An unanswered 3-star review is the one they read most closely. Start with your most recent reviews, and reply to each one in your own words.","medium":"You reply to some reviews, often the bad ones or when there's time. The gaps are visible to anyone who scrolls. Replies that read like a template can do as much harm as none: 50% of consumers are put off by generic or templated replies (BrightLocal 2026). Aim for every review, within two days, each written for what the customer said.","high":"You answer your reviews, and homeowners can see it. Keep your replies personal: 50% of consumers are put off by generic or templated replies (BrightLocal 2026). The risk to watch is the hard review that lands in a busy week. Make sure you hear about it the same day, so you can call the customer before you reply."}},"recommendations":{"low":"Start here. This area is where most of your work goes out of sight, and it is usually the easiest to fix first.","medium":"Tighten it. The habit exists; the next step is making it run every week without anyone remembering.","high":"Protect it. Check it weekly so a busy season or a software change doesn't quietly switch it off."},"bandLabels":{"low":"Low","medium":"Medium","high":"High"},"ctaOrder":["report","call","sharpen","service"],"cta":{"sharpen":{"h3":"Sharpen your report","body":"Answer eight more quick questions and your report goes deeper: who gets skipped, what happens when someone is out, and how fast you hear about a bad review. About 30 seconds.","bodyN":"Answer {n} more quick questions and your report goes deeper: who gets skipped, what happens when someone is out, and how fast you hear about a bad review. About 30 seconds.","button":"Add 8 answers","buttonN":"Add {n} answers","done":"Your report will use your {n} extra answers.","img":"report"},"service":{"h3":"See how we'd run it for you","body":"Rempo connects to the software you already log jobs in, asks every customer after every job with one reminder, and writes a reply for every review. You see the work in a monthly report.","button":"See how it works","img":"house"},"call":{"h3":"Last step: pick a time","body":"Book 15 minutes to walk through your report with us: your reviews per 100 jobs next to the top three, and what we'd run first. Pick a day and a time window, and we'll call you.","button":"Pick a time","img":"podium"},"checkout":{"h3":"Get started","body":"Rather skip the call? Start now, and our team does the setup.","button":"Get started","img":"mark-3d"}},"booking":{"h3":"Last step: pick a time","lead":"A 15-minute call to walk through your report. Pick a day and a time window, and we'll call you.","day":"Pick a day","window":"Pick a time window (your time)","button":"Book my call","pickDay":"Pick a day for the call.","pickWindow":"Pick a time window.","phoneError":"Please enter a 10-digit US phone number.","consentError":"Tick the box so we can call you.","sending":"Booking your call","failed":"That didn't go through. Check your connection and try again.","done":"You're booked: {day}, {window}.","doneLine":"We'll call {phone} between {hours}, your time, to walk through your report for {business}. Bring whoever runs the office: it saves you passing it all on later.","doneEmail":"We've emailed the details to {email}. If the time stops working, reply and we'll move it.","calendar":"Add to calendar","calendarTitle":"Rempo: your Invisible Work Scorecard report (15 minutes)","calendarBody":"A 15-minute call with Rempo to walk through your Invisible Work Scorecard report. We'll call you.","next":"While you wait: sharpen your report (optional, {n} taps)"},"deepener":{"title":"Sharpen your report","lead":"Eight more quick questions, about 30 seconds. Your report goes deeper: who gets skipped, what happens when someone is out, and how fast you hear about a bad review.","leadN":"{n} more quick questions, about 30 seconds. Your report goes deeper: who gets skipped, what happens when someone is out, and how fast you hear about a bad review.","label":"Sharpen your report","button":"Add to my report","sending":"Adding your answers","done":"Done. Your report will use your {n} extra answers.","doneLine":"Your sharper report is on its way to your inbox, as a PDF.","already":"You've already added your extra answers. Your report will use them.","missing":"We couldn't find that scorecard. Open the link in your score email again, or take the scorecard.","toResults":"Back to my score","toCall":"Last step: pick a time"},"ruleLine":"Every customer gets the same request after every job: no filtering, no rewards, no staff names.","unsubscribe":{"h":"Unsubscribe from Rempo's emails","body":"You won't get another email from us about your scorecard. If your report was on its way, we won't email it.","button":"Unsubscribe","done":"Done. You won't get another email from us.","again":"Changed your mind? Take the scorecard again and tick the box."},"page404":{"h":"That page isn't here.","body":"The link may be old. Start the scorecard, or see how Rempo works.","button":"See my Visibility Score"},"notFound":"We couldn't find that result. Open the link in your score email again, or take the scorecard.","retake":"Take the scorecard","report":{"h3":"Your report","body":"Your full report is on its way to your inbox as a PDF. Open it here any time: your Visibility Score, the method that closes your gaps, and a 30-day plan.","button":"Open my report","pdf":"Download the PDF","img":"report"}},"legal":{"notice":"By tapping {button}, you agree to our {terms} and acknowledge our {privacy}, which explains what we collect and how we use it.","noticeMeta":"Unless you opt out, we also tell Meta when a form like this is sent, to measure our ads. {choices}","noticeSms":"Texts follow our {sms}.","terms":"Terms of Service","privacy":"Privacy Policy","choices":"Your privacy choices","sms":"SMS terms","newTab":"(opens in a new tab)"},"brand":{"name":"RoomIQ","slug":"roomiq-first-deal","homeLabel":"roomiq.io","colors":{"ink":"#03045E","text":"#010041","muted":"#456CD6","link":"#00667B","accent":"#00B4D8","accent2":"#0077B6","onAccent":"#FFFFFF","canvas":"#F3F7FF","line":"#E7EFFF","tint":"#D9F4FC","line2":"#CFDEFF","ink300":"#AEC7FF","ink400":"#83A8FF","ink500":"#5E88F5","signal":"#F2B442","star":"#F9CE14","chart":"#2A78D6"}},"img":{}}</script>
+<script src="/assets/app.js?v=ddee314656" defer></script>
+</body>
+</html>

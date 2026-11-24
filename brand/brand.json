@@ -1,0 +1,300 @@
+{
+  "name": "RoomIQ",
+  "note": "Drafted by extract-design-system.mjs from RoomIQproductionlandingpage and RoomIQGTMWalkthrough on 2026-11-24, then reviewed: pill buttons and the light theme's blue button fill as on the landing page (its navy-to-blue gradient is set in src/styles/site.css), and the logo redrawn with the word as paths (Bricolage Grotesque 800 at 26 px), so it renders the same without the page's fonts.",
+  "colors": {
+    "ink": "#03045E",
+    "primary": "#00B4D8",
+    "signal": "#F2B442",
+    "neutral": "ink"
+  },
+  "light": {
+    "bg": "#FFFFFF",
+    "accent-fill": "#0077B6"
+  },
+  "dark": {
+    "bg": "#03045E",
+    "surface": "#0A0F6B",
+    "surface-2": "#131B77",
+    "line-strong": "#3A4596",
+    "text-2": "#C3C7D1",
+    "accent-text": "#83D5EE"
+  },
+  "fonts": {
+    "display": {
+      "family": "Bricolage Grotesque",
+      "file": "assets/fonts/display.woff2",
+      "weight": "200 800"
+    },
+    "text": {
+      "family": "Instrument Sans",
+      "file": "assets/fonts/text.woff2",
+      "weight": "400 700"
+    }
+  },
+  "radius": {
+    "card": 20,
+    "screen": 28,
+    "button": 999
+  },
+  "logo": {
+    "lockup": "assets/logo/lockup-on-light.svg",
+    "lockupOnDark": "assets/logo/lockup-on-dark.svg",
+    "mark": "assets/logo/mark.svg",
+    "favicon": "assets/logo/favicon.svg",
+    "width": 134,
+    "height": 30
+  },
+  "confidence": {
+    "primary": "high",
+    "ink": "high",
+    "signal": "high",
+    "fonts": "medium",
+    "logo": "high"
+  },
+  "images": [
+    {
+      "file": "assets/images/rooms-segments-1720.webp",
+      "w": 1720,
+      "h": 822,
+      "kb": 41
+    },
+    {
+      "file": "assets/images/rooms-segments-1600.webp",
+      "w": 1600,
+      "h": 765,
+      "kb": 39
+    },
+    {
+      "file": "assets/images/roomiq-story-poster.webp",
+      "w": 1280,
+      "h": 720,
+      "kb": 54
+    },
+    {
+      "file": "assets/images/rooms-windows-1720.webp",
+      "w": 1720,
+      "h": 472,
+      "kb": 43
+    },
+    {
+      "file": "assets/images/real07-windows-1444.webp",
+      "w": 1444,
+      "h": 543,
+      "kb": 41
+    },
+    {
+      "file": "assets/images/rooms-segments-1280.webp",
+      "w": 1280,
+      "h": 612,
+      "kb": 29
+    },
+    {
+      "file": "assets/images/rooms-windows-1600.webp",
+      "w": 1600,
+      "h": 439,
+      "kb": 40
+    },
+    {
+      "file": "assets/images/real07-windows-1280.webp",
+      "w": 1280,
+      "h": 481,
+      "kb": 36
+    },
+    {
+      "file": "assets/images/location-supply-960.webp",
+      "w": 960,
+      "h": 617,
+      "kb": 25
+    },
+    {
+      "file": "assets/images/corner-house-840.webp",
+      "w": 840,
+      "h": 630,
+      "kb": 54
+    },
+    {
+      "file": "assets/images/garden-house-840.webp",
+      "w": 840,
+      "h": 630,
+      "kb": 97
+    },
+    {
+      "file": "assets/images/porch-house-840.webp",
+      "w": 840,
+      "h": 630,
+      "kb": 80
+    },
+    {
+      "file": "assets/images/rooms-evidence-1720.webp",
+      "w": 1720,
+      "h": 266,
+      "kb": 26
+    },
+    {
+      "file": "assets/images/rooms-windows-1280.webp",
+      "w": 1280,
+      "h": 351,
+      "kb": 30
+    },
+    {
+      "file": "assets/images/rooms-segments-960.webp",
+      "w": 960,
+      "h": 459,
+      "kb": 19
+    },
+    {
+      "file": "assets/images/real07-evidence-1444.webp",
+      "w": 1444,
+      "h": 298,
+      "kb": 22
+    },
+    {
+      "file": "assets/images/location-supply-800.webp",
+      "w": 800,
+      "h": 514,
+      "kb": 21
+    },
+    {
+      "file": "assets/images/rooms-evidence-1600.webp",
+      "w": 1600,
+      "h": 247,
+      "kb": 25
+    },
+    {
+      "file": "assets/images/real07-windows-960.webp",
+      "w": 960,
+      "h": 361,
+      "kb": 24
+    },
+    {
+      "file": "assets/images/real07-evidence-1280.webp",
+      "w": 1280,
+      "h": 264,
+      "kb": 20
+    },
+    {
+      "file": "assets/images/market-legend-1244.webp",
+      "w": 1244,
+      "h": 260,
+      "kb": 23
+    },
+    {
+      "file": "assets/images/rooms-segments-800.webp",
+      "w": 800,
+      "h": 382,
+      "kb": 15
+    },
+    {
+      "file": "assets/images/location-supply-640.webp",
+      "w": 640,
+      "h": 411,
+      "kb": 17
+    },
+    {
+      "file": "assets/images/forecast-lift-760.webp",
+      "w": 760,
+      "h": 346,
+      "kb": 19
+    },
+    {
+      "file": "assets/images/rooms-evidence-1280.webp",
+      "w": 1280,
+      "h": 198,
+      "kb": 20
+    },
+    {
+      "file": "assets/images/rooms-windows-960.webp",
+      "w": 960,
+      "h": 263,
+      "kb": 21
+    },
+    {
+      "file": "assets/images/real07-windows-800.webp",
+      "w": 800,
+      "h": 301,
+      "kb": 19
+    },
+    {
+      "file": "assets/images/rooms-segments-640.webp",
+      "w": 640,
+      "h": 306,
+      "kb": 11
+    },
+    {
+      "file": "assets/images/market-legend-960.webp",
+      "w": 960,
+      "h": 201,
+      "kb": 16
+    },
+    {
+      "file": "assets/images/real07-evidence-960.webp",
+      "w": 960,
+      "h": 198,
+      "kb": 14
+    },
+    {
+      "file": "assets/images/forecast-lift-640.webp",
+      "w": 640,
+      "h": 291,
+      "kb": 16
+    },
+    {
+      "file": "assets/images/rooms-windows-800.webp",
+      "w": 800,
+      "h": 220,
+      "kb": 17
+    },
+    {
+      "file": "assets/images/real07-windows-640.webp",
+      "w": 640,
+      "h": 241,
+      "kb": 16
+    },
+    {
+      "file": "assets/images/location-supply-480.webp",
+      "w": 480,
+      "h": 308,
+      "kb": 13
+    },
+    {
+      "file": "assets/images/rooms-evidence-960.webp",
+      "w": 960,
+      "h": 148,
+      "kb": 14
+    },
+    {
+      "file": "assets/images/market-legend-800.webp",
+      "w": 800,
+      "h": 167,
+      "kb": 13
+    },
+    {
+      "file": "assets/images/corner-house-420.webp",
+      "w": 420,
+      "h": 315,
+      "kb": 15
+    },
+    {
+      "file": "assets/images/garden-house-420.webp",
+      "w": 420,
+      "h": 315,
+      "kb": 25
+    },
+    {
+      "file": "assets/images/porch-house-420.webp",
+      "w": 420,
+      "h": 315,
+      "kb": 22
+    },
+    {
+      "file": "assets/images/real07-evidence-800.webp",
+      "w": 800,
+      "h": 165,
+      "kb": 11
+    }
+  ],
+  "sources": [
+    "/home/user/RoomIQproductionlandingpage",
+    "/home/user/RoomIQGTMWalkthrough"
+  ]
+}
