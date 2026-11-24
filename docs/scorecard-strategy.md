@@ -61,7 +61,7 @@ points (its questions 1, 2, 3, 4 and 7), in its order (lowest points first). The
 
 | Id | Key | Kind | Question | Options (points or value) | Why it is asked |
 |---|---|---|---|---|---|
-| G1 | `stage` | gateway (segment) | Where are you with rent-by-the-room? | Learning, no house in mind yet; Looking at houses now; A house is under contract; I own a house I'll convert to rooms; I already rent rooms in 1 to 10 houses; I run more than 10 houses | the segment; "first deal" or "next deal" words; fit (learning is under the floor); call-only (more than 10 houses) |
+| G1 | `stage` | gateway (segment) | Where are you with rent-by-the-room? | Learning, no house yet; Looking at houses; Under contract; Converting my house; I run 1 to 10 houses; More than 10 houses | the segment; "first deal" or "next deal" words; fit (learning is under the floor); call-only (more than 10 houses) |
 | G2 | `market` | gateway | Where is the house, or the market you're looking at? | Dallas-Fort Worth; Houston; Atlanta; Orlando; Jacksonville; Phoenix; Las Vegas; Another US market; Not decided yet | covered market or not: the free forecast is offered only in covered markets; the city's rule on unrelated adults and the insurance line on the checklist page |
 | Q1 | `rentsource` | scored, Rent Evidence, x3 | Where does your per-room rent number come from? | I don't have one yet (0); A platform's earnings calculator (1); Whole-home rent divided by bedrooms (1); Asking rents I found on room listings (2); Comps of nearby rooms, with how fast they filled (4) | rent is evidence or assumption |
 | Q2 | `fillsource` | scored, Fill Speed, x3 | How do you know how fast rooms fill near the property? | I haven't looked (0); I assume a vacancy percentage (1); Host stories and forum posts (2); A platform's market reports (2); Observed fill times of comparable rooms nearby (4) | lease-up risk awareness |
@@ -144,11 +144,11 @@ Worked example (spec 1, section 11): $2,000 to $3,000, about 3 months to fill, 1
 
 ## Fit and routing
 
-- **Qualified** (stored, shown in the admin and the CRM, used for the Schedule event): every stage but "Learning, no
-  house in mind yet", in a covered market.
+- **Qualified** (stored, shown in the admin and the CRM, used for the Schedule event): every stage but "Still learning,
+  no house yet", in a covered market.
 - **Under the floor**: "Learning" or a market outside the covered list. They get the full result and report; they are
   nurture, not sales.
-- **Call-only**: "I run more than 10 houses": the walkthrough first, no free-forecast push (the Operator plan is a
+- **Call-only**: "More than 10 houses": the walkthrough first, no free-forecast push (the Operator plan is a
   conversation).
 - **Covered markets**: the seven preset metros, until the weekly coverage check publishes its list (a setting). Outside
   them the free forecast card is replaced by "Look up your market", and the report's checklist leads.
@@ -188,7 +188,7 @@ and D2.
 | D5 | `newsupply` | Nearby Supply, 2 | Do you know whether new co-living homes opened nearby this year? | No idea (0); I think a few did (1); I checked the current listings (2); I track homes that open and close nearby (4) |
 | D6 | `pricedrops` | Nearby Supply, 1 | Have rooms near the house been cutting their rents? | I don't know (0); I've heard so (1); I've seen a few drop (2); I've checked recent price drops on comparable rooms (4) |
 | D7 | `roomcount` | Room Mix, 2 | How did you decide how many rooms to rent? | Not decided yet (0); As many as the house can fit (1); The current bedroom count (2); A layout checked against rents nearby (4) |
-| D8 | `garage` | Room Mix, 1 | Have you priced the garage or extra space as a room? | Haven't thought about it (0); I'll convert it: more rooms earn more (1); I'll keep it as it is (1); Compared both ways, against rents nearby (4); There's no garage or extra space (not scored) |
+| D8 | `sizemix` | Room Mix, 1 | Have you checked which room sizes rent best nearby? | Not yet (0); I assume bigger rooms rent better (1); I've seen a few listings (2); I compared rents and fill speed by room size nearby (4) |
 | D9 | `dealmath` | Lease-up Reserves, 2 | Where do the numbers in your deal math come from? | I haven't run the numbers yet (0); A calculator's default settings (1); My own estimates (2); Rents and occupancy of comparable rooms, with my own costs (4) |
 | D10 | `stress` | Lease-up Reserves, 1 | Does your deal math test a slower lease-up? | No (0); I add a vacancy rate on top (1); I test one slower case (2); I test it against how comparable launches nearby filled (4) |
 | C1 | `zoning` | checklist, not scored | Have you checked the city's rule on unrelated adults sharing a home? | Not yet; I asked around; I read a summary online; I checked the city code; I confirmed with the city or an attorney |

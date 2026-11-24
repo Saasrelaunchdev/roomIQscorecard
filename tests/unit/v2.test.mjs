@@ -1,6 +1,6 @@
 // The second version's parts, one at a time: what the server reads about a visitor (location, device, timing,
-// source), Resend's webhook signature, the copy that follows the report's delivery, the Rempo pages of the report and
-// the team's settings, and the admin's analytics. The API tests (api.test.mjs) run them together.
+// source), Resend's webhook signature, the copy that follows the report's delivery, the RoomIQ pages of the report
+// and the team's settings, and the admin's analytics. The API tests (api.test.mjs) run them together.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
@@ -21,16 +21,18 @@ import { ROW, HERO } from "../fixtures/sample.mjs";
 
 const req = (headers) => ({ headers });
 
-test("the owner's decision of 2026-11-22: the PDF report goes out with the score; a person adds the top three", () => {
+test("instant delivery, no outside data: the PDF report goes out with the score, and nothing waits on a person", () => {
   assert.equal(SITE.reportDelivery, "instant");
-  assert.ok(EMAILS.scoreReport.lines.some((l) => /within one business day/.test(l)), "the score email says the top three follow");
+  assert.equal(SITE.enrichment, false);
+  assert.ok(!EMAILS.scoreReport.lines.some((l) => /within one business day|top three/.test(l)), "no update is promised");
   assert.match(EMAILS.scoreReport.reportAttached, /attached as a PDF/);
   assert.match(LANDING.trust[2], /right after, as a PDF/);
   assert.match(RESULTS.header.email, /as a PDF/);
   assert.equal(RESULTS.ctaOrder[0], "report");
-  // The checked wording is kept for switching back (site.reportDelivery "checked"), and both wordings are linted
-  assert.match(LANDING_ALL.trust[2], /Checked by a person, emailed within one business day/);
-  assert.equal(forDelivery(LANDING_ALL, "checked").trust[2], "Checked by a person, emailed within one business day");
+  assert.deepEqual(RESULTS.ctaOrderByTier.advanced.slice(0, 2), ["call", "forecast"], "Advanced: the walkthrough first, the GTM's strong CTA");
+  assert.equal(RESULTS.ctaOrderByTier.intermediate[0], "forecast", "Intermediate: the free forecast first");
+  // The copy is written for the instant delivery: switching the setting changes nothing
+  assert.deepEqual(forDelivery(LANDING_ALL, "checked"), LANDING);
 });
 
 test("location: country, state and city from Vercel's headers; nothing precise; junk dropped", () => {
@@ -103,52 +105,53 @@ test("an email's state only moves forward, and keeps when each step happened", (
   assert.equal(applyEmailEvent(m, "email.sent", "x", {}), null, "not an event the log keeps");
 });
 
-test("the report's Rempo pages: the method from the answers, the two ways, the first 30 days; the letter and the note", () => {
+test("the report's RoomIQ pages: the method from the answers, the two ways, the first 30 days; the letter and the note", () => {
   const m = buildReport(ROW, { links: { results: "https://x.test/results/T" }, now: new Date("2026-11-22T12:00:00"), checker: "Dana",
     options: { letter: "Hi {first_name},\n\nstart with {primary_bottleneck}. {unknown_field}", signer: { name: "Dana", title: "Founder" }, note: "Good talking today.", delivery: "instant" } });
   assert.deepEqual(m.sections, { letter: true, method: true, service: true, playbook: true });
-  assert.deepEqual(m.letter.body, ["Hi Sam,", "start with Ask System."], "the team's letter, its fields filled, an unknown one dropped");
-  assert.equal(m.letter.sign, "Dana, Founder, Rempo");
+  assert.deepEqual(m.letter.body, ["Hi Jordan,", "start with Fill Speed."], "the team's letter, its fields filled, an unknown one dropped");
+  assert.equal(m.letter.sign, "Dana, Founder, RoomIQ");
   assert.deepEqual(m.letter.note.body, ["Good talking today."]);
-  assert.equal(m.coming, null, "the top three are in: nothing promised next");
+  assert.equal(m.letter.note.title, "For you, Jordan");
+  assert.equal(m.coming, null, "no outside data: nothing promised next");
   const steps = Object.fromEntries(m.method.steps.map((s) => [s.key, s]));
-  assert.equal(steps.system.chip, "fix", "the first weak link is the one to fix");
-  assert.equal(steps.system.first, true);
-  assert.deepEqual(steps.coverage.today, ["1 to 3 of your last 10 customers were asked for a review.", "Most customers get asked, except on busy days.", "Most job records have the customer's mobile number or email."]);
-  assert.deepEqual(steps.replies.profile, ["12 of your last 30 reviews have a reply."]);
-  assert.match(m.service.days.yourStart[0], /^For Maple Street Heating, we'd start with Ask System\./);
-  assert.match(m.overview.intro, /the Visible Work Method that closes the gaps, how Rempo would run it for you, and a 30-day plan you can run yourself\.$/);
+  assert.deepEqual(Object.keys(steps), ["rent", "fill", "supply", "mix", "reserves"]);
+  assert.equal(steps.fill.chip, "fix", "the area to fix first");
+  assert.equal(steps.fill.first, true);
+  assert.deepEqual(steps.rent.today, ["Your rent comes from asking rents on room listings.", "You have a rough split between private and shared-bath rooms.", "Your rent rests on 1 or 2 nearby rooms."]);
+  assert.deepEqual(steps.mix.today, ["You haven't decided the bath mix.", "You plan to rent as many rooms as the house can fit.", "You assume bigger rooms rent better."]);
+  assert.deepEqual(steps.rent.profile, [], "no outside data in this funnel");
+  assert.match(m.service.days.yourStart[0], /^For your plan, we'd start with Fill Speed\. For your Fill Speed, that means occupancy from comparable rooms nearby/);
+  assert.match(m.overview.intro, /Next come your Deal Readiness Score, your first six months and three checks RoomIQ can't do for you\. Then your strongest and weakest areas, the Room-by-Room Underwrite that closes the gaps, how to run it with RoomIQ's Free plan, and a 30-day plan you can run by hand\.$/);
   const html = reportHtml(m, {});
-  for (const h of ["A note before you read", "What a fully visible shop does", "Where Maple Street Heating stands on each step", "Two ways to run the method", "Your first 30 days with Rempo", "Your Visible Work Starts Here"]) assert.ok(html.includes(h), h);
-  assert.ok(html.includes("We don&#39;t remove reviews."), "what Rempo won't do");
+  for (const h of ["A note before you read", "What an evidence-first underwrite looks like", "Where your plan stands on each step", "Two ways to run the method", "Your first 30 days with RoomIQ", "Your Room-by-Room Underwrite Starts Here"]) assert.ok(html.includes(h), h);
+  assert.ok(html.includes("No zoning check."), "what RoomIQ doesn't do");
+  assert.ok(html.includes("Informational only, not financial or lending advice."));
 });
 
-test("the report's sections: off means left out; the first version's report stays as it was", () => {
-  const lean = buildReport({ ...ROW, public_data: null, deepener: null }, { options: { sections: { letter: false, method: false, service: false }, delivery: "instant" } });
+test("the report's sections: off means left out", () => {
+  const lean = buildReport({ ...ROW, deepener: null }, { options: { sections: { letter: false, method: false, service: false }, delivery: "instant" } });
   assert.equal(lean.letter, null); assert.equal(lean.method, null); assert.equal(lean.service, null);
-  assert.ok(lean.coming, "the instant report says the top three come next");
+  assert.equal(lean.coming, null, "nothing waits on the team");
   const html = reportHtml(lean, {});
-  assert.ok(html.includes("Coming within one business day"));
-  assert.ok(!html.includes("What a fully visible shop does") && html.includes("Your Visible Work Starts Here"));
-  // With the top three and the playbook, and none of the new pages, the overview reads exactly as before
-  const before = buildReport(ROW, { options: { sections: { method: false, service: false }, delivery: "checked" } });
-  assert.match(before.overview.intro, / Next come your Visibility Score, the work that never reaches Google, and how you compare with the top three near you\. Then your strongest and weakest areas, and a 30-day plan you can run yourself\.$/);
-  // A snapshot taken by the first version (no sections in it) still draws, with the playbook and without the new pages
-  const old = { ...before };
+  assert.ok(!html.includes("What an evidence-first underwrite looks like") && html.includes("Your Room-by-Room Underwrite Starts Here"));
+  assert.ok(html.includes("Three checks RoomIQ can&#39;t do for you"), "the checks page is always there");
+  // A snapshot with no sections in it still draws, with the playbook and without the method pages
+  const old = { ...lean };
   delete old.sections; delete old.method; delete old.service; delete old.letter; delete old.coming;
   const oldHtml = reportHtml(old, {});
-  assert.ok(oldHtml.includes("Your Visible Work Starts Here") && !oldHtml.includes("A note before you read"));
+  assert.ok(oldHtml.includes("Your Room-by-Room Underwrite Starts Here") && !oldHtml.includes("A note before you read"));
 });
 
 test("settings: checked words, real addresses, the sections a lead's report carries", () => {
-  assert.throws(() => cleanSettings("report", { letter: "We guarantee more reviews in a month." }), /can't go in a report/);
-  assert.throws(() => cleanSettings("report", { letter: "Rempo — always on." }), /dash/);
-  assert.throws(() => cleanSettings("report", { letter: "74% of homeowners read reviews." }), /source/);
-  assert.equal(cleanSettings("report", { letter: "74% of consumers look for recent reviews (BrightLocal 2026)." }).letter.length > 0, true);
+  assert.throws(() => cleanSettings("report", { letter: "We guarantee a full house in a month." }), /can't go in a report/);
+  assert.throws(() => cleanSettings("report", { letter: "RoomIQ — always on." }), /dash/);
+  assert.throws(() => cleanSettings("report", { letter: "84% of rooms fill in a month." }), /source/);
+  assert.equal(cleanSettings("report", { letter: "Start with the rooms near the house, by bath type and size." }).letter.length > 0, true);
   assert.throws(() => cleanSettings("notifications", { teamTo: "a@example.com, nope" }), /not an email/);
   assert.equal(cleanSettings("notifications", { teamTo: "a@example.com; b@example.com" }).teamTo, "a@example.com, b@example.com");
   assert.throws(() => cleanSettings("other", {}), /Unknown/);
-  assert.throws(() => cleanOptions({ note: "Rempo is instant." }), /can't go in a report/);
+  assert.throws(() => cleanOptions({ note: "Our forecasts are accurate." }), /can't go in a report/);
   const settings = settingsOf({ report: { sections: { playbook: false } } });
   assert.deepEqual(sectionsFor(settings, { sections: { playbook: true, method: false } }), { letter: true, method: false, service: true, playbook: true });
   assert.deepEqual(sectionsFor(settings, {}), { letter: true, method: true, service: true, playbook: false });
@@ -175,5 +178,6 @@ test("analytics: dimensions merged and rated; email engagement; the lead's local
 
 test("the sample is the worked example (the admin's test email uses it)", () => {
   assert.deepEqual(ROW.answers, HERO);
-  assert.equal(buildReport(ROW, {}).result.score, 38);
+  assert.equal(buildReport(ROW, {}).result.score, 33, "with the deepener's answers");
+  assert.equal(buildReport({ ...ROW, deepener: null }, {}).result.score, 35, "on screen");
 });

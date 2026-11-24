@@ -11,7 +11,7 @@ import {
 
 // The worked example (spec 1, section 11): Jordan, a made-up first-time investor looking at houses in Atlanta
 const HERO = { stage: "looking", market: "atlanta", rentsource: "listings", fillsource: "vacancy", supply: "counted", bathmix: "notyet", slowplan: "weeks", carry: "2to3k", fillmonths: "m3", reserves: "m1" };
-const DEEP = { rentperroom: "split", rentcomps: "few", occsource: "rule", launch: "whenever", newsupply: "think", pricedrops: "unsure", roomcount: "max", garage: "na", dealmath: "mine", stress: "vacancy", zoning: "notyet", financing: "wholehome" };
+const DEEP = { rentperroom: "split", rentcomps: "few", occsource: "rule", launch: "whenever", newsupply: "think", pricedrops: "unsure", roomcount: "max", sizemix: "assume", dealmath: "mine", stress: "vacancy", zoning: "notyet", financing: "wholehome" };
 const area = (r) => Object.fromEntries(Object.entries(r.areas).map(([k, v]) => [k, v.score]));
 
 test("worked example, on screen: 50, 25, 50, 0, 50 and a Deal Readiness Score of 35, Beginner", () => {
@@ -46,16 +46,17 @@ test("worked example, the lease-up gap: $2,000 x (3 minus 1) = $4,000; the lease
   assert.deepEqual(gapVars(iw), { gap: "$4,000", cost: "$2,000", exposure: "$6,000", fill_months: "3 months", reserve_months: "1 month", uncovered_months: "2 months", spare_months: "0 months" });
 });
 
-test("worked example, with the deepener: 46, 25, 33, 10, 46 and 32; Room Mix leaves D8's maximum out", () => {
+test("worked example, with the deepener: 46, 25, 33, 13, 46 and 33 (32.5 rounded half up)", () => {
   const r = evaluate(SC, HERO, DEEP);
   assert.equal(r.deepened, true);
-  assert.deepEqual(area(r), { rent: 46, fill: 25, supply: 33, mix: 10, reserves: 46 });
+  assert.deepEqual(area(r), { rent: 46, fill: 25, supply: 33, mix: 13, reserves: 46 });
   assert.equal(r.areas.rent.exact, 45.833333333);
   assert.equal(r.areas.supply.exact, 33.333333333);
-  assert.equal(r.areas.mix.max, 20);
-  assert.equal(r.areas.mix.earned, 2);
-  assert.equal(r.scoreExact, 32);
-  assert.equal(r.score, 32);
+  assert.equal(r.areas.mix.exact, 12.5);
+  assert.equal(r.areas.mix.max, 24);
+  assert.equal(r.areas.mix.earned, 3);
+  assert.equal(r.scoreExact, 32.5);
+  assert.equal(r.score, 33);
   assert.equal(r.tier, "beginner");
   assert.equal(r.bottleneck.primary, "fill");
   assert.equal(r.bottleneck.secondary, "mix");
@@ -87,7 +88,7 @@ test("rounding is half up, at the end", () => {
 });
 
 test("branching: 'I don't have one yet' hides D1 and D2; the checklist always shows", () => {
-  assert.deepEqual(deepenerShown(SC, HERO).map((d) => d.id), ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "C1", "C2"]);
+  assert.deepEqual(deepenerShown(SC, HERO).map((d) => d.id), ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "C1", "C2"], "the checklist after the scored questions");
   assert.deepEqual(deepenerShown(SC, { ...HERO, rentsource: "none" }).map((d) => d.id), ["D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "C1", "C2"]);
   // A hidden question's answer is dropped, never counted
   const { deepener } = cleanDeepener(SC, { ...HERO, rentsource: "none" }, DEEP);
@@ -100,10 +101,13 @@ test("a skipped question, or an answer with no points, leaves both the score and
   const a = areaScores(SC, { ...HERO, rentsource: "none" }, { occsource: "observed" });
   assert.equal(a.rent.max, 12);
   assert.equal(a.rent.score, 0);
-  // Room Mix: Q4 12 + D7 8; D8 "There's no garage or extra space" counts for neither
-  const b = areaScores(SC, { ...HERO, bathmix: "modeled" }, { roomcount: "checked", garage: "na" });
+  // Room Mix: Q4 12 + D7 8 when D8 is left unanswered
+  const b = areaScores(SC, { ...HERO, bathmix: "modeled" }, { roomcount: "checked" });
   assert.equal(b.mix.max, 20);
   assert.equal(b.mix.score, 100);
+  // An option with no points (supported for questions that may not apply) counts for neither
+  const sc2 = { ...SC, deepener: SC.deepener.map((d) => (d.key === "sizemix" ? { ...d, options: [...d.options, { v: "na", label: "n/a", points: null }] } : d)) };
+  assert.equal(areaScores(sc2, { ...HERO, bathmix: "modeled" }, { roomcount: "checked", sizemix: "na" }).mix.max, 20);
   // The checklist never touches a score
   const c = areaScores(SC, HERO, { zoning: "confirmed", financing: "cash" });
   assert.deepEqual(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v.max])), { rent: 12, fill: 12, supply: 12, mix: 12, reserves: 12 });

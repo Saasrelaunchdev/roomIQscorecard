@@ -55,12 +55,12 @@ export async function svixHeaders(body, secret = WEBHOOK_SECRET, { id = `msg_${M
   return { "svix-id": id, "svix-timestamp": String(at), "svix-signature": `v1,${sig}`, "content-type": "application/json" };
 }
 
-/** A complete submission: the worked example. */
+/** A complete submission: the worked example (spec 1, section 11). The quiz asks for no business or city. */
 export function submission(extra = {}) {
   return {
     action: "submit",
-    answers: { trade: "hvac", jobs: "16to40", asked10: "1to3", asks: "remember", newest: "1to3", replies: "some", ticket: "300to750", records: "fieldsoftware", profiles: "1" },
-    company: "Maple Street Heating", city: "Austin", firstName: "Sam", email: `sam+${Math.random().toString(36).slice(2, 8)}@example.com`, consentEmail: true,
+    answers: { stage: "looking", market: "atlanta", rentsource: "listings", fillsource: "vacancy", supply: "counted", bathmix: "notyet", slowplan: "weeks", carry: "2to3k", fillmonths: "m3", reserves: "m1" },
+    firstName: "Sam", email: `sam+${Math.random().toString(36).slice(2, 8)}@example.com`, consentEmail: true,
     visit: `visit-${Math.random().toString(36).slice(2, 10)}`, variant: "scoreapp", page: "https://scorecard.test/?utm_source=facebook", utm_source: "facebook", utm_campaign: "fall",
     ...extra
   };

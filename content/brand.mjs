@@ -30,11 +30,12 @@ export default {
   // The report's pictures, embedded in the PDF: slot -> "<name>-<width>" in src/assets/img/ (a .webp). A slot left
   // out, or a missing file, leaves its picture out. The pages' pictures are found by name (src/assets/img/<name>-<width>.webp,
   // every width present goes into the srcset), as content/*.mjs names them.
+  // The report's pictures: the story film's poster (an illustrated, made-up neighborhood) on the cover; no others
   reportImages: {
-    cover: "street-six-1200",
-    letter: "podium-800",
-    quickStart: "toolbox-640",
-    next: "team-desk-800"
+    cover: "neighborhood-1280",
+    letter: null,
+    quickStart: null,
+    next: null
   },
 
   // Colors for the places a stylesheet can't reach: the emails (inline styles) and the share image. Keep them equal

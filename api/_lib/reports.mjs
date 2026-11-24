@@ -12,7 +12,8 @@ import { sectionsFor } from "./settings.mjs";
 export const scorecardFileName = () => String(SC.name || "Scorecard").replace(/^the\s+/i, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") || "Scorecard";
 /** "Invisible-Work-Scorecard-Maple-Street-Heating.pdf" */
 export function pdfName(row) {
-  const name = String((row && row.company) || "report").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "report";
+  // The business when the quiz asks for one; otherwise the first name (this quiz asks for no business)
+  const name = String((row && (row.company || row.first_name)) || "report").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "report";
   return `${scorecardFileName()}-${name}.pdf`;
 }
 

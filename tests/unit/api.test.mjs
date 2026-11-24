@@ -22,20 +22,26 @@ test("submit: scored again on the server, stored, answered at once; then the sco
   assert.equal(r.status, 200);
   assert.equal(r.data.ok, true);
   assert.match(r.data.token, /^[A-Za-z0-9_-]{32}$/);
-  assert.equal(r.data.result.score, 38, "the browser's numbers are never trusted");
-  assert.deepEqual(r.data.deepener.shown, ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"]);
+  assert.equal(r.data.result.score, 35, "the browser's numbers are never trusted");
+  assert.deepEqual(r.data.deepener.shown, ["rentperroom", "rentcomps", "occsource", "launch", "newsupply", "pricedrops", "roomcount", "sizemix", "dealmath", "stress", "zoning", "financing"]);
+  assert.equal(r.data.result.covered, true);
+  assert.equal(r.data.result.market, "atlanta");
   assert.equal(r.data.delivery, "instant");
   let row = S.rows().find((x) => x.token === r.data.token);
-  assert.equal(row.score, 38);
-  assert.equal(row.tier, "somedays");
-  assert.equal(row.bottleneck, "coverage");
+  assert.equal(row.score, 35);
+  assert.equal(row.tier, "beginner");
+  assert.equal(row.bottleneck, "fill");
   assert.equal(row.fit, "qualified");
-  assert.equal(row.route, "call or checkout");
+  assert.equal(row.route, "free forecast");
+  assert.equal(row.trade, "looking", "the segment: where they are with rent-by-the-room");
+  assert.equal(row.city, "Atlanta", "the market of the deal stands in for a city");
+  assert.equal(row.company, "");
   assert.equal(row.email, body.email.toLowerCase());
   assert.equal(row.tracking.utm_source, "facebook");
   assert.equal(row.tracking.source, "facebook");
   assert.equal(row.consent.consentEmail, true);
-  assert.equal(row.result.invisible.unasked, 560);
+  assert.equal(row.result.invisible.unasked, 2);
+  assert.equal(row.result.invisible.workValue, 4000);
   assert.match(row.ip_hash || "", /^[0-9a-f]{64}$|^$/);
   // After the answer: the report, its emails, the counters
   await S.settled();
@@ -44,19 +50,21 @@ test("submit: scored again on the server, stored, answered at once; then the sco
   assert.ok(row.report.instant_at);
   assert.equal(row.report.pdf_ok, false, "no PDF in this test (SCORECARD_PDF=off): the email carries the link");
   const mail = S.emails().slice(before);
-  const score = mail.find((m) => m.subject === "Your Visibility Score: 38/100, and your report");
+  const score = mail.find((m) => m.subject === "Your Deal Readiness Score: 35/100, and your report");
   assert.ok(score, "the score email, with the report");
   assert.equal(score.to, body.email.toLowerCase());
-  assert.match(score.text, /at least 560 customers a year/);
-  assert.match(score.text, /Fix first: Ask Coverage\./);
+  assert.match(score.text, /your reserves run out 2 months before the rooms fill\. That's at least \$4,000 of costs with no cushion behind it\./);
+  assert.match(score.text, /Fix first: Fill Speed\. An assumed vacancy rate isn't fill speed\./);
+  assert.match(score.text, /Start this week: Swap the assumed vacancy rate for a count/);
   assert.match(score.text, /Your full report is online here: http:\/\/localhost:\d+\/report\//);
-  assert.match(score.text, /the Visible Work Method that closes the gaps/);
-  assert.match(score.text, /Next, someone on our team will compare Maple Street Heating with the top three for HVAC in Austin/);
-  assert.match(score.text, /Answer 8 more quick questions here: http:\/\/localhost:\d+\/sharpen\//);
+  assert.match(score.text, /the Room-by-Room Underwrite and a 30-day plan/);
+  assert.match(score.text, /run a free forecast on it: https:\/\/roomiq\.io\/dashboard\?src=scorecard&utm_source=scorecard&utm_medium=email&utm_campaign=roomiq-first-deal/);
+  assert.match(score.text, /Answer 12 more quick questions here: http:\/\/localhost:\d+\/sharpen\//);
+  assert.match(score.text, /Book a 20-minute walkthrough: http:\/\/localhost:\d+\/results\/[A-Za-z0-9_-]+#call/);
   assert.match(score.text, /Unsubscribe: http:\/\/localhost:\d+\/unsubscribe\//);
   assert.match(score.html, /<a href="http:\/\/localhost:\d+\/report\//);
   assert.deepEqual(score.attachments, []);
-  const team = mail.find((m) => m.team && /New scorecard: Maple Street Heating, Austin\. 38\/100/.test(m.title));
+  const team = mail.find((m) => m.team && /New scorecard: Sam, Atlanta\. 35\/100, Beginner: underwriting on assumptions\./.test(m.title));
   assert.ok(team, "the team's notice");
   assert.ok(team.rows.some(([k, v]) => k === "Report" && /could not be printed/.test(v)));
   assert.ok(team.links.some(([k]) => k === "Their report"));
@@ -70,21 +78,24 @@ test("submit: scored again on the server, stored, answered at once; then the sco
   assert.equal(complete.source, "facebook");
   // The owner's link works at once, with the comparison promised next
   const page = await (await S.api(`/report/${r.data.token}`, { raw: true })).text();
-  assert.match(page, /The Invisible Work Scorecard Report/);
-  assert.match(page, /Coming within one business day/);
-  assert.match(page, /What a fully visible shop does/);
+  assert.match(page, /The First Deal Risk Scorecard Report/);
+  assert.match(page, /Your reserves run out 2 months early/);
+  assert.match(page, /Three checks RoomIQ can&#39;t do for you/);
+  assert.match(page, /Atlanta: no more than six people may live together unless all are related/);
+  assert.match(page, /What an evidence-first underwrite looks like/);
+  assert.doesNotMatch(page, /Coming within one business day/, "nothing waits on the team");
   assert.doesNotMatch(page, /Preview for the team/);
 });
 
 test("submit: the time each question took, the approximate location, the device", async () => {
-  const timing = { totalMs: 64321.4, landingMs: 9000, backs: 1, aways: 2, steps: { G1: 9100, G2: 3200, Q1: 4100, X9: 5, S10: 99999999 } };
+  const timing = { totalMs: 64321.4, landingMs: 9000, backs: 1, aways: 2, steps: { G1: 9100, G2: 3200, Q1: 4100, X9: 5, S11: 99999999 } };
   const client = { vw: 390, vh: 664, sw: 390, sh: 844, dpr: 3, lang: "en-US", touch: 5 };
   const ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 330.0.0.40.92";
   const headers = { "user-agent": ua, "x-vercel-ip-country": "US", "x-vercel-ip-country-region": "TX", "x-vercel-ip-city": "San%20Antonio", "x-vercel-ip-timezone": "America/Chicago" };
   const r = await S.api("/api/scorecard", { method: "POST", body: submission({ timing, client, utm_source: "", page: "https://scorecard.test/", referrer: "https://l.instagram.com/" }), headers });
   assert.equal(r.status, 200);
   const row = S.rows().find((x) => x.token === r.data.token);
-  assert.deepEqual(row.timing, { totalMs: 64321, landingMs: 9000, backs: 1, aways: 2, steps: { G1: 9100, G2: 3200, Q1: 4100, S10: 3600000 } }, "known steps only, whole milliseconds, capped");
+  assert.deepEqual(row.timing, { totalMs: 64321, landingMs: 9000, backs: 1, aways: 2, steps: { G1: 9100, G2: 3200, Q1: 4100, S11: 3600000 } }, "known steps only, whole milliseconds, capped");
   assert.deepEqual(row.geo, { country: "US", region: "TX", city: "San Antonio", tz: "America/Chicago" });
   assert.equal(row.device.type, "mobile");
   assert.equal(row.device.os, "iOS");
@@ -95,7 +106,8 @@ test("submit: the time each question took, the approximate location, the device"
   // Nothing precise: no coordinates, no postal code, no IP address
   assert.equal(JSON.stringify(row).match(/latitude|longitude|postal|"ip"/), null);
   await S.settled();
-  const team = S.emails().reverse().find((m) => m.team && m.rows.some(([k, v]) => k === "Business" && /Maple Street Heating/.test(v)));
+  const team = S.emails().reverse().find((m) => m.team && m.rows.some(([k, v]) => k === "Location" && v === "San Antonio, TX, US"));
+  assert.ok(team.rows.some(([k, v]) => k === "Market" && v === "Atlanta"));
   assert.ok(team.rows.some(([k, v]) => k === "Location" && v === "San Antonio, TX, US"));
   assert.ok(team.rows.some(([k, v]) => k === "Device" && v === "Phone, iOS, in Instagram's browser"));
   assert.ok(team.rows.some(([k, v]) => k === "Time to finish" && v === "1 min 4 s"));
@@ -103,19 +115,22 @@ test("submit: the time each question took, the approximate location, the device"
 
 test("submit: what is refused, and the honeypot", async () => {
   const missing = submission();
-  delete missing.answers.jobs;
+  delete missing.answers.carry;
   let r = await S.api("/api/scorecard", { method: "POST", body: missing });
   assert.equal(r.status, 400);
-  assert.deepEqual(r.data.missing, ["jobs"]);
-  r = await submit({ answers: { ...submission().answers, asks: "made-up" } });
+  assert.deepEqual(r.data.missing, ["carry"]);
+  r = await submit({ answers: { ...submission().answers, bathmix: "made-up" } });
   assert.equal(r.status, 400);
   r = await submit({ email: "not-an-email" });
   assert.equal(r.status, 400);
   r = await submit({ consentEmail: false });
   assert.equal(r.status, 400);
   assert.match(r.data.error, /Consent/);
-  r = await submit({ company: "" });
+  r = await submit({ firstName: "" });
   assert.equal(r.status, 400);
+  // No business or city field in this quiz: a missing company is no reason to refuse
+  r = await submit({ company: "" });
+  assert.equal(r.status, 200);
   const n = S.rows().length;
   r = await submit({ hp: "I am a bot" });
   assert.equal(r.status, 200);
@@ -138,8 +153,9 @@ test("the result by token: the score and its words, never the answers or the ema
   const r = await S.api(`/api/scorecard?token=${data.token}`);
   assert.equal(r.status, 200);
   assert.equal(r.data.firstName, "Sam");
-  assert.equal(r.data.result.score, 38);
-  assert.equal(r.data.result.invisible.workValue, 168000);
+  assert.equal(r.data.result.score, 35);
+  assert.equal(r.data.result.invisible.workValue, 4000);
+  assert.equal(r.data.result.bottleneck.cascadeLine, "Your Room Mix score follows from your Fill Speed score: a bath mix is priced from what rooms rent for and how fast they fill, by bath type.");
   assert.equal(JSON.stringify(r.data).includes("@example.com"), false);
   assert.equal("answers" in r.data, false);
   assert.equal(r.data.reportReady, true);
@@ -150,42 +166,43 @@ test("the result by token: the score and its words, never the answers or the ema
 
 test("the deepener: the report's scores follow it; a hidden question can't be answered", async () => {
   const { data } = await submit();
-  let r = await S.api("/api/scorecard", { method: "POST", body: { action: "deepener", token: data.token, answers: { d1: "most" } } });
+  let r = await S.api("/api/scorecard", { method: "POST", body: { action: "deepener", token: data.token, answers: { rentperroom: "split" } } });
   assert.equal(r.status, 400);
-  assert.ok(r.data.missing.includes("d2"));
+  assert.ok(r.data.missing.includes("rentcomps"));
   await S.settled();
   const before = S.emails().length;
-  r = await S.api("/api/scorecard", { method: "POST", body: { action: "deepener", token: data.token, answers: { d1: "most", d2: "most", d3: "nothing", d4: "stops", d5: "drops", d6: "no", d7: "week", d8: "standard" },
+  const DEEP = { rentperroom: "split", rentcomps: "few", occsource: "rule", launch: "whenever", newsupply: "think", pricedrops: "unsure", roomcount: "max", sizemix: "assume", dealmath: "mine", stress: "vacancy", zoning: "notyet", financing: "wholehome" };
+  r = await S.api("/api/scorecard", { method: "POST", body: { action: "deepener", token: data.token, answers: DEEP,
     timing: { totalMs: 21000, steps: { D1: 2500, D2: 3000, Q1: 1 } } } });
   assert.equal(r.status, 200);
-  assert.equal(r.data.n, 8);
+  assert.equal(r.data.n, 12);
   await S.settled();
-  const sharper = S.emails().slice(before).find((m) => m.subject === "Your sharper report: 38/100");
-  assert.ok(sharper, "the sharper report goes to the owner");
-  assert.match(sharper.text, /Thanks for the 8 extra answers/);
-  assert.match(sharper.text, /Fix first: Ask System\./);
+  const sharper = S.emails().slice(before).find((m) => m.subject === "Your sharper report: 33/100");
+  assert.ok(sharper, "the sharper report goes to the investor");
+  assert.match(sharper.text, /Thanks for the 12 extra answers/);
+  assert.match(sharper.text, /Fix first: Fill Speed\./);
   assert.match(sharper.text, /The updated report is online here: http:\/\/localhost:\d+\/report\//);
-  assert.match(sharper.text, /Pick a time for a 15-minute call: http:\/\/localhost:\d+\/results\/[A-Za-z0-9_-]+#call/);
+  assert.match(sharper.text, /Book a 20-minute walkthrough: http:\/\/localhost:\d+\/results\/[A-Za-z0-9_-]+#call/);
   const row = S.rows().find((x) => x.token === data.token);
   assert.deepEqual(row.deepener_timing, { totalMs: 21000, steps: { D1: 2500, D2: 3000 } });
-  assert.equal(row.report.snapshot.deepened, true, "the owner's report now carries the extra answers");
-  assert.equal(row.report_result.areas.system.score, 13);
-  assert.equal(row.report_result.score, 38);
-  assert.equal(row.bottleneck, "system");
-  assert.equal(row.score, 38, "the on-screen score stays");
+  assert.equal(row.report.snapshot.deepened, true, "the investor's report now carries the extra answers");
+  assert.equal(row.report_result.areas.mix.score, 13);
+  assert.equal(row.report_result.score, 33);
+  assert.equal(row.bottleneck, "fill");
+  assert.equal(row.score, 35, "the on-screen score stays");
   const view = await S.api(`/api/scorecard?token=${data.token}`);
   assert.equal(view.data.deepener.done, true);
-  // Q2 "We don't really ask" hides D3 and D4
-  const none = await submit({ answers: { ...submission().answers, asks: "none" } });
-  assert.deepEqual(none.data.deepener.shown, ["d1", "d2", "d5", "d6", "d7", "d8"]);
-  r = await S.api("/api/scorecard", { method: "POST", body: { action: "deepener", token: none.data.token, answers: { d1: "most", d2: "most", d3: "one", d4: "runs", d5: "yes", d6: "current", d7: "sameday", d8: "personal" } } });
+  // Q1 "I don't have one yet" hides D1 and D2
+  const none = await submit({ answers: { ...submission().answers, rentsource: "none" } });
+  assert.deepEqual(none.data.deepener.shown, ["occsource", "launch", "newsupply", "pricedrops", "roomcount", "sizemix", "dealmath", "stress", "zoning", "financing"]);
+  r = await S.api("/api/scorecard", { method: "POST", body: { action: "deepener", token: none.data.token, answers: DEEP } });
   assert.equal(r.status, 200);
-  assert.equal(r.data.n, 6);
+  assert.equal(r.data.n, 10);
 });
 
-test("the call: weekdays only, a US number and consent; the call email goes out", async () => {
+test("the walkthrough: weekdays only, a US number and consent; the address optional; the booking email goes out", async () => {
   const { data } = await submit();
-  const base = { action: "book", token: data.token, slotDay: nextWeekday(), slotWindow: "midday", phone: "(512) 555-0134", consentPhone: true, consentText: false };
+  const base = { action: "book", token: data.token, slotDay: nextWeekday(), slotWindow: "midday", phone: "(512) 555-0134", address: "  12 Example Lane, Atlanta  ", consentPhone: true, consentText: true };
   assert.equal((await S.api("/api/scorecard", { method: "POST", body: { ...base, phone: "555" } })).status, 400);
   assert.equal((await S.api("/api/scorecard", { method: "POST", body: { ...base, consentPhone: false } })).status, 400);
   assert.equal((await S.api("/api/scorecard", { method: "POST", body: { ...base, slotWindow: "midnight" } })).status, 400);
@@ -201,11 +218,15 @@ test("the call: weekdays only, a US number and consent; the call email goes out"
   const row = S.rows().find((x) => x.token === data.token);
   assert.equal(row.status, "booked");
   assert.equal(row.booking.phone, "5125550134");
+  assert.equal(row.booking.address, "12 Example Lane, Atlanta");
+  assert.equal(row.booking.consentText, false, "no texts: RoomIQ publishes no SMS terms");
   await S.settled();
   const call = S.emails().slice(before).find((m) => /^You're booked: /.test(m.subject || ""));
   assert.ok(call);
-  assert.match(call.text, /We'll call \(512\) 555-0134\./);
-  assert.match(call.text, /Can you reply YES to confirm\?/);
+  assert.match(call.text, /You're booked for a 20-minute walkthrough on /);
+  assert.match(call.text, /call \(512\) 555-0134 if the link doesn't work\./);
+  const team = S.emails().slice(before).find((m) => m.team && /^Walkthrough booked: Sam, Atlanta\./.test(m.title));
+  assert.ok(team.rows.some(([k, v]) => k === "Walkthrough address" && v === "12 Example Lane, Atlanta"));
 });
 
 test("unsubscribe: no more emails to that address", async () => {
@@ -243,10 +264,12 @@ test("analytics: known events kept, unknown dropped, nothing personal", async ()
 test("pages: the rewrites serve the right shells, with the right robots rules", async () => {
   const home = await S.api("/", { raw: true });
   const html = await home.text();
-  assert.match(html, /Is Your Review Habit Strong Enough to Show the Work You Actually Do\?/);
-  assert.equal((html.match(/class="gc-step"/g) || []).length, 10, "the ten steps are in the page");
-  const inv = await (await S.api("/invisible", { raw: true })).text();
-  assert.match(inv, /Your work is better\. Can homeowners see it\?/);
+  assert.match(html, /Would your first rent-by-the-room deal survive its first six months\?/);
+  assert.equal((html.match(/class="gc-step"/g) || []).length, 11, "the eleven steps are in the page");
+  const ads = await (await S.api("/first-deal", { raw: true })).text();
+  assert.match(ads, /Will your first deal survive six months\?/);
+  const start = await (await S.api("/start", { raw: true })).text();
+  assert.equal((start.match(/class="gc-step"/g) || []).length, 11, "the quiz alone");
   const res = await S.api("/results/abcdefghijklmnopqrstuvwxyz", { raw: true });
   assert.equal(res.headers.get("x-robots-tag"), "noindex, nofollow");
   assert.match(await res.text(), /name="robots" content="noindex,nofollow"/);
@@ -276,54 +299,49 @@ test("admin: signed out is refused; a wrong password is refused; the right one s
   assert.equal(s.data.setup.storage, "local");
 });
 
-test("admin: the list, a lead, the public profile, approve and send (the PDF attached), the report's access", { timeout: 180000 }, async () => {
+test("admin: the list, a lead, approve and send (the PDF attached), the report's access", { timeout: 180000 }, async () => {
   await S.login();
-  const { data } = await submit({ firstName: "Robin", company: "Pipe Dream Plumbing", email: "robin@example.com", answers: { ...submission().answers, trade: "plumbing" },
+  const { data } = await submit({ firstName: "Robin", email: "robin@example.com", answers: { ...submission().answers, market: "phoenix" },
     timing: { totalMs: 58000, landingMs: 12000, backs: 0, aways: 0, steps: { G1: 12000, G2: 2500, Q1: 3900 } } });
   await S.settled();
-  const list = await S.api("/api/admin?action=list&q=Pipe%20Dream", { auth: true });
+  const list = await S.api("/api/admin?action=list&q=Robin", { auth: true });
   assert.equal(list.status, 200);
-  const item = list.data.rows.find((x) => x.company === "Pipe Dream Plumbing");
+  const item = list.data.rows.find((x) => x.first_name === "Robin");
   assert.ok(item);
+  assert.equal(item.city, "Phoenix");
   assert.equal(item.seconds, 58);
-  assert.equal(item.value, 168000);
+  assert.equal(item.value, 4000);
+  assert.equal(item.unasked, 2);
   assert.equal(item.source, "facebook");
   assert.equal(item.report_emailed, true);
   const lead = await S.api(`/api/admin?action=lead&id=${item.id}`, { auth: true });
   assert.equal(lead.status, 200);
-  assert.equal(lead.data.report.result.score, 38);
-  assert.equal(lead.data.labels.find((l) => l.id === "G1").a, "Plumbing");
+  assert.equal(lead.data.report.result.score, 35);
+  assert.equal(lead.data.labels.find((l) => l.id === "G1").a, "Looking at houses");
+  assert.equal(lead.data.labels.find((l) => l.id === "G2").a, "Phoenix");
   assert.equal(lead.data.labels.find((l) => l.id === "Q1").seconds, 3.9);
   assert.equal(lead.data.visitor.total, "58 s");
-  assert.equal(lead.data.form.months.length, 12);
   assert.ok(lead.data.emails.some((m) => m.kind === "score" && m.status === "sent"), "the lead's emails, from the log");
   assert.ok(lead.data.reportState.emailedAt);
   assert.equal(lead.data.row.report.snapshot, undefined, "the snapshot stays on the server");
   assert.equal(lead.data.options.effective.playbook, true);
-  // The owner already has the report (instant delivery): their link shows it, never "on its way"
+  // The investor already has the report (instant delivery): their link shows it, never "on its way"
   S.clearCookie();
   let page = await (await S.api(`/report/${data.token}`, { raw: true })).text();
-  assert.match(page, /The Invisible Work Scorecard Report/);
+  assert.match(page, /The First Deal Risk Scorecard Report/);
+  assert.match(page, /Phoenix: no more than five people, who need not be related/);
   assert.doesNotMatch(page, /Your report is on its way/);
   await S.login();
-  // The profile
-  const pd = { search: { service: "plumbing", city: "Austin", date: "2026-11-22" },
-    business: { rating: "4.4", count: "40", reviews90: "3", newestDays: "75", replied: "5", sampled: "30", checks: { hours: true }, months: [1, 1, 0, 2, 1, 0, 0, 1, 2, 1, 1, 0] },
-    top3: [{ name: "One", rating: 4.8, count: 300, reviews90: 25, newestDays: 2, replied: 25, sampled: 30, checks: { hours: true, services: true, photos: true, description: true, categories: true } }],
-    themes: [{ theme: "a call that was not returned", count: "2" }, { theme: "", count: 1 }], compare: "", monthsRead: "auto", junk: "dropped" };
-  let r = await S.api("/api/admin?action=save", { method: "POST", body: { id: item.id, public_data: pd, checker: "Dana", notes: "Owner prefers mornings." }, auth: true });
+  // The team's notes and who checked it
+  let r = await S.api("/api/admin?action=save", { method: "POST", body: { id: item.id, checker: "Dana", notes: "Walkthrough on Tuesday." }, auth: true });
   assert.equal(r.status, 200);
   const row = S.rows().find((x) => x.id === item.id);
-  assert.equal(row.public_data.business.rating, 4.4);
-  assert.equal(row.public_data.themes.length, 1);
-  assert.equal("junk" in row.public_data, false);
   assert.equal(row.report.checker, "Dana");
-  // The GTM gap score now carries the top-three reading (suggested: far behind on every measure)
-  assert.equal(row.report_result.gtmGapScore, 20 + 14 + 8 + 12 + 25);
-  // The team's live preview, signed in, next to what the owner has
+  assert.equal(row.report_result.gtmGapScore, null, "no outbound gap score in this funnel");
+  // The team's live preview, signed in, next to what the investor has
   page = await (await S.api(`/report/${data.token}?live=1`, { raw: true, auth: true })).text();
   assert.match(page, /Live preview for the team/);
-  assert.match(page, /Pipe Dream Plumbing, next to the top three for plumbing in Austin/);
+  assert.match(page, /Your First Six Months/);
   // Approve and send: the update, with the PDF attached when one can print here
   S.pdf(pdfAvailable() || Boolean(process.env.CHROMIUM_PATH));
   const printing = (() => { try { return pdfAvailable(); } catch { return false; } })();
@@ -334,22 +352,21 @@ test("admin: the list, a lead, the public profile, approve and send (the PDF att
   assert.equal(r.data.emailed, true);
   const sent = S.rows().find((x) => x.id === item.id);
   assert.equal(sent.status, "sent");
-  assert.ok(sent.report.snapshot && sent.report.snapshot.fields.business === "Pipe Dream Plumbing");
-  assert.ok(sent.report.snapshot.top3.available);
-  const mail = S.emails().slice(before).find((m) => m.subject === "Your report, now with the top three near you");
-  assert.ok(mail, "the update to the report the owner has");
-  assert.match(mail.text, /Dana at Rempo read your public Google profile and the top three for plumbing in Austin/);
+  assert.ok(sent.report.snapshot && sent.report.snapshot.fields.first_name === "Robin");
+  assert.equal(sent.report.snapshot.fields.market, "Phoenix");
+  const mail = S.emails().slice(before).find((m) => m.subject === "Your report, updated");
+  assert.ok(mail, "the update to the report the investor has");
+  assert.match(mail.text, /Dana at RoomIQ has updated your First Deal Risk Scorecard report\./);
   if (printing) {
     assert.equal(mail.attachments.length, 1);
-    assert.equal(mail.attachments[0].filename, `${scorecardFileName()}-Pipe-Dream-Plumbing.pdf`);
+    assert.equal(mail.attachments[0].filename, `${scorecardFileName()}-Robin.pdf`);
     assert.equal(readFileSync(mail.attachments[0].file).subarray(0, 5).toString(), "%PDF-");
     assert.match(mail.text, /The updated report is attached as a PDF/);
   }
   // Now anyone with the link sees the checked report, from the snapshot, and each view is counted
   S.clearCookie();
   page = await (await S.api(`/report/${data.token}`, { raw: true })).text();
-  assert.match(page, /The Invisible Work Scorecard Report/);
-  assert.match(page, /Pipe Dream Plumbing, next to the top three/);
+  assert.match(page, /The First Deal Risk Scorecard Report/);
   assert.doesNotMatch(page, /Preview for the team/);
   if (printing) {
     const pdf = await S.api(`/report/${data.token}/pdf`, { raw: true });
@@ -361,31 +378,31 @@ test("admin: the list, a lead, the public profile, approve and send (the PDF att
   S.pdf(false);
   await S.settled();
   const counted = S.rows().find((x) => x.id === item.id);
-  assert.ok(counted.report_views >= 2, "the owner's views are counted");
+  assert.ok(counted.report_views >= 2, "the investor's views are counted");
   if (printing) assert.equal(counted.pdf_downloads, 1);
-  // Reopen: in the instant delivery the owner keeps the report they were sent
+  // Reopen: in the instant delivery the investor keeps the report they were sent
   await S.login();
   r = await S.api("/api/admin?action=reopen", { method: "POST", body: { id: item.id }, auth: true });
   assert.equal(r.status, 200);
   S.clearCookie();
   page = await (await S.api(`/report/${data.token}`, { raw: true })).text();
-  assert.match(page, /The Invisible Work Scorecard Report/);
+  assert.match(page, /The First Deal Risk Scorecard Report/);
 });
 
 test("admin: a lead's own report: a note, and the sections it carries; the claim rules apply", async () => {
   await S.login();
-  const { data } = await submit({ company: "Note Test Heating" });
+  const { data } = await submit({ firstName: "Noah" });
   await S.settled();
   const id = S.rows().find((x) => x.token === data.token).id;
-  let r = await S.api("/api/admin?action=options", { method: "POST", body: { id, note: "Good talking today.\n\nWe'd start with your replies.", sections: { playbook: false, method: true, bogus: true } }, auth: true });
+  let r = await S.api("/api/admin?action=options", { method: "POST", body: { id, note: "Good talking today.\n\nWe'd start with your fill watch.", sections: { playbook: false, method: true, bogus: true } }, auth: true });
   assert.equal(r.status, 200, JSON.stringify(r.data));
-  assert.deepEqual(r.data.options, { note: "Good talking today.\n\nWe'd start with your replies.", sections: { method: true, playbook: false } });
+  assert.deepEqual(r.data.options, { note: "Good talking today.\n\nWe'd start with your fill watch.", sections: { method: true, playbook: false } });
   const page = await (await S.api(`/report/${data.token}?live=1`, { raw: true, auth: true })).text();
-  assert.match(page, /For Note Test Heating/);
-  assert.match(page, /We&#39;d start with your replies\./);
-  assert.doesNotMatch(page, /Your Visible Work Starts Here/, "no playbook in this lead's report");
-  assert.match(page, /Where Note Test Heating stands on each step/);
-  r = await S.api("/api/admin?action=options", { method: "POST", body: { id, note: "We guarantee more reviews in 30 days." }, auth: true });
+  assert.match(page, /For you, Noah/);
+  assert.match(page, /We&#39;d start with your fill watch\./);
+  assert.doesNotMatch(page, /Your Room-by-Room Underwrite Starts Here/, "no playbook in this lead's report");
+  assert.match(page, /Where your plan stands on each step/);
+  r = await S.api("/api/admin?action=options", { method: "POST", body: { id, note: "We guarantee a sold-out house in 30 days." }, auth: true });
   assert.equal(r.status, 400);
   assert.match(r.data.error, /can't go in a report/);
 });
@@ -401,22 +418,22 @@ test("admin: settings: the letter and its signature, the sections, the team's ad
   assert.equal(r.status, 200, JSON.stringify(r.data));
   assert.equal(r.data.settings.report.signerName, "Dana");
   assert.equal(r.data.settings.report.sections.service, false);
-  r = await S.api("/api/admin?action=settings", { method: "POST", body: { key: "report", value: { letter: "Rempo is instant and gets you more reviews." } }, auth: true });
+  r = await S.api("/api/admin?action=settings", { method: "POST", body: { key: "report", value: { letter: "RoomIQ gives accurate forecasts and higher returns." } }, auth: true });
   assert.equal(r.status, 400);
   r = await S.api("/api/admin?action=settings", { method: "POST", body: { key: "notifications", value: { teamTo: "sales@example.com, not-an-email" } }, auth: true });
   assert.equal(r.status, 400);
   r = await S.api("/api/admin?action=settings", { method: "POST", body: { key: "notifications", value: { teamTo: "sales@example.com; owner@example.com", attachPdf: false } }, auth: true });
   assert.equal(r.status, 200);
   assert.equal(r.data.settings.notifications.teamTo, "sales@example.com, owner@example.com");
-  // The next lead: the letter, signed; no Rempo pages; the team's notice to the new addresses
-  const { data } = await submit({ firstName: "Lee", company: "Letter Test Plumbing" });
+  // The next lead: the letter, signed; no RoomIQ "two ways" pages; the team's notice to the new addresses
+  const { data } = await submit({ firstName: "Lee" });
   await S.settled();
   const page = await (await S.api(`/report/${data.token}`, { raw: true })).text();
   assert.match(page, /Hi Lee, thanks for taking the scorecard\./);
-  assert.match(page, /Start with Ask Coverage\./);
-  assert.match(page, /Dana, Founder, Rempo/);
+  assert.match(page, /Start with Fill Speed\./);
+  assert.match(page, /Dana, Founder, RoomIQ/);
   assert.doesNotMatch(page, /Two ways to run the method/);
-  const team = S.emails().reverse().find((m) => m.team && /Letter Test Plumbing/.test(m.title));
+  const team = S.emails().reverse().find((m) => m.team && /New scorecard: Lee, Atlanta/.test(m.title));
   assert.deepEqual(team.to, ["sales@example.com", "owner@example.com"]);
   // Back to the defaults, for the other tests
   await S.api("/api/admin?action=settings", { method: "POST", body: { key: "report", value: {} }, auth: true });
@@ -429,10 +446,10 @@ test("admin: the test email sends the sample report to the address given", async
   const before = S.emails().length;
   const r = await S.api("/api/admin?action=test-email", { method: "POST", body: { to: "Owner@Example.com" }, auth: true });
   assert.equal(r.status, 200, JSON.stringify(r.data));
-  const mail = S.emails().slice(before).find((m) => /^Test: Your Visibility Score/.test(m.subject || ""));
+  const mail = S.emails().slice(before).find((m) => /^Test: Your Deal Readiness Score/.test(m.subject || ""));
   assert.ok(mail);
   assert.equal(mail.to, "owner@example.com");
-  assert.match(mail.text, /This is the sample report, for a made-up shop/);
+  assert.match(mail.text, /This is the sample report, for a made-up investor/);
   assert.ok(S.emailLog().some((m) => m.kind === "test" && m.to_email === "owner@example.com"));
 });
 
@@ -476,19 +493,19 @@ test("the PDF report goes with the score email, to the owner and the team", { ti
   S.pdf(true);
   try {
     const before = S.emails().length;
-    const { data } = await submit({ company: "Pdf Test Heating" });
+    const { data } = await submit({ firstName: "Pat" });
     await S.settled();
     const mail = S.emails().slice(before);
-    const score = mail.find((m) => m.subject === "Your Visibility Score: 38/100, and your report");
+    const score = mail.find((m) => m.subject === "Your Deal Readiness Score: 35/100, and your report");
     assert.equal(score.attachments.length, 1);
-    assert.equal(score.attachments[0].filename, `${scorecardFileName()}-Pdf-Test-Heating.pdf`);
+    assert.equal(score.attachments[0].filename, `${scorecardFileName()}-Pat.pdf`);
   assert.equal(scorecardFileName(), String(SC_NAME).replace(/^the\s+/i, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, ""));
     assert.ok(score.attachments[0].bytes > 50000);
     assert.equal(readFileSync(score.attachments[0].file).subarray(0, 5).toString(), "%PDF-");
     assert.match(score.text, /Your full report is attached as a PDF, and it's online here: /);
-    const team = mail.find((m) => m.team && /Pdf Test Heating/.test(m.title));
+    const team = mail.find((m) => m.team && /New scorecard: Pat, Atlanta/.test(m.title));
     assert.equal(team.attachments.length, 1, "the team gets the PDF too (Settings: Attach the PDF)");
-    assert.ok(team.rows.some(([k, v]) => k === "Report" && /went to the owner/.test(v)));
+    assert.ok(team.rows.some(([k, v]) => k === "Report" && /went to the investor/.test(v)));
     const row = S.rows().find((x) => x.token === data.token);
     assert.equal(row.report.pdf_ok, true);
     assert.equal(S.emailLog().find((m) => m.assessment_id === row.id && m.kind === "score").attachments, 1);
@@ -517,8 +534,7 @@ test("admin: insights and the CSV export", async () => {
   assert.equal(r.status, 200);
   assert.ok(r.data.funnel.all.complete >= 1);
   assert.ok(r.data.profile.count >= 1);
-  assert.equal(r.data.profile.tiers.length, 4);
-  assert.ok(r.data.funnel.variants.some((v) => v.variant === "invisible"));
+  assert.equal(r.data.profile.tiers.length, 3);
   assert.ok(r.data.funnel.all.steps.find((x) => x.id === "Q1").medianMs > 0, "each question's time");
   assert.ok(r.data.dims.device.some((d) => d.value === "mobile"));
   assert.ok(r.data.dims.region.some((d) => d.value === "US:TX" || d.value === "US:CA"));
@@ -526,7 +542,7 @@ test("admin: insights and the CSV export", async () => {
   assert.ok(r.data.profile.geo.states.some((x) => x.key === "TX"));
   assert.ok(r.data.profile.timing.medianTotalMs > 0);
   assert.equal(r.data.profile.hourWeek.length, 7);
-  assert.ok(r.data.profile.invisible.valueTotal >= 168000);
+  assert.ok(r.data.profile.invisible.valueTotal >= 4000);
   assert.ok(Array.isArray(r.data.profile.hotLeads));
   const csv = await S.api("/api/admin?action=export", { raw: true, auth: true });
   assert.equal(csv.status, 200);
@@ -541,6 +557,8 @@ test("the daily digest needs Vercel's cron secret", async () => {
   const before = S.emails().length;
   const r = await S.api("/api/cron", { headers: { authorization: "Bearer test-cron-secret" } });
   assert.equal(r.status, 200);
-  assert.ok(r.data.waiting >= 1);
-  assert.ok(S.emails().slice(before).some((m) => m.team && /reports are waiting for the top three/.test(m.title)));
+  // Instant delivery with no outside data: every report went out with the score, so nothing waits and nothing is sent
+  assert.equal(r.data.waiting, 0);
+  assert.equal(r.data.skipped, "nothing waits on the team");
+  assert.equal(S.emails().slice(before).filter((m) => m.team).length, 0);
 });

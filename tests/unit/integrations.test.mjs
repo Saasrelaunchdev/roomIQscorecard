@@ -21,34 +21,39 @@ afterEach(() => {
   for (const k of ["META_PIXEL_ID", "META_CAPI_TOKEN", "META_TEST_EVENT_CODE", "GHL_TOKEN", "GHL_LOCATION_ID", "GHL_SCORECARD_FIELDS", "SCORECARD_WEBHOOK_URLS", "SCORECARD_WEBHOOK_SECRET", "SUPABASE_URL", "SUPABASE_SECRET_KEY", "SCORECARD_STORE_DIR", "LEADS_MIRROR", "SUPABASE_ANON_KEY"]) delete process.env[k];
 });
 
-const row = { id: "r1", email: "Sam@Example.com", first_name: "Sam", city: "Austin", company: "Maple Street Heating", visit: "visit-1", fit: "qualified",
-  tracking: { fbc: "fb.1.1700000000000.abcdefghij", fbp: "fb.1.1700000000000.1234567890", gpc: false, ads_consent: "granted", utm_source: "facebook" }, answers: { trade: "hvac" }, consent: { consentEmail: true } };
+// A RoomIQ lead: no business, the market of the deal in the city column
+const row = { id: "r1", email: "Sam@Example.com", first_name: "Sam", city: "Atlanta", company: "", visit: "visit-1", fit: "qualified",
+  tracking: { fbc: "fb.1.1700000000000.abcdefghij", fbp: "fb.1.1700000000000.1234567890", gpc: false, ads_consent: "granted", utm_source: "facebook" }, answers: { stage: "looking", market: "atlanta" }, consent: { consentEmail: true } };
 
-test("Meta: Lead for a qualified scorecard, hashed details, the browser's event id", async () => {
+test("Meta: ScorecardComplete for every completion (the GTM's event map), hashed details, the browser's event id", async () => {
   process.env.META_PIXEL_ID = "123456789";
   process.env.META_CAPI_TOKEN = "secret-token";
-  const ok = await toMeta({ name: "Lead", eventId: "lead-abcdef123", row, ip: "203.0.113.9", ua: "Mozilla/5.0", sourceUrl: "https://x.test/" });
-  assert.equal(ok, true);
+  const ok = await toMeta({ name: "ScorecardComplete", everyone: true, eventId: "complete-abcdef123", row: { ...row, fit: "learning" }, ip: "203.0.113.9", ua: "Mozilla/5.0", sourceUrl: "https://x.test/", custom: { content_name: "scorecard" } });
+  assert.equal(ok, true, "an unqualified completion still counts: decision 10 judges every completion");
   assert.equal(calls.length, 1);
   assert.match(calls[0].url, /^https:\/\/graph\.facebook\.com\/v25\.0\/123456789\/events\?access_token=secret-token$/);
   const body = JSON.parse(calls[0].body);
   const e = body.data[0];
-  assert.equal(e.event_name, "Lead");
-  assert.equal(e.event_id, "lead-abcdef123");
+  assert.equal(e.event_name, "ScorecardComplete");
+  assert.equal(e.event_id, "complete-abcdef123");
+  assert.deepEqual(e.custom_data, { content_name: "scorecard" });
   assert.match(e.user_data.em[0], /^[0-9a-f]{64}$/);
   assert.equal(e.user_data.fbc, row.tracking.fbc);
+  assert.equal(e.user_data.ct, undefined, "the market of the deal is never sent as the lead's city");
   assert.equal(JSON.stringify(body).includes("sam@example.com"), false, "never the email in the clear");
 });
 
-test("Meta: nothing for an unqualified scorecard, Global Privacy Control, or a declined notice", async () => {
+test("Meta: Schedule only for a qualified scorecard; nothing under Global Privacy Control or after a declined notice", async () => {
   process.env.META_PIXEL_ID = "123456789";
   process.env.META_CAPI_TOKEN = "secret-token";
-  assert.equal(await toMeta({ name: "Lead", eventId: "lead-abcdef123", row: { ...row, fit: "under-floor" } }), null);
-  assert.equal(await toMeta({ name: "Lead", eventId: "lead-abcdef123", row: { ...row, tracking: { ...row.tracking, gpc: true } } }), null);
-  assert.equal(await toMeta({ name: "Lead", eventId: "lead-abcdef123", row: { ...row, tracking: { ...row.tracking, ads_consent: "denied" } } }), null);
+  assert.equal(await toMeta({ name: "Schedule", eventId: "schedule-abcdef123", row: { ...row, fit: "learning" } }), null);
+  assert.equal(await toMeta({ name: "ScorecardComplete", everyone: true, eventId: "complete-abcdef123", row: { ...row, tracking: { ...row.tracking, gpc: true } } }), null);
+  assert.equal(await toMeta({ name: "ScorecardComplete", everyone: true, eventId: "complete-abcdef123", row: { ...row, tracking: { ...row.tracking, ads_consent: "denied" } } }), null);
   assert.equal(calls.length, 0);
+  assert.equal(await toMeta({ name: "Schedule", eventId: "schedule-abcdef123", row }), true);
+  assert.equal(JSON.parse(calls[0].body).data[0].event_name, "Schedule");
   delete process.env.META_CAPI_TOKEN;
-  assert.equal(await toMeta({ name: "Lead", eventId: "lead-abcdef123", row }), null);
+  assert.equal(await toMeta({ name: "ScorecardComplete", everyone: true, eventId: "complete-abcdef123", row }), null);
 });
 
 test("GoHighLevel: upsert the contact with the scorecard's tags and mapped fields", async () => {

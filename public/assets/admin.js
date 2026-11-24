@@ -177,13 +177,13 @@
   }
   function table(rows, total) {
     const th = (label, key) => key ? `<th data-sort="${key}" aria-sort="${sort.key === key ? (sort.dir > 0 ? "ascending" : "descending") : "none"}" class="sortable">${label}${sort.key === key ? (sort.dir > 0 ? " ↑" : " ↓") : ""}</th>` : `<th>${label}</th>`;
-    return `<p class="muted count">${num(total)} scorecard${total === 1 ? "" : "s"}. Click a column with an arrow to sort.</p><div class="scroll"><table class="tbl leads"><thead><tr>${th("When", "created_at")}${th("Business")}${th("Owner")}${th("Score", "score")}${th("Fix first")}` +
+    return `<p class="muted count">${num(total)} scorecard${total === 1 ? "" : "s"}. Click a column with an arrow to sort.</p><div class="scroll"><table class="tbl leads"><thead><tr>${th("When", "created_at")}${th("Market")}${th("Lead")}${th("Score", "score")}${th("Fix first")}` +
       `${th(metric().name, "value")}${th("From")}${th("Time", "seconds")}${th("Report", "views")}${th("Call")}${th("Status")}</tr></thead><tbody>` +
-      rows.map((r) => `<tr data-id="${esc(r.id)}" tabindex="0"><td class="nowrap">${esc(fmtDate(r.created_at))}</td><td><b>${esc(r.company)}</b><br><span class="muted">${esc(r.city)}</span></td>` +
+      rows.map((r) => `<tr data-id="${esc(r.id)}" tabindex="0"><td class="nowrap">${esc(fmtDate(r.created_at))}</td><td><b>${esc(r.company || r.city || "Other or not decided")}</b>${r.company ? `<br><span class="muted">${esc(r.city)}</span>` : ""}</td>` +
         `<td>${esc(r.first_name)}<br><span class="muted">${esc(r.email)}</span></td>` +
         `<td class="nowrap"><span class="score s-${esc(r.tier)}">${esc(r.score)}</span>${r.report_score !== undefined && r.report_score !== null && r.report_score !== r.score ? `<span class="muted"> → ${esc(r.report_score)}</span>` : ""}<br><span class="tag ${r.fit === "qualified" ? "ok" : "warn"}">${esc(r.fit)}</span></td>` +
         `<td>${esc(areaName(r.bottleneck))}${r.deepened ? `<br><span class="muted">deepened</span>` : ""}</td>` +
-        `<td class="num">${r.value !== null ? `<b>${esc(money(r.value))}</b>` : ""}${r.unasked !== null ? `<br><span class="muted">${esc(num(r.unasked))} unasked/yr</span>` : ""}</td>` +
+        `<td class="num">${r.value !== null ? `<b>${esc(money(r.value))}</b>` : ""}${r.unasked !== null ? `<br><span class="muted">${esc(num(r.unasked))} ${esc(metric().count)}</span>` : ""}</td>` +
         `<td>${esc(r.source || "direct")}${r.campaign ? ` <span class="muted">/ ${esc(r.campaign)}</span>` : ""}<br><span class="muted">${esc([r.place, DEVICE_LABELS[r.device] || r.device, r.in_app ? APP_LABELS[r.in_app] || r.in_app : ""].filter(Boolean).join(" · "))}</span></td>` +
         `<td class="num">${r.seconds !== null ? esc(secs(r.seconds * 1000)) : ""}</td>` +
         `<td>${r.report_emailed ? (r.pdf_ok ? "Emailed" : "Link sent") : r.sent_at ? "Sent" : ""}${r.report_views || r.pdf_downloads ? `<br><span class="muted">${r.report_views} view${r.report_views === 1 ? "" : "s"}${r.pdf_downloads ? `, ${r.pdf_downloads} PDF` : ""}</span>` : ""}</td>` +
@@ -203,20 +203,20 @@
     const sent = row.status === "sent";
     const vi = d.visitor;
     const t = row.tracking || {};
-    v.innerHTML = `<a href="#leads" class="back">← All scorecards</a><div class="lead-head"><div><h1>${esc(row.company)} <span class="muted">${esc(row.city)}</span></h1>` +
+    v.innerHTML = `<a href="#leads" class="back">← All scorecards</a><div class="lead-head"><div><h1>${esc(row.company || row.first_name)} <span class="muted">${esc(row.city)}</span></h1>` +
       `<p>${esc(row.first_name)} ${esc(row.last_name || "")} · <a href="mailto:${esc(row.email)}">${esc(row.email)}</a>${row.booking ? ` · ${esc(row.booking.phone)}` : ""}${row.unsubscribed_at ? ` · <span class="tag warn">unsubscribed</span>` : ""}</p>` +
       `<p class="muted">Came in ${esc(fmtDate(row.created_at))} · <span class="tag st-${esc(row.status)}">${esc(STATUS[row.status] || row.status)}</span></p></div>` +
       `<div class="acts"><a class="btn ghost" href="${esc(d.links.results)}" target="_blank" rel="noopener">Their result</a><a class="btn ghost" href="${esc(d.links.report)}" target="_blank" rel="noopener">The report they have</a>` +
       `<a class="btn ghost" href="${esc(d.links.report)}?live=1" target="_blank" rel="noopener">Live preview</a><a class="btn ghost" href="${esc(d.links.pdf)}" target="_blank" rel="noopener">PDF</a></div></div>` +
       `<div class="grid2"><section class="card"><h2>Result</h2><div class="kpis"><div><b>${esc(row.score)}</b><span>On screen</span></div><div><b>${esc(res.score)}</b><span>Report${res.deepened ? " (with the extra answers)" : ""}</span></div><div><b>${esc(res.tierName)}</b><span>Tier</span></div></div>` +
       `<div class="mlist">${areasList().map(([k, n]) => meterRow(n, res.areas[k].score, 100, String(res.areas[k].score), `${n}\n${res.areas[k].score} of 100, ${res.areas[k].band}`)).join("")}</div>` +
-      `<dl class="dl"><dt>Fix first</dt><dd>${res.bottleneck.maintenance ? "Maintenance: every area 75 or higher" : esc(areaName(res.bottleneck.primary))}${res.bottleneck.cascade ? ` (Freshness is its effect)` : ""}</dd><dt>Urgency</dt><dd>${esc(res.urgency)}</dd>` +
+      `<dl class="dl"><dt>Fix first</dt><dd>${res.bottleneck.maintenance ? "Maintenance: every area 75 or higher" : esc(areaName(res.bottleneck.primary))}${res.bottleneck.cascade ? ` (${esc(areaName(res.bottleneck.cascade.effect))} is its effect)` : ""}</dd><dt>Urgency</dt><dd>${esc(res.urgency)}</dd>` +
       `<dt>${esc(metric().name)}</dt><dd>${iw.unasked !== null ? `${esc(num(iw.unasked))} ${esc(metric().count)}${iw.workValue !== null ? `, <b>${esc(money(iw.workValue))}</b>` : ""}` : esc(iw.kind)}</dd><dt>Verdict</dt><dd>${esc(rep.verdict)}</dd>` +
       `<dt>Quick wins</dt><dd><ol>${rep.quickWins.map((q) => `<li>${esc(q.text)}</li>`).join("")}</ol></dd><dt>Fit, route</dt><dd>${esc(row.fit)} · ${esc(row.route)}</dd>` +
-      `<dt>Gap score (GTM)</dt><dd>${esc(res.gtmGapScore)} <span class="muted">(top three: ${esc(rep.compare)})</span></dd></dl>` +
+      (res.gtmGapScore !== null && res.gtmGapScore !== undefined ? `<dt>Gap score (GTM)</dt><dd>${esc(res.gtmGapScore)} <span class="muted">(top three: ${esc(rep.compare)})</span></dd>` : "") + `</dl>` +
       (rep.callNotes.length ? `<h3>Call notes</h3><ul class="notes">${rep.callNotes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>` : "") + `</section>` +
       `<section class="card"><h2>Answers <span class="muted">and the seconds each took</span></h2>${answersList(d.labels)}` +
-      (d.booking ? `<h3>Call</h3><p><b>${esc(d.booking.day)}, ${esc(d.booking.window)}</b> (${esc(d.booking.hours)}, their time) · ${esc(row.booking.phone)} · texts ${row.booking.consentText ? "yes" : "no"}</p>` : "") + `</section></div>` +
+      (d.booking ? `<h3>Walkthrough</h3><p><b>${esc(d.booking.day)}, ${esc(d.booking.window)}</b> (${esc(d.booking.hours)}, their time) · ${esc(row.booking.phone)} · texts ${row.booking.consentText ? "yes" : "no"}${row.booking.address ? `<br>The house: ${esc(row.booking.address)}` : ""}</p>` : "") + `</section></div>` +
       `<div class="grid2"><section class="card"><h2>Where, on what, how long</h2><dl class="dl">` +
       `<dt>Location</dt><dd>${esc(vi.place || "not known")} <span class="muted">(from the IP address: approximate)</span></dd><dt>Time zone</dt><dd>${esc(vi.tz || "not known")}</dd>` +
       `<dt>Device</dt><dd>${esc(vi.device || "not known")}${vi.screen ? `<br><span class="muted">${esc(vi.screen)}${vi.lang ? `, ${esc(vi.lang)}` : ""}</span>` : ""}</dd>` +
@@ -225,7 +225,7 @@
       `<dt>Before the first tap</dt><dd>${esc(vi.landing || "not measured")}</dd><dt>Time to finish</dt><dd><b>${esc(vi.total || "not measured")}</b>${vi.backs ? ` · went back ${vi.backs} time${vi.backs === 1 ? "" : "s"}` : ""}${vi.aways ? ` · left the page ${vi.aways} time${vi.aways === 1 ? "" : "s"}` : ""}</dd>` +
       (vi.deepenerTotal ? `<dt>Deepener</dt><dd>${esc(vi.deepenerTotal)}</dd>` : "") + `</dl></section>` +
       `<section class="card"><h2>The report and the emails</h2>${reportState(d)}${emailLog(d.emails)}` +
-      `<div class="acts small"><span class="muted">Send again:</span><button class="link" data-resend="score">Score email${d.reportState.delivery === "instant" ? " with the report" : ""}</button>${row.booking ? `<button class="link" data-resend="call">Call email</button>` : ""}${sent ? `<button class="link" data-resend="report">Report email</button>` : ""}</div>` +
+      `<div class="acts small"><span class="muted">Send again:</span><button class="link" data-resend="score">Score email${d.reportState.delivery === "instant" ? " with the report" : ""}</button>${row.booking ? `<button class="link" data-resend="call">Walkthrough email</button>` : ""}${sent ? `<button class="link" data-resend="report">Report email</button>` : ""}</div>` +
       (d.activity.length ? `<details class="activity"><summary>Activity (${d.activity.length})</summary><ul>${d.activity.map((a) => `<li><span class="muted">${esc(fmtDate(a.at))}</span> ${esc(a.name.replace(/_/g, " "))}</li>`).join("")}</ul></details>` : "") + `</section></div>` +
       optionsCard(d) + (setup.enrichment === false ? "" : profileForm(d, pd)) + reviewCard(d, row, sent);
     bindLead(d);
@@ -260,7 +260,7 @@
       `<label class="fld"><span>A note for ${esc(d.row.company)} (printed under the letter; the claim rules apply)</span><textarea name="note" rows="3" maxlength="1200" placeholder="Good talking today. We'd start with your replies.">${esc(o.note)}</textarea></label>` +
       `<fieldset class="secs-set"><legend>Sections</legend>${Object.entries(sectionLabels()).map(([k, l]) => `<label><input type="checkbox" name="sec-${k}"${o.effective[k] ? " checked" : ""}> ${esc(l)}${typeof o.sections[k] === "boolean" ? ` <span class="tag">set for this lead</span>` : ""}</label>`).join("")}</fieldset>` +
       `<div class="acts"><button class="btn ghost" data-options>Save for this lead</button><button class="link" data-options-reset>Use the team's settings</button><a class="link" href="${esc(d.links.report)}?live=1" target="_blank" rel="noopener">Preview</a></div>` +
-      `<p class="muted small-note">Changes show in the live preview at once. The owner gets them with the next email that carries the report (Approve and send, or a resend).</p></section>`;
+      `<p class="muted small-note">Changes show in the live preview at once. The investor gets them with the next email that carries the report (Approve and send, or a resend).</p></section>`;
   }
 
   function profileForm(d, pd) {
@@ -286,8 +286,8 @@
   function reviewCard(d, row, sent) {
     const instant = d.reportState.delivery === "instant";
     return `<section class="card review"><h2>Review and send ${instant && setup.enrichment !== false ? `<span class="muted">the update with the top three</span>` : ""}</h2><div class="row3"><label class="fld"><span>Checked by (first name, on the cover)</span><input name="checker" value="${esc((row.report && row.report.checker) || "")}"></label>` +
-      `<label class="fld"><span>Owner's last name (optional)</span><input name="last_name" value="${esc(row.last_name || "")}"></label><label class="fld"><span>Status</span><select name="status">${Object.entries(STATUS).filter(([k]) => k !== "sent" || sent).map(([k, l]) => `<option value="${k}"${row.status === k ? " selected" : ""}${k === "sent" ? " disabled" : ""}>${l}</option>`).join("")}</select></label></div>` +
-      `<label class="fld"><span>Notes for the team (never shown to the owner)</span><textarea name="notes" rows="3">${esc(row.notes || "")}</textarea></label>` +
+      `<label class="fld"><span>Last name (optional)</span><input name="last_name" value="${esc(row.last_name || "")}"></label><label class="fld"><span>Status</span><select name="status">${Object.entries(STATUS).filter(([k]) => k !== "sent" || sent).map(([k, l]) => `<option value="${k}"${row.status === k ? " selected" : ""}${k === "sent" ? " disabled" : ""}>${l}</option>`).join("")}</select></label></div>` +
+      `<label class="fld"><span>Notes for the team (never shown to the lead)</span><textarea name="notes" rows="3">${esc(row.notes || "")}</textarea></label>` +
       `<div class="acts"><button class="btn ghost" data-save>Save</button><a class="btn ghost" href="${esc(d.links.report)}?live=1" target="_blank" rel="noopener">Preview the report</a>` +
       (sent ? `<button class="btn ghost" data-reopen>Reopen to edit</button><span class="tag st-sent">Sent ${esc(fmtDate(row.sent_at))}</span>` : `<button class="btn" data-send>${instant ? "Approve and send the update" : "Approve and send"}</button>`) + `</div>` +
       `${d.report.top3Available ? "" : `<p class="warn">The public profile is empty: the report's Top Three page stays out until it is filled in.</p>`}</section>`;
@@ -311,7 +311,9 @@
   function bindLead(d) {
     const id = d.row.id;
     const reload = () => leadView(id);
-    $("#profile").addEventListener("submit", async (e) => {
+    // The outside-data form exists only with enrichment on (site.enrichment); without it the lead page binds the rest
+    const profile = $("#profile");
+    if (profile) profile.addEventListener("submit", async (e) => {
       e.preventDefault();
       try { await api("save", { method: "POST", body: { id, public_data: readProfile(e.target) } }); toast("Profile saved. The report follows it."); reload(); } catch (err) { toast(err.message, true); }
     });
@@ -342,13 +344,13 @@
       try {
         await api("save", { method: "POST", body: { id, checker: f.checker, last_name: f.last_name, notes: f.notes } });
         const r = await api("send", { method: "POST", body: { id, checker: f.checker, withoutProfile: !d.report.top3Available && confirm("The public profile is empty. Send without the Top Three page?") } });
-        toast(r.emailed ? "Sent: the owner has the report." : "Approved. The email did not go: check Settings.", !r.emailed);
+        toast(r.emailed ? "Sent: the investor has the report." : "Approved. The email did not go: check Settings.", !r.emailed);
         reload();
       } catch (err) { toast(err.message, true); send.disabled = false; send.textContent = label; }
     });
     const reopen = $("[data-reopen]", review);
     if (reopen) reopen.addEventListener("click", async () => {
-      if (!confirm(d.reportState.delivery === "instant" ? "Reopen? The owner keeps the report they have until you send again." : "Reopen? The owner's link shows 'on its way' until you send it again.")) return;
+      if (!confirm(d.reportState.delivery === "instant" ? "Reopen? The investor keeps the report they have until you send again." : "Reopen? The investor's link shows 'on its way' until you send it again.")) return;
       try { await api("reopen", { method: "POST", body: { id } }); reload(); } catch (err) { toast(err.message, true); }
     });
     $$("[data-resend]").forEach((b) => b.addEventListener("click", async () => {
@@ -413,7 +415,7 @@
     const cells = m.map((row, wd) => `<span class="hl">${WEEK[wd]}</span>${row.map((v, h) => { const f = rampOf(v, max); return `<span class="hc${f ? "" : " blank"}" tabindex="0"${f ? ` style="background:${f.bg}"` : ""} data-tip="${esc(`${v} lead${v === 1 ? "" : "s"}\n${WEEK[wd]}, ${hourName(h)} to ${hourName((h + 1) % 24)}`)}"></span>`; }).join("")}`).join("");
     const axis = `<span></span>${Array.from({ length: 24 }, (_, h) => `<span class="ha">${h % 6 === 0 ? esc(hourName(h)) : ""}</span>`).join("")}`;
     const total = m.flat().reduce((a, b) => a + b, 0);
-    return `<div class="scroll"><div class="heat" role="img" aria-label="Completed scorecards by weekday and hour, in each owner's own time">${cells}${axis}</div></div>${scaleLegend(max, "leads per hour")}` +
+    return `<div class="scroll"><div class="heat" role="img" aria-label="Completed scorecards by weekday and hour, in each investor's own time">${cells}${axis}</div></div>${scaleLegend(max, "leads per hour")}` +
       `<details class="tv"><summary>Table view</summary>${total ? `<div class="scroll"><table class="tbl mini"><thead><tr><th></th>${Array.from({ length: 24 }, (_, h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${m.map((row, wd) => `<tr><td>${WEEK[wd]}</td>${row.map((v) => `<td>${v || ""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : "<p class='muted'>Nothing yet.</p>"}</details>`;
   }
   const kpi = (value, label, sub, hero) => `<div class="stat${hero ? " hero" : ""}"><span class="sl">${esc(label)}</span><b>${esc(value)}</b>${sub ? `<span class="ss">${esc(sub)}</span>` : ""}</div>`;
@@ -476,7 +478,7 @@
       tableOf(["Source", "Leads", "Qualified", "Booked", "Booked rate", `Median ${metric().name.toLowerCase()}`], p.bySource.map((s) => [esc(s.label), s.count, s.qualified, s.booked, pct(s.bookedRate), s.medianValue !== null ? esc(money(s.medianValue)) : ""])) +
       (p.byCampaign.length ? `<h3>By campaign</h3>${tableOf(["Campaign", "Leads", "Qualified", "Booked", "Booked rate"], p.byCampaign.map((s) => [esc(s.label), s.count, s.qualified, s.booked, pct(s.bookedRate)]))}` : "") + `</section></div>`;
     // 6. When
-    out += `<section class="card"><h2>When owners take it <span class="muted">weekday and hour, in each owner's own time</span></h2>${heatmap(p.hourWeek)}</section>`;
+    out += `<section class="card"><h2>When investors take it <span class="muted">weekday and hour, in each investor's own time</span></h2>${heatmap(p.hourWeek)}</section>`;
     // 7. What they scored
     out += `<div class="grid2"><section class="card"><h2>Scores <span class="muted">${num(p.count)} scorecards, average ${p.averageScore === null ? "n/a" : p.averageScore}</span></h2>` +
       columns(p.scoreBuckets.map((b) => ({ value: b.count, from: b.from, tip: `${b.count} scorecard${b.count === 1 ? "" : "s"}\nScore ${b.from} to ${b.to}` })), { label: "Scores in bands of ten", height: 120, axis: (b) => String(b.from) }) +
@@ -538,21 +540,21 @@
     const r = d.settings.report, n = d.settings.notifications, s = d.setup;
     const row = (ok, name, fix) => `<li class="${ok ? "ok" : "no"}"><b aria-hidden="true">${ok ? "✓" : "✗"}</b><span>${esc(name)}<span class="sr">${ok ? " (set up)" : " (not set up)"}</span></span><em>${esc(ok ? "" : fix)}</em></li>`;
     v.innerHTML = `<section class="card" id="set-report"><h2>The report <span class="muted">every report from now on; each lead's page can change its own</span></h2>` +
-      `<p class="muted">Reports go out ${d.delivery === "instant" ? "the moment a scorecard is finished, with the score; your team then adds the top three" : "after your team approves them"}.</p>` +
-      `<label class="fld"><span>The letter at the front (leave empty for the standard one). Blank lines start paragraphs. You can use {first_name}, {business}, {city}, {service} and {primary_bottleneck}.</span><textarea name="letter" rows="6" maxlength="1500" placeholder="Thank you for taking the Invisible Work Scorecard, {first_name}...">${esc(r.letter)}</textarea></label>` +
+      `<p class="muted">Reports go out ${d.delivery === "instant" ? (setup.enrichment === false ? "the moment a scorecard is finished, with the score" : "the moment a scorecard is finished, with the score; your team then adds the top three") : "after your team approves them"}.</p>` +
+      `<label class="fld"><span>The letter at the front (leave empty for the standard one). Blank lines start paragraphs. You can use {first_name}, {market}, {deal} and {primary_bottleneck}.</span><textarea name="letter" rows="6" maxlength="1500" placeholder="Thank you for taking the First Deal Risk Scorecard, {first_name}...">${esc(r.letter)}</textarea></label>` +
       `<div class="row3"><label class="fld"><span>Signed by (first name; empty signs it "The ${esc(brandName())} team")</span><input name="signerName" maxlength="60" value="${esc(r.signerName)}"></label><label class="fld"><span>Their title (optional)</span><input name="signerTitle" maxlength="60" value="${esc(r.signerTitle)}"></label></div>` +
       `<fieldset class="secs-set"><legend>Sections in every report</legend>${Object.entries(sectionLabels()).map(([k, l]) => `<label><input type="checkbox" name="sec-${k}"${r.sections[k] ? " checked" : ""}> ${esc(l)}</label>`).join("")}</fieldset>` +
-      `<div class="acts"><button class="btn" data-save-report>Save</button><a class="btn ghost" href="${API}?action=sample" target="_blank" rel="noopener">Preview with the sample shop</a></div>` +
-      `<p class="muted small-note">The words go through the same claim rules as the site: no promised reviews or rankings, no prices, no guarantees, no "instant" or "automatic", every statistic with its source.</p></section>` +
+      `<div class="acts"><button class="btn" data-save-report>Save</button><a class="btn ghost" href="${API}?action=sample" target="_blank" rel="noopener">Preview with the sample investor</a></div>` +
+      `<p class="muted small-note">The words go through the same claim rules as the site: no accuracy, income or return claims, no named platforms, no prices or trials, no guarantees, every statistic with its source.</p></section>` +
       `<section class="card" id="set-team"><h2>The team's notices</h2><label class="fld"><span>Who gets them (comma separated; empty uses LEAD_NOTIFY_TO${d.envTeamTo.length ? `: ${esc(d.envTeamTo.join(", "))}` : ", which is not set"})</span><input name="teamTo" value="${esc(n.teamTo)}" placeholder="you@yourdomain.com, sales@yourdomain.com"></label>` +
-      `<div class="checks col"><label><input type="checkbox" name="attachPdf"${n.attachPdf ? " checked" : ""}> Attach the lead's PDF report to the new-lead email</label><label><input type="checkbox" name="deepener"${n.deepener ? " checked" : ""}> Tell us when a lead answers the deepener</label><label><input type="checkbox" name="booking"${n.booking ? " checked" : ""}> Tell us when a lead books a call</label></div>` +
+      `<div class="checks col"><label><input type="checkbox" name="attachPdf"${n.attachPdf ? " checked" : ""}> Attach the lead's PDF report to the new-lead email</label><label><input type="checkbox" name="deepener"${n.deepener ? " checked" : ""}> Tell us when a lead answers the deepener</label><label><input type="checkbox" name="booking"${n.booking ? " checked" : ""}> Tell us when a lead books a walkthrough</label></div>` +
       `<div class="acts"><button class="btn" data-save-team>Save</button></div></section>` +
-      `<section class="card" id="set-test"><h2>Send a test</h2><p class="muted">Emails the sample report (a made-up shop) to the address you give, the way an owner gets it, with the PDF. It checks your Resend domain end to end.</p>` +
+      `<section class="card" id="set-test"><h2>Send a test</h2><p class="muted">Emails the sample report (a made-up investor) to the address you give, the way an investor gets it, with the PDF. It checks your Resend domain end to end.</p>` +
       `<div class="row3"><label class="fld"><span>Send it to</span><input type="email" name="to" autocomplete="email" placeholder="you@yourdomain.com"></label></div><div class="acts"><button class="btn ghost" data-test>Send the test</button></div></section>` +
       `<section class="card"><h2>What this deployment is set up for</h2><ul class="setup">` +
       row(s.storage !== "none", `Storage (${s.storage})`, s.storageFix || "Set SUPABASE_URL and SUPABASE_SECRET_KEY, and run sql/schema.sql") +
       row(s.passwordStrong, "A strong admin password", "Use 12 characters or more in ADMIN_PASSWORD") +
-      row(s.prospectEmail, "Emails to owners (score and report, call, updates)", "Set RESEND_API_KEY and SCORECARD_EMAIL_FROM") +
+      row(s.prospectEmail, "Emails to investors (score and report, walkthrough, updates)", "Set RESEND_API_KEY and SCORECARD_EMAIL_FROM") +
       row(s.teamEmail || s.slack, "The team's notices", "Set LEAD_NOTIFY_FROM and LEAD_NOTIFY_TO (or the addresses above), or SLACK_WEBHOOK_URL") +
       row(s.pdf, "PDF reports", "Deploy to Vercel, or set CHROMIUM_PATH locally") +
       row(s.resendWebhook, "Delivered, opened and clicked (Resend's webhook)", "Add a webhook in Resend to /api/resend-webhook and set RESEND_WEBHOOK_SECRET") +

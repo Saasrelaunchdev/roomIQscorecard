@@ -62,13 +62,15 @@ test("insights: start rate, completion rate and drop-off, per variant", () => {
 
 test("insights: the scorecards' profile, and the CSV (formula injection guarded)", () => {
   const r = evaluate(SC, HERO);
-  const rows = [{ created_at: "2026-11-20T10:00:00.000Z", sent_at: "2026-11-21T10:00:00.000Z", status: "sent", answers: HERO, result: r, report_result: r, score: 38, tier: "somedays", bottleneck: "coverage", fit: "qualified", route: "call or checkout", tracking: { utm_source: "facebook" }, company: "=HYPERLINK(\"x\")", email: "a@b.co", first_name: "Sam, Jr." }];
+  const rows = [{ created_at: "2026-11-20T10:00:00.000Z", sent_at: "2026-11-21T10:00:00.000Z", status: "sent", answers: HERO, result: r, report_result: r, score: 35, tier: "beginner", bottleneck: "fill", fit: "qualified", route: "free forecast", tracking: { utm_source: "facebook" }, company: "=HYPERLINK(\"x\")", email: "a@b.co", first_name: "Sam, Jr." }];
   const p = profileOf(rows);
   assert.equal(p.count, 1);
-  assert.equal(p.averageScore, 38);
-  assert.equal(p.tiers.find((t) => t.key === "somedays").count, 1);
+  assert.equal(p.averageScore, 35);
+  assert.equal(p.tiers.find((t) => t.key === "beginner").count, 1);
   assert.equal(p.medianHoursToReport, 24);
-  assert.equal(p.answers.jobs.options.find((o) => o.v === "16to40").count, 1);
+  assert.equal(p.answers.carry.options.find((o) => o.v === "2to3k").count, 1);
+  assert.equal(p.invisible.valueTotal, 4000);
+  assert.equal(p.invisible.unaskedTotal, 2);
   const csv = toCsv(rows);
   const [head, line] = csv.trim().split("\r\n");
   assert.match(head, /^created_at,status,first_name/);
@@ -77,13 +79,13 @@ test("insights: the scorecards' profile, and the CSV (formula injection guarded)
 });
 
 test("emails: a line whose placeholder has no value is left out; values are escaped in the HTML; the footer is there", () => {
-  const msg = compose(EMAILS.score, { firstName: "Sam <b>", score: 38, tier: "The Some-Days Shop", invisible_line: "Line.", bottleneck: "Ask Coverage", bottleneck_line: "Fix it.",
-    quick_win: null, business: "Maple", service: "HVAC", city: "Austin", deepener_link: null, results_link: "https://x.test/results/T", unsubscribe_link: "https://x.test/unsubscribe/T", privacy_link: "https://rempo.io/legal/privacy" },
+  const msg = compose(EMAILS.score, { firstName: "Sam <b>", score: 35, tier: "Beginner: underwriting on assumptions", invisible_line: "Line.", bottleneck: "Fill Speed", bottleneck_line: "Fix it.",
+    quick_win: null, business: "", service: "first deal", city: "Atlanta", deepener_link: null, results_link: "https://x.test/results/T", unsubscribe_link: "https://x.test/unsubscribe/T", privacy_link: "https://roomiq.io/privacy" },
     { buttonUrl: "https://x.test/results/T", buttonLabel: "See my score" });
-  assert.equal(msg.subject, "Your Visibility Score: 38/100");
+  assert.equal(msg.subject, "Your Deal Readiness Score: 35/100");
   assert.doesNotMatch(msg.text, /Start this week|sharper report|\{/);
   assert.match(msg.text, /Unsubscribe: https:\/\/x\.test\/unsubscribe\/T/);
-  assert.match(msg.text, /Privacy Policy: https:\/\/rempo\.io\/legal\/privacy/);
+  assert.match(msg.text, /Privacy Policy: https:\/\/roomiq\.io\/privacy/);
   assert.match(msg.html, /Sam &lt;b&gt;/);
   assert.match(msg.html, /href="https:\/\/x\.test\/results\/T"/);
 });
@@ -92,13 +94,17 @@ test("the claim rules pass over every word, and catch what they should", async (
   const { errors } = await lintAll();
   assert.deepEqual(errors, []);
   const rules = (await import("../../rules/copy-rules.json", { with: { type: "json" } })).default;
-  const bad = lint(collect({ results: { a: "We get you more reviews.", b: "Rempo is instant.", c: "Ask everyone — always.", d: "74% of consumers read reviews.", e: "We never remove reviews.", f: "Plans from $99." } }), rules);
-  assert.equal(bad.errors.length, 5);
-  assert.ok(bad.errors.some((e) => /more-reviews/.test(e)));
-  assert.ok(bad.errors.some((e) => /instant/.test(e)));
+  const bad = lint(collect({ results: { a: "Get accurate rent forecasts for any address.", b: "Find cash-flowing deals fast.", c: "Check your rents — always.", d: "84% of rooms fill in a month.",
+    e: "RoomIQ is not a zoning check.", f: "Pro is $45 a month.", g: "Room data powered by a listing platform.", h: "Compare with PadSplit's calculator." } }), rules);
+  assert.equal(bad.errors.length, 7);
+  assert.ok(bad.errors.some((e) => /\(accuracy\)/.test(e)));
+  assert.ok(bad.errors.some((e) => /\(income\)/.test(e)));
   assert.ok(bad.errors.some((e) => /em or en dashes/.test(e)));
   assert.ok(bad.errors.some((e) => /source in the same sentence/.test(e)));
-  assert.ok(bad.errors.some((e) => /offer/.test(e)));
+  assert.ok(bad.errors.some((e) => /\(offer-terms\)/.test(e)));
+  assert.ok(bad.errors.some((e) => /\(partnership\)/.test(e)));
+  assert.ok(bad.errors.some((e) => /\(named-platform\)/.test(e)));
+  assert.ok(!bad.errors.some((e) => /zoning check/.test(e)), "a sentence that refuses the claim passes");
 });
 
 test("the committed build matches its sources (node tools/build.mjs --check)", () => {

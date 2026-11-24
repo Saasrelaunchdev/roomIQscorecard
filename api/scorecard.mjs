@@ -20,7 +20,7 @@ import SITE from "../content/site.mjs";
 import BRAND from "../content/brand.mjs";
 import EMAILS from "../content/emails.mjs";
 import RESULTS from "../content/results.mjs";
-import { evaluate, cleanDeepener, deepenerShown, fill, optionOf } from "../lib/scoring.mjs";
+import { evaluate, cleanDeepener, deepenerShown, deepenerAll, fill, optionOf } from "../lib/scoring.mjs";
 import { usPhone, dayAllowed, windowOf, phoneLabel } from "../lib/booking.mjs";
 import { send, readJson, query, sameOrigin, clientIp, header, userAgent, baseUrl, deployment, str, EMAIL, TOKEN, fail, HttpError } from "./_lib/http.mjs";
 import { getStore, storeConfig, notConnected, StoreError } from "./_lib/store.mjs";
@@ -197,7 +197,7 @@ async function deepen(req, res, body) {
   const compare = row.public_data && row.public_data.compare;
   const ev = evaluate(SC, row.answers, deepener, { compare });
   const saved = await getStore().update(row.id, { deepener, deepened_at: new Date().toISOString(), report_result: trim(ev), bottleneck: ev.bottleneck.primary,
-    deepener_timing: timingOf(body.timing, SC.deepener.map((d) => d.id)) });
+    deepener_timing: timingOf(body.timing, deepenerAll(SC).map((d) => d.id)) });
   const links = linksFor(baseUrl(req, SITE), saved);
   const job = later("after deepener", () => afterDeepener(saved, ev, links));
   if (job.mustAwait) await job.done;

@@ -570,7 +570,7 @@ async function sharpenPage() {
   const links = `<div class="sec-cta" style="margin-top:4px"><a class="btn btn-line" href="/results/${esc(token)}">${esc(D.toResults)}</a>${view.booked ? "" : `<a class="btn btn-primary" href="/results/${esc(token)}#call">${esc(D.toCall)}</a>`}</div>`;
   if (view.deepener.done) { box.innerHTML = `<div class="gc done-card"><h2>${esc(D.already)}</h2>${links}</div>`; return; }
   hit("deepener_view");
-  const steps = SC.deepener.filter((d) => view.deepener.shown.includes(d.key)).map((d) => Object.assign({ type: "choice" }, d));
+  const steps = deepenerAll(SC).filter((d) => view.deepener.shown.includes(d.key)).map((d) => Object.assign({ type: "choice" }, d));
   const n = steps.length;
   box.innerHTML = quizCardHtml(steps, UI, { id: "deep", label: D.label, frame: D.leadN.replace("{n}", n), button: D.button, kind: "deepener" });
   makeQuiz($("#deep"), {

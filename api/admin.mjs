@@ -20,7 +20,7 @@ import SC from "../content/scorecard.mjs";
 import SITE from "../content/site.mjs";
 import BRAND from "../content/brand.mjs";
 import EMAILS from "../content/emails.mjs";
-import { evaluate, fill, deepenerShown } from "../lib/scoring.mjs";
+import { evaluate, fill, deepenerShown, deepenerAll } from "../lib/scoring.mjs";
 import { buildReport, monthLabels, CHECKS, isoDay } from "../lib/report-model.mjs";
 import { reportHtml } from "../lib/report-html.mjs";
 import { funnelOf, profileOf, dimsOf, emailStatsOf, toCsv } from "../lib/insights.mjs";
@@ -137,7 +137,7 @@ function labelsFor(row) {
     if (s.choice) out.push({ id: "S9", q: s.choice.label, a: (s.choice.options.find((o) => o.v === all[s.choice.key]) || {}).label || "", seconds: sec(t[s.id]) });
     if (s.type === "fields" && !s.choice) out.push({ id: s.id, q: s.q || "Contact details", a: "", seconds: sec(t[s.id]), fields: true });
   }
-  for (const d of SC.deepener) out.push({ id: d.id, q: d.q, a: all[d.key] ? (d.options.find((o) => o.v === all[d.key]) || {}).label : "", deep: true, seconds: sec(dt[d.id]) });
+  for (const d of deepenerAll(SC)) out.push({ id: d.id, q: d.q, a: all[d.key] ? (d.options.find((o) => o.v === all[d.key]) || {}).label : "", deep: true, seconds: sec(dt[d.id]) });
   return out;
 }
 
@@ -206,7 +206,8 @@ async function approve(req, body) {
   if (!checker) throw new HttpError(400, "Add who checked the report (their first name prints on the cover).");
   const links = linksFor(baseUrl(req, SITE), row);
   const settings = await loadSettings(store);
-  if (!modelFor(row, { links, settings, checker }).top3.available && !body.withoutProfile) throw new HttpError(400, "The public profile is empty, so the Top Three page would be missing. Fill it in, or send anyway.");
+  // Only when outside data is part of the report (site.enrichment): RoomIQ's report is built from the answers alone
+  if (SITE.enrichment !== false && !modelFor(row, { links, settings, checker }).top3.available && !body.withoutProfile) throw new HttpError(400, "The public profile is empty, so the Top Three page would be missing. Fill it in, or send anyway.");
   // The PDF must print before the owner is told it is ready; it goes with the email
   const made = await makeReport(row, { links, settings, checker });
   const model = made.model;

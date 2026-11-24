@@ -41,16 +41,15 @@ export default {
   /* ---------- The main quiz: eleven steps, about a minute (spec 1, sections 5 and 6). Contact is always last ---------- */
   steps: [
     {
-      id: "G1", key: "stage", kind: "gateway", type: "choice",
+      id: "G1", key: "stage", kind: "gateway", type: "choice", layout: "grid",
       q: "Where are you with rent-by-the-room?",
-      help: "Pick the closest.",
       options: [
-        { v: "learning", label: "Learning, no house in mind yet", service: "first deal" },
-        { v: "looking", label: "Looking at houses now", service: "first deal" },
-        { v: "contract", label: "A house is under contract", service: "first deal" },
-        { v: "own", label: "I own a house I'll convert to rooms", service: "first deal" },
-        { v: "operator", label: "I already rent rooms in 1 to 10 houses", service: "next deal" },
-        { v: "scaling", label: "I run more than 10 houses", service: "next deal" }
+        { v: "learning", label: "Learning, no house yet", service: "first deal" },
+        { v: "looking", label: "Looking at houses", service: "first deal" },
+        { v: "contract", label: "Under contract", service: "first deal" },
+        { v: "own", label: "Converting my house", service: "first deal" },
+        { v: "operator", label: "I run 1 to 10 houses", service: "next deal" },
+        { v: "scaling", label: "More than 10 houses", service: "next deal" }
       ]
     },
     {
@@ -244,15 +243,13 @@ export default {
       ]
     },
     {
-      id: "D8", key: "garage", area: "mix", weight: 1,
-      q: "Have you priced the garage or extra space as a room?",
+      id: "D8", key: "sizemix", area: "mix", weight: 1,
+      q: "Have you checked which room sizes rent best nearby?",
       options: [
-        { v: "notyet", label: "Haven't thought about it", points: 0 },
-        { v: "convert", label: "I'll convert it: more rooms earn more", points: 1 },
-        { v: "keep", label: "I'll keep it as it is", points: 1 },
-        { v: "compared", label: "Compared both ways, against rents nearby", points: 4 },
-        // Not scored: a question that does not apply leaves both the score and the maximum (spec 1, section 3)
-        { v: "na", label: "There's no garage or extra space", points: null }
+        { v: "none", label: "Not yet", points: 0 },
+        { v: "assume", label: "I assume bigger rooms rent better", points: 1 },
+        { v: "seen", label: "I've seen a few listings", points: 2 },
+        { v: "compared", label: "I compared rents and fill speed by room size nearby", points: 4 }
       ]
     },
     {
@@ -274,9 +271,13 @@ export default {
         { v: "onecase", label: "I test one slower case", points: 2 },
         { v: "comps", label: "I test it against how comparable launches nearby filled", points: 4 }
       ]
-    },
-    // The checklist: I1's unscored zoning and financing checks (spec 1, section 6.6). No area, no points: they feed the
-    // report's "Three checks RoomIQ can't do for you" page, the rule flag and the call notes
+    }
+  ],
+
+  /* ---------- The checklist: I1's unscored zoning and financing checks (spec 1, section 6.6) ---------- */
+  // Asked on the deepener page after its scored questions (lib/scoring.mjs deepenerAll). No area, no points: they feed
+  // the report's "Three checks RoomIQ can't do for you" page, the rule flag and the call notes
+  checklist: [
     {
       id: "C1", key: "zoning", kind: "checklist",
       q: "Have you checked the city's rule on unrelated adults sharing a home?",
@@ -366,10 +367,9 @@ export default {
   // The cascade (spec 1, section 9): Room Mix and Lease-up Reserves follow from the two borrowed numbers. While Rent
   // Evidence or Fill Speed is under strongAt, a weakest Room Mix or Reserves is never fixed first: the lower of the two
   // causes is, and the effect is reported as its effect
-  cascade: [
-    { effect: "mix", causes: ["rent", "fill"] },
-    { effect: "reserves", causes: ["rent", "fill"] }
-  ],
+  // cascade is the template's one effect; cascadeAlso adds the second (lib/scoring.mjs bottleneckOf reads both)
+  cascade: { effect: "mix", causes: ["rent", "fill"] },
+  cascadeAlso: [{ effect: "reserves", causes: ["rent", "fill"] }],
   cascadeLines: {
     mix: "Your Room Mix score follows from your {cause} score: a bath mix is priced from what rooms rent for and how fast they fill, by bath type.",
     reserves: "Your Lease-up Reserves score follows from your {cause} score: reserves can only be sized once you know what rooms rent for and how fast they fill."
@@ -449,10 +449,9 @@ export default {
       notyet: "Check the room count against rents nearby and against the city's rule on unrelated adults",
       max: "Check the room count against rents nearby and against the city's rule on unrelated adults"
     },
-    garage: {
-      notyet: "Price the garage both ways, as parking and as a room, against rents nearby",
-      convert: "Price the garage both ways, as parking and as a room, against rents nearby",
-      keep: "Price the garage both ways, as parking and as a room, against rents nearby"
+    sizemix: {
+      none: "Group your nearby rooms by size too, large, medium and small, with the rent and fill speed of each",
+      assume: "Group your nearby rooms by size too, large, medium and small, with the rent and fill speed of each"
     },
     slowplan: {
       none: "Multiply your monthly carrying cost by the months you expect lease-up to take, and compare it with your reserves",
@@ -467,16 +466,18 @@ export default {
       no: "Add one slower case to your deal math: the same rents, with lease-up taking twice as long",
       vacancy: "Drop the extra vacancy rate if your occupancy already comes from rooms nearby, because it counts empty rooms twice"
     },
-    // The rule flag's words (below): first, whatever the area scores
-    zoning: {
-      notyet: "Read your city's rule on unrelated adults sharing a home, then confirm it with the city or an attorney",
-      asked: "Read your city's rule on unrelated adults sharing a home, then confirm it with the city or an attorney",
-      summary: "Read your city's rule on unrelated adults sharing a home, then confirm it with the city or an attorney"
-    }
   },
   quickWinCount: 3,
-  // The rule flag (spec 1, section 6.6): an unconfirmed zoning check puts its quick win first, whatever the scores
-  ruleFlag: { key: "zoning", v: ["notyet", "asked", "summary"] },
+  // The template's rule flag (a deepener answer that puts its quick win first): not used here. RoomIQ's flag is on the
+  // checklist (checklistFlag, below)
+  ruleFlag: null,
+  // The checklist's flag (spec 1, section 6.6): an unconfirmed check of the city's rule puts this quick win first,
+  // whatever the area scores, and adds the note on the city's rule to the weakest area's page
+  checklistFlag: {
+    key: "zoning",
+    v: ["notyet", "asked", "summary"],
+    text: "Read your city's rule on unrelated adults sharing a home, then confirm it with the city or an attorney"
+  },
   // All strong (every area 75 or higher): the quick wins become checks, one from each of the lowest areas
   checks: {
     rent: "Once a month, recheck five rooms near the house: rent, bath type and whether they filled",

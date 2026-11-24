@@ -1,5 +1,6 @@
 // /api/cron: once each weekday morning (vercel.json "crons"), the team hears how many reports are waiting and how old the
-// oldest is, so "emailed within one business day" holds (in the instant delivery, the top-three update is what waits). Vercel calls it with Authorization: Bearer <CRON_SECRET> when
+// oldest is, so "emailed within one business day" holds. With instant delivery and no outside data (RoomIQ's setup),
+// every report goes out with the score and nothing waits: the job answers and sends nothing. Vercel calls it with Authorization: Bearer <CRON_SECRET> when
 // CRON_SECRET is set; anyone else is refused.
 import SITE from "../content/site.mjs";
 import EMAILS from "../content/emails.mjs";
@@ -11,6 +12,8 @@ import { notifyTeam } from "./_lib/notify.mjs";
 export default async function handler(req, res) {
   const secret = process.env.CRON_SECRET ? String(process.env.CRON_SECRET).trim() : "";
   if (!secret || req.headers.authorization !== `Bearer ${secret}`) return send(res, 401, { error: "unauthorized" });
+  // Instant delivery with no outside data: every report went out with the score, so nothing waits on the team
+  if (SITE.reportDelivery === "instant" && SITE.enrichment === false) return send(res, 200, { ok: true, waiting: 0, skipped: "nothing waits on the team" });
   const since = new Date(Date.now() - 30 * 86400e3).toISOString();
   const { rows } = await getStore().list({ from: since, limit: 500 });
   const waiting = rows.filter((r) => !r.sent_at && !["closed", "spam", "sent"].includes(r.status)).sort((a, b) => (a.created_at < b.created_at ? -1 : 1));

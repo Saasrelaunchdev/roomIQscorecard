@@ -37,7 +37,8 @@ The funnel: landing page, eleven steps (ten taps, then first name and email), th
 (twelve taps), the walkthrough booking, the PDF report.
 
 Scored: five areas, one question each in the main quiz (weight 3) and two each in the deepener (weights 2 and 1).
-Qualifying and the metric: five gateway questions. Unscored: two checklist questions in the deepener.
+Qualifying and the metric: five gateway questions. Unscored: two checklist questions, on the deepener page after its
+scored questions.
 
 | Area | Key | Weight | Why it exists |
 |---|---|---|---|
@@ -50,7 +51,8 @@ Qualifying and the metric: five gateway questions. Unscored: two checklist quest
 ## 3. Scoring and weighting
 
 1. Each answer is worth 0 to 4 points (`maxPoints` 4), times its question's weight: main quiz 3, deepener 2 or 1.
-2. An answer with no points (D8 "There's no garage or extra space"; C1 and C2) leaves both the score and the maximum.
+2. The checklist's questions (C1, C2) carry no points: they never count toward a score. (The scoring also accepts an
+   option without points, which leaves both the score and the maximum, for a question that may not apply.)
 3. Area score = points earned / points possible x 100, over the questions shown and answered, rounded half up.
    Without the deepener, an area is its one main question: 0, 25, 50 or 100 (no main option is worth 3 points).
 4. **Deal Readiness Score** = the average of the five unrounded area scores, rounded half up at the end. Higher is
@@ -128,13 +130,13 @@ carrying cost; rooms that fill sooner bring rent in sooner. The report says so.
 
 | Id | Key | Question | Options (key: label) | Feeds |
 |---|---|---|---|---|
-| G1 | `stage` | Where are you with rent-by-the-room? | `learning`: Learning, no house in mind yet; `looking`: Looking at houses now; `contract`: A house is under contract; `own`: I own a house I'll convert to rooms; `operator`: I already rent rooms in 1 to 10 houses; `scaling`: I run more than 10 houses | the segment ("first deal" for the first four, "next deal" for operators); fit; call-only; call notes |
+| G1 | `stage` | Where are you with rent-by-the-room? | `learning`: Learning, no house yet; `looking`: Looking at houses; `contract`: Under contract; `own`: Converting my house; `operator`: I run 1 to 10 houses; `scaling`: More than 10 houses | the segment ("first deal" for the first four, "next deal" for operators); fit; call-only; call notes |
 | G2 | `market` | Where is the house, or the market you're looking at? | `dfw`: Dallas-Fort Worth; `houston`: Houston; `atlanta`: Atlanta; `orlando`: Orlando; `jacksonville`: Jacksonville; `phoenix`: Phoenix; `lasvegas`: Las Vegas; `other`: Another US market; `undecided`: Not decided yet | covered or not (section 10); the checklist page's city rule and insurance line; the report's cover; the stored city |
 | G3 | `carry` | About what will the house cost you each month before rent comes in? | see section 4 | C |
 | G4 | `fillmonths` | How long do you expect the rooms to take to fill? | see section 4 | N |
 | G5 | `reserves` | If no rent came in, how many months of costs could your reserves carry? | see section 4 | M |
 
-Help lines: G1 "Pick the closest." G3 "Loan payment, taxes, insurance and utilities, with every room empty. A range is
+Help lines (G1 has none, so its six answers fit a phone's first screen): G3 "Loan payment, taxes, insurance and utilities, with every room empty. A range is
 fine." G4 "Counted from the day rooms are ready to rent." G5 "Cash set aside for this house, after the down payment and
 the work."
 
@@ -237,7 +239,7 @@ decided on a hunch."
 |---|---|---|---|---|
 | Q4 | `bathmix` | 3 | Have you decided the bath mix? | `notyet` Not yet (0); `keep` Keeping the current bathrooms (1); `adding` Adding a bathroom because it seems worth it (2); `modeled` Modeled private against shared-bath rents nearby (4) |
 | D7 | `roomcount` | 2 | How did you decide how many rooms to rent? | `notyet` Not decided yet (0); `max` As many as the house can fit (1); `current` The current bedroom count (2); `checked` A layout checked against rents nearby (4) |
-| D8 | `garage` | 1 | Have you priced the garage or extra space as a room? | `notyet` Haven't thought about it (0); `convert` I'll convert it: more rooms earn more (1); `keep` I'll keep it as it is (1); `compared` Compared both ways, against rents nearby (4); `na` There's no garage or extra space (no points) |
+| D8 | `sizemix` | 1 | Have you checked which room sizes rent best nearby? | `none` Not yet (0); `assume` I assume bigger rooms rent better (1); `seen` I've seen a few listings (2); `compared` I compared rents and fill speed by room size nearby (4) |
 
 | Band | Card text |
 |---|---|
@@ -250,8 +252,8 @@ Fix-first line: "Bath mix is a structural revenue driver. Compare private and sh
 Quick wins: Q4 `notyet` "Write down the weekly rents of 5 private-bath and 5 shared-bath rooms nearby, and the
 difference"; `keep` "Price the house both ways: the baths as they are, and with one more private bath"; `adding` "Before
 you book a plumber, compare private and shared-bath rents nearby". D7 `notyet` and `max` "Check the room count against
-rents nearby and against the city's rule on unrelated adults". D8 `notyet`, `convert` and `keep` "Price the garage both
-ways, as parking and as a room, against rents nearby".
+rents nearby and against the city's rule on unrelated adults". D8 `none` and `assume` "Group your nearby rooms by size
+too, large, medium and small, with the rent and fill speed of each".
 
 ### 6.5 Lease-up Reserves (`reserves`)
 
@@ -279,15 +281,16 @@ and `defaults` "Run your deal math on your own costs and on room rents from near
 D10 `no` "Add one slower case to your deal math: the same rents, with lease-up taking twice as long"; `vacancy` "Drop the
 extra vacancy rate if your occupancy already comes from rooms nearby, because it counts empty rooms twice".
 
-### 6.6 The checklist (not scored, in the deepener)
+### 6.6 The checklist (not scored, on the deepener page after D10)
 
 | Q | Key | Question | Options |
 |---|---|---|---|
 | C1 | `zoning` | Have you checked the city's rule on unrelated adults sharing a home? | `notyet` Not yet; `asked` I asked around; `summary` I read a summary online; `code` I checked the city code; `confirmed` I confirmed with the city or an attorney |
 | C2 | `financing` | How will you finance the house? | `unsure` Not sure yet; `wholehome` A loan sized on whole-home rent; `cash` Cash; `roomlender` A lender who works with room rentals, briefed on room income |
 
-The rule flag: C1 `notyet`, `asked` or `summary` puts this quick win first, whatever the area scores: "Read your city's
-rule on unrelated adults sharing a home, then confirm it with the city or an attorney".
+The checklist's flag (`checklistFlag`): C1 `notyet`, `asked` or `summary` puts this quick win first, whatever the area
+scores, and adds the note on the city's rule to the weakest area's page: "Read your city's rule on unrelated adults
+sharing a home, then confirm it with the city or an attorney".
 
 ## 7. Branching
 
@@ -388,7 +391,7 @@ Jordan, a made-up first-time investor, looking at houses in Atlanta.
 
 | Step | Answer | Points x weight |
 |---|---|---|
-| G1 `stage` | Looking at houses now (`looking`) | |
+| G1 `stage` | Looking at houses (`looking`) | |
 | G2 `market` | Atlanta (`atlanta`) | |
 | Q1 `rentsource` | Asking rents I found on room listings (`listings`) | 2 x 3 = 6 of 12 |
 | Q2 `fillsource` | I assume a vacancy percentage (`vacancy`) | 1 x 3 = 3 of 12 |
@@ -431,7 +434,7 @@ Jordan, a made-up first-time investor, looking at houses in Atlanta.
 | D5 `newsupply` | I think a few did (`think`) | 1 x 2 = 2 |
 | D6 `pricedrops` | I don't know (`unsure`) | 0 x 1 = 0 |
 | D7 `roomcount` | As many as the house can fit (`max`) | 1 x 2 = 2 |
-| D8 `garage` | There's no garage or extra space (`na`) | not scored |
+| D8 `sizemix` | I assume bigger rooms rent better (`assume`) | 1 x 1 = 1 |
 | D9 `dealmath` | My own estimates (`mine`) | 2 x 2 = 4 |
 | D10 `stress` | I add a vacancy rate on top (`vacancy`) | 1 x 1 = 1 |
 | C1 `zoning` | Not yet (`notyet`) | not scored |
@@ -440,12 +443,13 @@ Jordan, a made-up first-time investor, looking at houses in Atlanta.
 - Rent Evidence: (6 + 4 + 1) / 24 = 11 / 24 = 45.8333, shown **46**.
 - Fill Speed: (3 + 2 + 1) / 24 = 6 / 24 = **25**.
 - Nearby Supply: (6 + 2 + 0) / 24 = 8 / 24 = 33.3333, shown **33**.
-- Room Mix: (0 + 2) / 20 (D8 leaves the maximum) = **10**.
+- Room Mix: (0 + 2 + 1) / 24 = 3 / 24 = 12.5, shown **13**.
 - Lease-up Reserves: (6 + 4 + 1) / 24 = 45.8333, shown **46**.
-- Deal Readiness Score: (45.8333 + 25 + 33.3333 + 10 + 45.8333) / 5 = 160 / 5 = **32**, Beginner.
-- Bottleneck: Room Mix 10 is lowest, an effect; the primary is Fill Speed (25 against Rent Evidence's 45.8333), the
+- Deal Readiness Score: (45.8333 + 25 + 33.3333 + 12.5 + 45.8333) / 5 = 162.5 / 5 = 32.5, rounded half up **33**,
+  Beginner.
+- Bottleneck: Room Mix 12.5 is lowest, an effect; the primary is Fill Speed (25 against Rent Evidence's 45.8333), the
   cascade from Room Mix; the secondary is Room Mix.
-- Quick wins: (1) the rule flag, C1 `notyet`; (2) Q2 `vacancy`; (3) D3 `rule`.
+- Quick wins: (1) the checklist's flag, C1 `notyet`; (2) Q2 `vacancy`; (3) D3 `rule`.
 - Report notes: D10 `vacancy` on Lease-up Reserves; D7 `max` on Room Mix.
 - Call notes: C1 `notyet`, C2 `wholehome`, D10 `vacancy`.
 - The metric and the urgency do not change: the deepener asks no metric question.

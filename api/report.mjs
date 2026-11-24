@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     if (job.mustAwait) await job.done;
   }
   const preview = !admin ? false : !ready ? true : q.get("live") === "1"
-    ? (instant && snapshot ? "Live preview for the team. The owner has the version emailed to them; Approve and send updates it." : true) : false;
+    ? (instant && snapshot ? "Live preview for the team. The investor has the version emailed to them; Approve and send updates it." : true) : false;
   const html = reportHtml(model, { preview, links: { pdf: links.pdf, results: links.results }, toolbar: format !== "pdf" });
   if (format === "html") return sendText(res, 200, html, undefined, { ...headers, "cache-control": "private, no-store" });
   try {

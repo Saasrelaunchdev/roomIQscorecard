@@ -176,12 +176,11 @@ export default {
         current: "You plan to rent the current bedroom count.",
         checked: "Your room count is a layout checked against rents nearby."
       },
-      garage: {
-        notyet: "You haven't priced the garage or extra space.",
-        convert: "You plan to turn the garage or extra space into a room.",
-        keep: "You plan to keep the garage or extra space as it is.",
-        compared: "You priced the garage or extra space both ways.",
-        na: "The house has no garage or extra space."
+      sizemix: {
+        none: "You haven't checked which room sizes rent best nearby.",
+        assume: "You assume bigger rooms rent better.",
+        seen: "You've seen a few listings by room size.",
+        compared: "You compared rents and fill speed by room size nearby."
       },
       slowplan: {
         none: "You haven't planned for a slow lease-up.",
