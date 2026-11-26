@@ -20,7 +20,7 @@ import SC from "../content/scorecard.mjs";
 import SITE from "../content/site.mjs";
 import BRAND from "../content/brand.mjs";
 import EMAILS from "../content/emails.mjs";
-import { evaluate, fill, deepenerShown, deepenerAll } from "../lib/scoring.mjs";
+import { evaluate, fill, deepenerShown, deepenerAll, typedAnswer } from "../lib/scoring.mjs";
 import { buildReport, monthLabels, CHECKS, isoDay } from "../lib/report-model.mjs";
 import { reportHtml } from "../lib/report-html.mjs";
 import { funnelOf, profileOf, dimsOf, emailStatsOf, toCsv } from "../lib/insights.mjs";
@@ -134,9 +134,9 @@ function labelsFor(row) {
   const sec = (ms) => (typeof ms === "number" ? Math.round(ms / 100) / 10 : null);
   for (const s of SC.steps) {
     if (s.options && s.type !== "fields") {
-      const label = (s.options.find((o) => o.v === all[s.key]) || {}).label || "";
-      const typed = s.type === "text" && all[s.textKey] ? all[s.textKey] : "";
-      out.push({ id: s.id, q: s.q, a: typed && typed !== label ? `${typed} (${label})` : label, seconds: sec(t[s.id]) });
+      // A typed answer shows its words and the answer they were matched to ("Scottsdale, AZ (Phoenix)")
+      const a = s.type === "text" ? typedAnswer(s, all) : (s.options.find((o) => o.v === all[s.key]) || {}).label || "";
+      out.push({ id: s.id, q: s.q, a, seconds: sec(t[s.id]) });
     }
     if (s.choice) out.push({ id: "S9", q: s.choice.label, a: (s.choice.options.find((o) => o.v === all[s.choice.key]) || {}).label || "", seconds: sec(t[s.id]) });
     if (s.type === "fields" && !s.choice) out.push({ id: s.id, q: s.q || "Contact details", a: "", seconds: sec(t[s.id]), fields: true });

@@ -160,8 +160,9 @@ The answers; the seconds each question took, counted only while the page was on 
 how often they went back or left the page mid-quiz; the country, state and city Vercel's IP headers suggest, and the time
 zone (never coordinates, a postal code or the IP address itself: the IP is kept only hashed, for rate limits); phone,
 tablet or computer, the system, the browser and the app whose browser it is; the screen size and language; the source
-(the campaign, a Meta click, the referring site, or direct). The market is a preset metro, never an address; the
-walkthrough's address is optional and kept only with the booking. The analytics events carry no answers and no contact
+(the campaign, a Meta click, the referring site, or direct). The market is typed: it is kept as a preset metro, or as the
+city typed outside the presets, never an address (units, house numbers, streets and ZIP codes are removed before
+anything is stored, `lib/scoring.mjs` cleanPlace); the walkthrough's address is optional and kept only with the booking. The analytics events carry no answers and no contact
 details.
 
 ## The admin

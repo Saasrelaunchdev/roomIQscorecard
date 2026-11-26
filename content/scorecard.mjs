@@ -55,20 +55,24 @@ export default {
     {
       // Typed, not tapped (the owner's decision of 2026-11-26). The answer is still one of the options below: the preset
       // metro the typed words name (lib/scoring.mjs placeOf, by its aliases; a state that doesn't match rules a metro
-      // out), else "other". The chip answers "undecided". The words are kept, digits and street parts removed, as
-      // answers.marketText and the lead's city
+      // out), else "undecided" when the words say no market is chosen yet (undecidedWords, whole words), else "other".
+      // The chip answers "undecided". The words are kept, units, house numbers, streets and ZIP codes removed
+      // (lib/scoring.mjs cleanPlace), as answers.marketText, and as the lead's city outside the presets
       id: "G2", key: "market", kind: "gateway", type: "text",
       q: "Where is the house, or the market you're looking at?",
       help: "Just the city or metro, not the street address.",
       placeholder: "For example, Phoenix",
       textKey: "marketText", otherKey: "other", undecided: "undecided", max: 60,
+      undecidedWords: ["not sure", "unsure", "dont know", "don t know", "do not know", "idk", "dunno", "no idea", "no clue", "undecided",
+        "not decided", "havent decided", "haven t decided", "deciding", "not yet", "tbd", "unknown", "none", "n a", "na", "anywhere",
+        "everywhere", "nowhere", "any", "open", "flexible", "usa", "united states", "nationwide"],
       options: [
         { v: "dfw", label: "Dallas-Fort Worth", state: "tx", aliases: ["dallas", "fort worth", "ft worth", "dfw", "plano", "irving", "garland", "frisco", "mckinney", "denton", "grand prairie", "mesquite", "carrollton", "richardson", "lewisville", "flower mound", "mansfield", "keller", "grapevine", "southlake", "rowlett", "rockwall", "prosper", "wylie", "euless", "coppell", "arlington tx", "allen tx"] },
-        { v: "houston", label: "Houston", state: "tx", aliases: ["houston", "katy", "sugar land", "pearland", "the woodlands", "woodlands", "humble", "baytown", "league city", "conroe", "missouri city", "friendswood", "tomball", "kingwood", "atascocita", "galveston", "rosenberg", "bellaire", "deer park", "spring tx", "cypress tx", "pasadena tx", "richmond tx"] },
+        { v: "houston", label: "Houston", state: "tx", aliases: ["houston", "htx", "katy", "sugar land", "pearland", "the woodlands", "woodlands", "humble", "baytown", "league city", "conroe", "missouri city", "friendswood", "tomball", "kingwood", "atascocita", "galveston", "rosenberg", "bellaire", "deer park", "spring tx", "cypress tx", "pasadena tx", "richmond tx"] },
         { v: "atlanta", label: "Atlanta", state: "ga", aliases: ["atlanta", "atl", "marietta", "sandy springs", "alpharetta", "kennesaw", "lawrenceville", "peachtree city", "peachtree corners", "east point", "stone mountain", "dunwoody", "johns creek", "snellville", "conyers", "douglasville", "stockbridge", "mcdonough", "tucker", "norcross", "suwanee", "buford", "cumming", "acworth", "lilburn", "smyrna ga", "roswell ga", "decatur ga", "duluth ga", "college park ga"] },
         { v: "orlando", label: "Orlando", state: "fl", aliases: ["orlando", "kissimmee", "winter park", "winter garden", "altamonte springs", "apopka", "oviedo", "ocoee", "clermont", "lake mary", "windermere", "celebration", "longwood", "casselberry", "maitland", "winter springs", "lake nona", "sanford fl", "st cloud fl", "saint cloud fl"] },
         { v: "jacksonville", label: "Jacksonville", state: "fl", aliases: ["jacksonville", "jax", "orange park", "ponte vedra", "fernandina beach", "jacksonville beach", "neptune beach", "fleming island", "middleburg", "yulee", "st augustine", "saint augustine", "atlantic beach fl"] },
-        { v: "phoenix", label: "Phoenix", state: "az", aliases: ["phoenix", "mesa", "scottsdale", "tempe", "chandler", "gilbert", "goodyear", "avondale", "buckeye", "queen creek", "maricopa", "apache junction", "fountain hills", "cave creek", "sun city", "paradise valley", "laveen", "litchfield park", "tolleson", "el mirage", "ahwatukee", "glendale az", "peoria az", "surprise az"] },
+        { v: "phoenix", label: "Phoenix", state: "az", aliases: ["phoenix", "phx", "mesa", "scottsdale", "tempe", "chandler", "gilbert", "goodyear", "avondale", "buckeye", "queen creek", "maricopa", "apache junction", "fountain hills", "cave creek", "sun city", "paradise valley", "laveen", "litchfield park", "tolleson", "el mirage", "ahwatukee", "glendale az", "peoria az", "surprise az"] },
         { v: "lasvegas", label: "Las Vegas", state: "nv", aliases: ["las vegas", "vegas", "north las vegas", "summerlin", "boulder city", "sunrise manor", "henderson nv", "spring valley nv", "enterprise nv", "paradise nv"] },
         { v: "other", label: "Another US market" },
         { v: "undecided", label: "Not decided yet" }

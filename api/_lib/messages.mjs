@@ -5,7 +5,7 @@ import SC from "../../content/scorecard.mjs";
 import SITE from "../../content/site.mjs";
 import RESULTS from "../../content/results.mjs";
 import EMAILS from "../../content/emails.mjs";
-import { deepenerShown, fill, money, num, areaName, optionOf, gapVars } from "../../lib/scoring.mjs";
+import { deepenerShown, fill, money, num, areaName, optionOf, gapVars, typedAnswer } from "../../lib/scoring.mjs";
 import { dayLabel, windowOf, phoneLabel } from "../../lib/booking.mjs";
 import { emailConfig, compose, sendEmail } from "./emails.mjs";
 import { notifyTeam } from "./notify.mjs";
@@ -21,6 +21,14 @@ export function invisibleLine(ev) {
  *  of the deal (stored in the city column) stand in. */
 export function who(row) {
   return { business: row.company || row.first_name || "A lead", city: row.city || "no preset market" };
+}
+
+/** The market as the team's notice shows it: a typed market as the admin shows it, the words and the answer they were
+ *  matched to ("Boise, ID (Another US market)"); a tapped one by its label. */
+function marketText(row) {
+  const step = SC.steps.find((s) => s.key === "market");
+  if (step && step.type === "text") return typedAnswer(step, row.answers || {}) || row.city || "";
+  return (optionOf(SC, "market", (row.answers || {}).market) || {}).label || row.city || "";
 }
 
 /** A link into RoomIQ from an email: src=scorecard and the scorecard as the source. */
@@ -100,7 +108,7 @@ export function teamRows(row, ev) {
   return [
     ["Name", [row.first_name, row.last_name].filter(Boolean).join(" ")],
     ["Email", row.email],
-    ...(row.company ? [["Business", `${row.company}, ${row.city}`]] : [["Market", (optionOf(SC, "market", (row.answers || {}).market) || {}).label || row.city || ""]]),
+    ...(row.company ? [["Business", `${row.company}, ${row.city}`]] : [["Market", marketText(row)]]),
     [((SC.segments || []).find((s) => s.field === (SC.segmentKey || "trade")) || { label: "Segment" }).label, (optionOf(SC, SC.segmentKey || "trade", row.trade) || {}).label],
     [SC.scoreName || "Score", `${ev.score}/100, ${ev.tierName}${ev.deepened ? " (with the deepener)" : ""}`],
     ["Areas", SC.areas.map((a) => `${a.name} ${ev.areas[a.key].score}`).join(", ")],

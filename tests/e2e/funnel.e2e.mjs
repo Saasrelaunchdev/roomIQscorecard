@@ -205,6 +205,10 @@ test("The typed market and the sliders: nothing counts until it's typed or moved
   await next(page);
   assert.equal(await page.locator(".gc-count").textContent(), "Question 2 of 11");
   assert.match(await page.locator(".gc-step:not([hidden]) .err").textContent(), /Type the city or metro/);
+  // A street alone names no place: caught here, as the server would refuse it after the contact step
+  await typeMarket(page, "123 Oak Ave");
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 2 of 11");
+  assert.match(await page.locator(".gc-step:not([hidden]) .err").textContent(), /Type the city or metro/);
   await typeMarket(page, "123 Oak Ave, Boise, ID 83702");
   for (const a of ["Comps of nearby rooms, with how fast they filled", "Observed fill times of comparable rooms nearby", "I counted listings", "Keeping the current bathrooms", "I'd lower rents"]) await tap(page, a);
   // A slider left where it starts is not an answer

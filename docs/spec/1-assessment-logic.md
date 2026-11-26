@@ -148,9 +148,14 @@ day rooms are ready to rent." G5 "Cash set aside for this house, after the down 
 suggestions, and a "Not decided yet" chip under it. The typed words name a preset metro when one of its aliases (the
 metro's cities and suburbs, `content/scorecard.mjs`) appears in them as whole words; a state written at the end that
 isn't the metro's rules it out ("Jacksonville, NC", "Dallas, GA"), and a few aliases need their state ("Arlington, TX",
-"Glendale, AZ", "Henderson, NV"). Anything else is `other`. The words are kept as `marketText`, and as the lead's city
-outside the presets, with every part of an address that starts with a number dropped, then every digit (so no house
-number, street or ZIP is stored). The server matches the words again; it never takes the browser's key for them.
+"Glendale, AZ", "Henderson, NV"). Words that say no market is chosen yet ("not sure", "I don't know", "TBD", "anywhere":
+`undecidedWords`, whole words) answer `undecided`, like the chip, unless a metro is also named ("Not sure, maybe Phoenix"
+is Phoenix). Anything else is `other`. The words are kept as `marketText`, and as the lead's city outside the presets,
+without any address: units go first ("Apt 4B", "Suite 200", "PO Box 9"), then a house number with its street up to the
+street's word ("123 Main St Atlanta GA" keeps "Atlanta GA"), a numbered part with no street word (whole, between commas;
+else its number), then every digit (so no house number, street or ZIP is stored). Words that name no place once cleaned
+(a street alone, "123 Main St") are caught on the step, by the same rule the server applies. The server matches the
+words again; it never takes the browser's key for them.
 
 **G3 to G5, sliders.** One stop per answer, in the order above, without the "not sure" answer, which is a chip under the
 slider. The slider starts in the middle and counts only once moved, tapped or set with the keys (or the chip is picked);

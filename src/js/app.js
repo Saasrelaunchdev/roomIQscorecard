@@ -216,8 +216,10 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
       return true;
     }
     if (s.dataset.kind === "text") {
+      // The server's own rule (lib/scoring.mjs typedPlace): a street alone ("123 Main St") names no place, so it is
+      // caught here rather than refused after the contact step
       const t = $(".gc-text input", s), alt = $(".gc-alt input", s);
-      const ok = (alt && alt.checked) || t.value.replace(/[^a-z]/gi, "").length >= 2;
+      const ok = (alt && alt.checked) || Boolean(typedPlace(t.value));
       t.setAttribute("aria-invalid", ok ? "false" : "true");
       if (!ok) { err(s, UI.place); t.focus(); return false; }
       return true;
