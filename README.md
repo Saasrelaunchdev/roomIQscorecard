@@ -23,6 +23,7 @@ The thinking behind it, in order:
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | Choices made where the sources were silent, waiting for the owner's confirmation |
 | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) | The team's routine |
 | [`docs/SCOREAPP-STRUCTURE.md`](docs/SCOREAPP-STRUCTURE.md) | How each part of ScoreApp maps to this build, with the research behind it |
+| [`docs/scoreapp/first-deal-risk-scoreapp-brief.md`](docs/scoreapp/first-deal-risk-scoreapp-brief.md) | The same scorecard for ScoreApp: prompts for its AI builders, the steps to do by hand and every word, written from `content/` by `node tools/scoreapp-brief.mjs` |
 
 ## The funnel
 

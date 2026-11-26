@@ -59,6 +59,7 @@ move them into this table.
 | `lib/generated/report-assets.mjs` (the report's embedded fonts and pictures) | `src/styles/report.css`, `content/brand.mjs`, `src/assets/` | `node tools/build.mjs` |
 | `src/assets/og.png` (the share image) | `content/landing.mjs`, `content/brand.mjs`, the brand files | `node tools/make-og.mjs`, then build |
 | `src/styles/tokens.css` (the colors) | `brand/brand.json` | the skill's `brand-tokens.mjs` (see `brand/README.md`) |
+| `docs/scoreapp/first-deal-risk-scoreapp-brief.md` (the ScoreApp build brief) | `content/*.mjs`, `lib/scoring.mjs` | `node tools/scoreapp-brief.mjs` |
 
 `npm test` fails when the committed build differs from its sources (`node tools/build.mjs --check`).
 
