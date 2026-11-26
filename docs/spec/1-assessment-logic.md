@@ -26,15 +26,19 @@ Copy rules for every word below:
 | Product | RoomIQ: room-level market data and underwriting for US rent-by-the-room investors |
 | Audience | US investors before or during their first rent-by-the-room deal; operators with 1 to 10 houses checking the next one |
 | Traffic | Meta ads (through the Meta page's scorecard buttons, or straight to `/first-deal`), the production landing page's score buttons, community, events and outreach links |
-| Time promise | about a minute: ten taps and one short form |
+| Time promise | about a minute: ten quick questions (taps, one typed market, three sliders) and one short form |
 | Delivery | instant: the score on screen, the PDF report by email at once |
 | Next step | a free forecast on their address (covered markets), or a 20-minute walkthrough with the founder |
 | Rule line | "Zoning, financing and insurance sit outside RoomIQ. This is not legal, lending or financial advice." |
 
 ## 2. Overview and architecture
 
-The funnel: landing page, eleven steps (ten taps, then first name and email), the result at once, an optional deepener
-(twelve taps), the walkthrough booking, the PDF report.
+The funnel: landing page, eleven steps (ten questions, then first name and email), the result at once, an optional
+deepener (twelve taps), the walkthrough booking, the PDF report.
+
+**How each question is answered** (the owner's decision of 2026-11-26, for variety): G1 and Q1 to Q5 by tapping one
+answer; G2 by typing the city or metro; G3, G4 and G5 by dragging a slider. Every answer is still one of the question's
+options below, so the scoring, the metric and every page read it the same way.
 
 Scored: five areas, one question each in the main quiz (weight 3) and two each in the deepener (weights 2 and 1).
 Qualifying and the metric: five gateway questions. Unscored: two checklist questions, on the deepener page after its
@@ -131,14 +135,26 @@ carrying cost; rooms that fill sooner bring rent in sooner. The report says so.
 | Id | Key | Question | Options (key: label) | Feeds |
 |---|---|---|---|---|
 | G1 | `stage` | Where are you with rent-by-the-room? | `learning`: Learning, no house yet; `looking`: Looking at houses; `contract`: Under contract; `own`: Converting my house; `operator`: I run 1 to 10 houses; `scaling`: More than 10 houses | the segment ("first deal" for the first four, "next deal" for operators); fit; call-only; call notes |
-| G2 | `market` | Where is the house, or the market you're looking at? | `dfw`: Dallas-Fort Worth; `houston`: Houston; `atlanta`: Atlanta; `orlando`: Orlando; `jacksonville`: Jacksonville; `phoenix`: Phoenix; `lasvegas`: Las Vegas; `other`: Another US market; `undecided`: Not decided yet | covered or not (section 10); the checklist page's city rule and insurance line; the report's cover; the stored city |
+| G2 | `market` | Where is the house, or the market you're looking at? | typed; matched to `dfw`: Dallas-Fort Worth; `houston`: Houston; `atlanta`: Atlanta; `orlando`: Orlando; `jacksonville`: Jacksonville; `phoenix`: Phoenix; `lasvegas`: Las Vegas; else `other`: Another US market; the chip under the field answers `undecided`: Not decided yet | covered or not (section 10); the checklist page's city rule and insurance line; the report's cover; the stored city |
 | G3 | `carry` | About what will the house cost you each month before rent comes in? | see section 4 | C |
 | G4 | `fillmonths` | How long do you expect the rooms to take to fill? | see section 4 | N |
 | G5 | `reserves` | If no rent came in, how many months of costs could your reserves carry? | see section 4 | M |
 
-Help lines (G1 has none, so its six answers fit a phone's first screen): G3 "Loan payment, taxes, insurance and utilities, with every room empty. A range is
-fine." G4 "Counted from the day rooms are ready to rent." G5 "Cash set aside for this house, after the down payment and
-the work."
+Help lines (G1 has none, so its six answers fit a phone's first screen): G2 "Just the city or metro, not the street
+address." G3 "Loan payment, taxes, insurance and utilities, with every room empty. A range is fine." G4 "Counted from the
+day rooms are ready to rent." G5 "Cash set aside for this house, after the down payment and the work."
+
+**G2, typed.** A text field (placeholder "For example, Phoenix", up to 60 characters) with the seven metros as
+suggestions, and a "Not decided yet" chip under it. The typed words name a preset metro when one of its aliases (the
+metro's cities and suburbs, `content/scorecard.mjs`) appears in them as whole words; a state written at the end that
+isn't the metro's rules it out ("Jacksonville, NC", "Dallas, GA"), and a few aliases need their state ("Arlington, TX",
+"Glendale, AZ", "Henderson, NV"). Anything else is `other`. The words are kept as `marketText`, and as the lead's city
+outside the presets, with every part of an address that starts with a number dropped, then every digit (so no house
+number, street or ZIP is stored). The server matches the words again; it never takes the browser's key for them.
+
+**G3 to G5, sliders.** One stop per answer, in the order above, without the "not sure" answer, which is a chip under the
+slider. The slider starts in the middle and counts only once moved, tapped or set with the keys (or the chip is picked);
+the answer shows above it ("$2,000 to $3,000 a month"), its first and last answers under its ends.
 
 The contact step (S11), last: "Where should we send your report?" First name (required), email (required), and a
 required box: "Email me my score, my report and the occasional underwriting tip. Unsubscribe any time." Button: "See my

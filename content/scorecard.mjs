@@ -53,16 +53,23 @@ export default {
       ]
     },
     {
-      id: "G2", key: "market", kind: "gateway", type: "choice", layout: "grid",
+      // Typed, not tapped (the owner's decision of 2026-11-26). The answer is still one of the options below: the preset
+      // metro the typed words name (lib/scoring.mjs placeOf, by its aliases; a state that doesn't match rules a metro
+      // out), else "other". The chip answers "undecided". The words are kept, digits and street parts removed, as
+      // answers.marketText and the lead's city
+      id: "G2", key: "market", kind: "gateway", type: "text",
       q: "Where is the house, or the market you're looking at?",
+      help: "Just the city or metro, not the street address.",
+      placeholder: "For example, Phoenix",
+      textKey: "marketText", otherKey: "other", undecided: "undecided", max: 60,
       options: [
-        { v: "dfw", label: "Dallas-Fort Worth" },
-        { v: "houston", label: "Houston" },
-        { v: "atlanta", label: "Atlanta" },
-        { v: "orlando", label: "Orlando" },
-        { v: "jacksonville", label: "Jacksonville" },
-        { v: "phoenix", label: "Phoenix" },
-        { v: "lasvegas", label: "Las Vegas" },
+        { v: "dfw", label: "Dallas-Fort Worth", state: "tx", aliases: ["dallas", "fort worth", "ft worth", "dfw", "plano", "irving", "garland", "frisco", "mckinney", "denton", "grand prairie", "mesquite", "carrollton", "richardson", "lewisville", "flower mound", "mansfield", "keller", "grapevine", "southlake", "rowlett", "rockwall", "prosper", "wylie", "euless", "coppell", "arlington tx", "allen tx"] },
+        { v: "houston", label: "Houston", state: "tx", aliases: ["houston", "katy", "sugar land", "pearland", "the woodlands", "woodlands", "humble", "baytown", "league city", "conroe", "missouri city", "friendswood", "tomball", "kingwood", "atascocita", "galveston", "rosenberg", "bellaire", "deer park", "spring tx", "cypress tx", "pasadena tx", "richmond tx"] },
+        { v: "atlanta", label: "Atlanta", state: "ga", aliases: ["atlanta", "atl", "marietta", "sandy springs", "alpharetta", "kennesaw", "lawrenceville", "peachtree city", "peachtree corners", "east point", "stone mountain", "dunwoody", "johns creek", "snellville", "conyers", "douglasville", "stockbridge", "mcdonough", "tucker", "norcross", "suwanee", "buford", "cumming", "acworth", "lilburn", "smyrna ga", "roswell ga", "decatur ga", "duluth ga", "college park ga"] },
+        { v: "orlando", label: "Orlando", state: "fl", aliases: ["orlando", "kissimmee", "winter park", "winter garden", "altamonte springs", "apopka", "oviedo", "ocoee", "clermont", "lake mary", "windermere", "celebration", "longwood", "casselberry", "maitland", "winter springs", "lake nona", "sanford fl", "st cloud fl", "saint cloud fl"] },
+        { v: "jacksonville", label: "Jacksonville", state: "fl", aliases: ["jacksonville", "jax", "orange park", "ponte vedra", "fernandina beach", "jacksonville beach", "neptune beach", "fleming island", "middleburg", "yulee", "st augustine", "saint augustine", "atlantic beach fl"] },
+        { v: "phoenix", label: "Phoenix", state: "az", aliases: ["phoenix", "mesa", "scottsdale", "tempe", "chandler", "gilbert", "goodyear", "avondale", "buckeye", "queen creek", "maricopa", "apache junction", "fountain hills", "cave creek", "sun city", "paradise valley", "laveen", "litchfield park", "tolleson", "el mirage", "ahwatukee", "glendale az", "peoria az", "surprise az"] },
+        { v: "lasvegas", label: "Las Vegas", state: "nv", aliases: ["las vegas", "vegas", "north las vegas", "summerlin", "boulder city", "sunrise manor", "henderson nv", "spring valley nv", "enterprise nv", "paradise nv"] },
         { v: "other", label: "Another US market" },
         { v: "undecided", label: "Not decided yet" }
       ]
@@ -120,7 +127,7 @@ export default {
       ]
     },
     {
-      id: "G3", key: "carry", kind: "gateway", type: "choice", layout: "grid",
+      id: "G3", key: "carry", kind: "gateway", type: "scale", unsure: "unsure", format: "{label} a month",
       q: "About what will the house cost you each month before rent comes in?",
       help: "Loan payment, taxes, insurance and utilities, with every room empty. A range is fine.",
       options: [
@@ -132,7 +139,7 @@ export default {
       ]
     },
     {
-      id: "G4", key: "fillmonths", kind: "gateway", type: "choice", layout: "grid",
+      id: "G4", key: "fillmonths", kind: "gateway", type: "scale", unsure: "unsure",
       q: "How long do you expect the rooms to take to fill?",
       help: "Counted from the day rooms are ready to rent.",
       options: [
@@ -144,7 +151,7 @@ export default {
       ]
     },
     {
-      id: "G5", key: "reserves", kind: "gateway", type: "choice", layout: "grid",
+      id: "G5", key: "reserves", kind: "gateway", type: "scale", unsure: "unsure",
       q: "If no rent came in, how many months of costs could your reserves carry?",
       help: "Cash set aside for this house, after the down payment and the work.",
       options: [

@@ -133,7 +133,11 @@ function labelsFor(row) {
   const t = (row.timing && row.timing.steps) || {}, dt = (row.deepener_timing && row.deepener_timing.steps) || {};
   const sec = (ms) => (typeof ms === "number" ? Math.round(ms / 100) / 10 : null);
   for (const s of SC.steps) {
-    if (s.type === "choice") out.push({ id: s.id, q: s.q, a: (s.options.find((o) => o.v === all[s.key]) || {}).label || "", seconds: sec(t[s.id]) });
+    if (s.options && s.type !== "fields") {
+      const label = (s.options.find((o) => o.v === all[s.key]) || {}).label || "";
+      const typed = s.type === "text" && all[s.textKey] ? all[s.textKey] : "";
+      out.push({ id: s.id, q: s.q, a: typed && typed !== label ? `${typed} (${label})` : label, seconds: sec(t[s.id]) });
+    }
     if (s.choice) out.push({ id: "S9", q: s.choice.label, a: (s.choice.options.find((o) => o.v === all[s.choice.key]) || {}).label || "", seconds: sec(t[s.id]) });
     if (s.type === "fields" && !s.choice) out.push({ id: s.id, q: s.q || "Contact details", a: "", seconds: sec(t[s.id]), fields: true });
   }

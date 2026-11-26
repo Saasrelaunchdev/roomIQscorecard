@@ -24,10 +24,53 @@ function roundHalfUp(x) {
 function heroChoices(sc) {
   const out = [];
   for (const s of sc.steps) {
-    if (s.type === "choice") out.push({ key: s.key, options: s.options, step: s });
+    // A tapped choice, a slider over the same answers ("scale") or typed words matched to one ("text")
+    if (s.options && s.type !== "fields") out.push({ key: s.key, options: s.options, step: s });
     else if (s.choice) out.push({ key: s.choice.key, options: s.choice.options, step: s });
   }
   return out;
+}
+
+/* ---------- A typed market (content/scorecard.mjs G2): the place, cleaned, and the preset it names ---------- */
+const STATES = { alabama: "al", alaska: "ak", arizona: "az", arkansas: "ar", california: "ca", colorado: "co", connecticut: "ct",
+  delaware: "de", "district of columbia": "dc", florida: "fl", georgia: "ga", hawaii: "hi", idaho: "id", illinois: "il", indiana: "in",
+  iowa: "ia", kansas: "ks", kentucky: "ky", louisiana: "la", maine: "me", maryland: "md", massachusetts: "ma", michigan: "mi",
+  minnesota: "mn", mississippi: "ms", missouri: "mo", montana: "mt", nebraska: "ne", nevada: "nv", "new hampshire": "nh",
+  "new jersey": "nj", "new mexico": "nm", "new york": "ny", "north carolina": "nc", "north dakota": "nd", ohio: "oh", oklahoma: "ok",
+  oregon: "or", pennsylvania: "pa", "rhode island": "ri", "south carolina": "sc", "south dakota": "sd", tennessee: "tn", texas: "tx",
+  utah: "ut", vermont: "vt", virginia: "va", washington: "wa", "west virginia": "wv", wisconsin: "wi", wyoming: "wy" };
+const STATE_NAMES = Object.keys(STATES).sort((a, b) => b.length - a.length);
+const STATE_CODES = new Set(Object.values(STATES));
+
+/** The typed place as kept: a city or metro, never an address. Parts of an address that start with a number (the house
+ *  and street) are dropped, then every digit and "#" (house numbers, units, ZIP codes). Up to max characters. */
+function cleanPlace(text, max = 60) {
+  let t = String(text == null ? "" : text).replace(/[\u0000-\u001f]+/g, " ");
+  if (/\d/.test(t) && t.includes(",")) t = t.split(",").map((p) => p.trim()).filter((p) => p && !/^\d/.test(p)).join(", ");
+  t = t.replace(/[0-9#]+/g, " ").replace(/\s+/g, " ").replace(/\s+,/g, ",").replace(/,+/g, ",").replace(/^[\s,.;:-]+|[\s,.;:-]+$/g, "");
+  return t.slice(0, max).trim();
+}
+
+/** Lowercase words, state names as their two-letter codes ("Phoenix, Arizona" is "phoenix az"). */
+function placeWords(text) {
+  let n = ` ${String(text || "").toLowerCase().replace(/[^a-z]+/g, " ").trim()} `;
+  for (const name of STATE_NAMES) n = n.split(` ${name} `).join(` ${STATES[name]} `);
+  return n.trim();
+}
+
+/** The option a typed place names: the first preset whose aliases appear as whole words, unless the place ends in another
+ *  state's code ("Jacksonville, NC", "Dallas, GA"); aliases that carry a state ("arlington tx") need it. Else otherKey. */
+function placeOf(step, text) {
+  const n = placeWords(text);
+  if (!n) return null;
+  const words = n.split(" ");
+  const state = words.length > 1 && STATE_CODES.has(words[words.length - 1]) ? words[words.length - 1] : null;
+  const hay = ` ${n} `;
+  for (const o of step.options) {
+    if (!o.aliases || (state && o.state && state !== o.state)) continue;
+    if (o.aliases.some((a) => hay.includes(` ${a} `))) return o.v;
+  }
+  return step.otherKey || "other";
 }
 
 /** Every question of the deepener page: the scored deepener questions, then the unscored checklist (sc.checklist), which
@@ -44,7 +87,7 @@ function scoredQuestions(sc) {
 /** The question (hero choice, profiles, or deepener) with this key, or null. */
 function questionOf(sc, key) {
   const h = heroChoices(sc).find((c) => c.key === key);
-  if (h) return h.step.type === "choice" ? h.step : { key, options: h.options, q: h.step.choice.label };
+  if (h) return h.step.options && h.step.type !== "fields" ? h.step : { key, options: h.options, q: h.step.choice.label };
   return deepenerAll(sc).find((d) => d.key === key) || null;
 }
 
@@ -59,7 +102,14 @@ function cleanHero(sc, raw) {
   const answers = {};
   const missing = [];
   for (const c of heroChoices(sc)) {
-    const v = raw && typeof raw[c.key] === "string" ? raw[c.key] : "";
+    let v = raw && typeof raw[c.key] === "string" ? raw[c.key] : "";
+    const st = c.step;
+    if (st.type === "text") {
+      // Typed words decide the answer, whatever key came with them; without words, only the chip's answer (or, from
+      // older pages and the tests, an option's key) stands
+      const text = cleanPlace(raw && raw[st.textKey], st.max);
+      if (text.replace(/[^a-z]/gi, "").length >= 2) { answers[st.textKey] = text; v = placeOf(st, text); }
+    }
     if (c.options.some((o) => o.v === v)) answers[c.key] = v;
     else missing.push(c.key);
   }
@@ -781,7 +831,9 @@ function nav(ui, i, last, button) {
     (last ? `<button type="submit" class="btn btn-primary gc-next gc-submit">${escHtml(button)}</button>` : `<button type="button" class="btn btn-primary gc-next">${escHtml(ui.next)}${useIcon("i-arrow")}</button>`) + `</div>`;
 }
 
-/** One step. step: a choice ({ key, q, options, layout }) or fields ({ key, q, fields, choice, consent }). */
+/** One step. step: a choice ({ key, q, options, layout }), a slider over the options ({ type: "scale", unsure, format }),
+ *  typed words matched to an option ({ type: "text", textKey, undecided, placeholder }) or fields ({ key, q, fields,
+ *  choice, consent }). */
 function stepHtml(step, i, total, ui, opts) {
   const hidden = i === 0 ? "" : " hidden";
   const id = step.id || step.key;
@@ -805,6 +857,32 @@ function stepHtml(step, i, total, ui, opts) {
     }
     if (last && opts && opts.legalHtml) body += opts.legalHtml;
     return `<fieldset class="gc-step" data-step="${i}" data-kind="fields" data-key="${escHtml(step.key)}" data-id="${escHtml(id)}"${hidden}>${head}${body}${nav(ui, i, last, button)}</fieldset>`;
+  }
+  // The option that sits outside a slider or a typed answer ("Not sure", "Not decided yet"): a chip under it
+  const altChip = (o) => (o ? `<div class="gc-alt"><label class="gc-alt-opt"><input type="checkbox" name="${escHtml(step.key)}Alt" value="${escHtml(o.v)}"><span>${escHtml(o.label)}</span></label></div>` : "");
+  if (step.type === "text") {
+    const tk = step.textKey;
+    const named = step.options.filter((o) => o.aliases);
+    const list = named.length ? `<datalist id="dl-${tk}">${named.map((o) => `<option value="${escHtml(o.label)}"></option>`).join("")}</datalist>` : "";
+    const help = step.help ? `<p class="help" id="h-${tk}">${escHtml(step.help)}</p>` : "";
+    const body = `<div class="field gc-text"><input id="f-${tk}" name="${tk}" type="text" autocomplete="off" spellcheck="false"${named.length ? ` list="dl-${tk}"` : ""}` +
+      `${step.max ? ` maxlength="${step.max}"` : ""}${step.placeholder ? ` placeholder="${escHtml(step.placeholder)}"` : ""} aria-label="${escHtml(step.q)}"${step.help ? ` aria-describedby="h-${tk}"` : ""}>${help}${list}</div>` +
+      altChip(step.options.find((o) => o.v === step.undecided));
+    return `<fieldset class="gc-step" data-step="${i}" data-kind="text" data-key="${escHtml(step.key)}" data-id="${escHtml(id)}"${hidden}>${head}${body}${nav(ui, i, last, button)}</fieldset>`;
+  }
+  if (step.type === "scale") {
+    // A slider over the answers in order; nothing is chosen until the thumb is moved (or the chip is picked)
+    const stops = step.options.filter((o) => o.v !== step.unsure);
+    const mid = Math.floor((stops.length - 1) / 2);
+    const data = escHtml(JSON.stringify(stops.map((o) => ({ v: o.v, label: o.label }))));
+    const help = step.help ? `<p class="help gc-help" id="h-${escHtml(id)}">${escHtml(step.help)}</p>` : "";
+    const body = `${help}<div class="gc-scale" data-state="unset"><p class="gc-scale-v" aria-hidden="true"><span class="gc-scale-hint">${escHtml(ui.slideHint)}</span><span class="gc-scale-label"></span></p>` +
+      `<input class="gc-range" type="range" min="0" max="${stops.length - 1}" step="1" value="${mid}" style="--p:${Math.round((mid / (stops.length - 1)) * 100)}%" aria-label="${escHtml(step.q)}" aria-valuetext="${escHtml(ui.slideHint)}"` +
+      ` data-opts="${data}"${step.format ? ` data-format="${escHtml(step.format)}"` : ""}${step.help ? ` aria-describedby="h-${escHtml(id)}"` : ""}>` +
+      `<div class="gc-ticks" aria-hidden="true">${stops.map(() => "<i></i>").join("")}</div>` +
+      `<div class="gc-ends" aria-hidden="true"><span>${escHtml(stops[0].label)}</span><span>${escHtml(stops[stops.length - 1].label)}</span></div>` +
+      `<input type="hidden" name="${escHtml(step.key)}" value=""></div>${altChip(step.options.find((o) => o.v === step.unsure))}`;
+    return `<fieldset class="gc-step" data-step="${i}" data-kind="scale" data-key="${escHtml(step.key)}" data-id="${escHtml(id)}"${hidden}>${head}${body}${nav(ui, i, last, button)}</fieldset>`;
   }
   const grid = step.layout === "grid" ? " grid" : "";
   const options = step.options.map((o) => `<label class="gc-opt"><input type="radio" name="${escHtml(step.key)}" value="${escHtml(o.v)}"><span>${escHtml(o.label)}</span></label>`).join("");
@@ -1043,7 +1121,8 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
     if (bar) bar.style.setProperty("--p", `${Math.round(((at + 1) / N) * 100)}%`);
     if (focus) {
       const s = steps[at];
-      const first = s.dataset.kind === "fields" ? $("input:not([type=checkbox]):not([type=radio])", s) : $(".gc-q", s);
+      const k = s.dataset.kind;
+      const first = k === "fields" || k === "text" ? $("input:not([type=checkbox]):not([type=radio]):not([type=hidden])", s) : k === "scale" ? $(".gc-range", s) : $(".gc-q", s);
       if (first) first.focus({ preventScroll: true });
       const r = card.getBoundingClientRect();
       if (r.top < 0 || r.top > innerHeight * 0.5) card.scrollIntoView({ block: "start", behavior: REDUCE ? "auto" : "smooth" });
@@ -1056,6 +1135,19 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
       const picked = $("input:checked", s);
       $(".gc-opts", s).setAttribute("aria-invalid", picked ? "false" : "true");
       if (!picked) { err(s, UI.pick); return false; }
+      return true;
+    }
+    if (s.dataset.kind === "scale") {
+      const ok = Boolean($("input[type=hidden]", s).value);
+      $(".gc-scale", s).classList.toggle("bad", !ok);
+      if (!ok) { err(s, UI.slide); return false; }
+      return true;
+    }
+    if (s.dataset.kind === "text") {
+      const t = $(".gc-text input", s), alt = $(".gc-alt input", s);
+      const ok = (alt && alt.checked) || t.value.replace(/[^a-z]/gi, "").length >= 2;
+      t.setAttribute("aria-invalid", ok ? "false" : "true");
+      if (!ok) { err(s, UI.place); t.focus(); return false; }
       return true;
     }
     for (const inp of $$(".field input", s)) {
@@ -1073,7 +1165,7 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
   }
   function collect() {
     for (const inp of $$("input", form)) {
-      if (inp.name === "hp") continue;
+      if (!inp.name || inp.name === "hp") continue;
       if (inp.type === "radio") { if (inp.checked) values[inp.name] = inp.value; }
       else if (inp.type === "checkbox") values[inp.name] = inp.checked;
       else values[inp.name] = inp.value.trim();
@@ -1089,8 +1181,52 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
     clock.sent[id] = true;
     if (onStep) onStep(s, at, ms);
   }
+  // Sliders: the answer is the stop the thumb rests on, set once the visitor moves it (or taps it, or uses the keys)
+  function setScale(s, idx) {
+    const r = $(".gc-range", s), stops = JSON.parse(r.dataset.opts), o = stops[idx];
+    $(".gc-scale", s).dataset.state = "set";
+    $(".gc-scale", s).classList.remove("bad");
+    $("input[type=hidden]", s).value = o.v;
+    $(".gc-scale-label", s).textContent = r.dataset.format ? r.dataset.format.replace("{label}", o.label) : o.label;
+    r.setAttribute("aria-valuetext", o.label);
+    r.style.setProperty("--p", `${Math.round((idx / (stops.length - 1)) * 100)}%`);
+    const alt = $(".gc-alt input", s);
+    if (alt) alt.checked = false;
+    err(s, "");
+  }
+  const unsetRange = (r) => $(".gc-scale", r.closest(".gc-step")).dataset.state !== "set";
+  form.addEventListener("input", (e) => {
+    const s = e.target.closest(".gc-step");
+    if (!s) return;
+    if (e.target.classList.contains("gc-range")) setScale(s, Number(e.target.value));
+    else if (s.dataset.kind === "text" && e.target.type === "text") {
+      const alt = $(".gc-alt input", s);
+      if (alt && e.target.value) alt.checked = false;
+      e.target.setAttribute("aria-invalid", "false");
+      err(s, "");
+    }
+  });
+  form.addEventListener("pointerup", (e) => { if (e.target.classList && e.target.classList.contains("gc-range") && unsetRange(e.target)) setScale(e.target.closest(".gc-step"), Number(e.target.value)); });
+  form.addEventListener("keyup", (e) => {
+    if (!e.target.classList || !e.target.classList.contains("gc-range") || !/^(Arrow|Home|End|Page)/.test(e.key) || !unsetRange(e.target)) return;
+    setScale(e.target.closest(".gc-step"), Number(e.target.value));
+  });
   form.addEventListener("change", (e) => {
     const s = e.target.closest(".gc-step");
+    // The chip outside a slider or a typed answer answers the step on its own, like a tapped option
+    if (s && e.target.closest(".gc-alt")) {
+      const on = e.target.checked;
+      if (s.dataset.kind === "scale") {
+        const box = $(".gc-scale", s);
+        box.dataset.state = on ? "alt" : "unset";
+        box.classList.remove("bad");
+        $("input[type=hidden]", s).value = on ? e.target.value : "";
+        $(".gc-scale-label", s).textContent = on ? e.target.nextElementSibling.textContent : "";
+      } else if (on) { const t = $(".gc-text input", s); t.value = ""; t.setAttribute("aria-invalid", "false"); }
+      err(s, "");
+      if (on && steps.indexOf(s) < N - 1) { answered(s); setTimeout(() => { if (!s.hidden) show(steps.indexOf(s) + 1, true); }, REDUCE ? 0 : 220); }
+      return;
+    }
     if (!s || e.target.type !== "radio" || s.dataset.kind !== "choice") return;
     err(s, "");
     $(".gc-opts", s).setAttribute("aria-invalid", "false");
@@ -1104,7 +1240,7 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
     if (!s) return;
     if (e.target.closest(".gc-back")) { clock.backs += 1; show(steps.indexOf(s) - 1, true); return; }
     const next = e.target.closest(".gc-next:not(.gc-submit)");
-    if (next && check(s)) { if (s.dataset.kind === "fields") answered(s); show(steps.indexOf(s) + 1, true); }
+    if (next && check(s)) { if (s.dataset.kind !== "choice") answered(s); show(steps.indexOf(s) + 1, true); }
   });
   form.addEventListener("keydown", (e) => {
     if (e.key !== "Enter" || e.target.tagName !== "INPUT" || e.target.type === "checkbox") return;
@@ -1149,7 +1285,12 @@ function heroQuiz(card) {
     onStep(s, i, ms) { hit("step", s.dataset.id, ms !== undefined ? { ms } : null); },
     async onSubmit(v, fail, timing) {
       const answers = {};
-      for (const c of heroChoices(SC)) if (typeof v[c.key] === "string") answers[c.key] = v[c.key];
+      for (const c of heroChoices(SC)) if (typeof v[c.key] === "string" && v[c.key]) answers[c.key] = v[c.key];
+      // A typed market goes as words (the server matches them to a preset again); its chip as the chip's own answer
+      for (const st of SC.steps.filter((x) => x.type === "text")) {
+        answers[st.textKey] = v[`${st.key}Alt`] === true ? "" : v[st.textKey] || "";
+        if (v[`${st.key}Alt`] === true) answers[st.key] = st.undecided;
+      }
       const local = evaluate(SC, answers);
       // The completion's event id: the browser's pixel and the server's Conversions API send the same one
       const leadEventId = `complete-${visit.replace(/[^A-Za-z0-9-]/g, "").slice(0, 40)}`;

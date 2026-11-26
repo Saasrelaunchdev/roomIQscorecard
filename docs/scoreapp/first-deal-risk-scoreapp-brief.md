@@ -48,6 +48,7 @@ from those two facts.
 | In the built funnel | In ScoreApp | Why |
 |---|---|---|
 | 11 steps: 5 gateway questions, 5 scored questions, then first name and email | The same 10 questions in the same order and words; the lead form after the questions (Form Behaviour: After Questions) | ScoreApp then shows the lead form over the masked results, which is the funnel's "contact last" rule |
+| Question 2 typed (a city or metro, matched by name to the seven presets, with a "Not decided yet" chip); questions 8 to 10 as sliders over the same answers, each with a "Not sure" chip | Single-choice questions with the same answers | ScoreApp's Audiences and the Smart Section read the answer, so a fixed list keeps them exact; ScoreApp's sliders score points, and these questions score none |
 | Five areas scored 0 to 100 from one question each (0, 1, 2 or 4 points) | Five categories, one scored question each, same points | Category score = points ÷ 4, so the same 0, 25, 50 or 100 |
 | Deal Readiness Score = the average of the five areas | Overall score = all points ÷ 20 | Equal maximum per category makes ScoreApp's total the same average |
 | Tiers Beginner 0 to 39, Intermediate 40 to 69, Advanced 70 to 100; area bands Low, Medium, High on the same ranges | One set of score tiers, labelled Beginner, Intermediate, Advanced, used for the overall score and every category | ScoreApp shares one tier set; the ranges are identical, so each area's Low, Medium and High text maps to one tier |

@@ -301,7 +301,7 @@ test("admin: signed out is refused; a wrong password is refused; the right one s
 
 test("admin: the list, a lead, approve and send (the PDF attached), the report's access", { timeout: 180000 }, async () => {
   await S.login();
-  const { data } = await submit({ firstName: "Robin", email: "robin@example.com", answers: { ...submission().answers, market: "phoenix" },
+  const { data } = await submit({ firstName: "Robin", email: "robin@example.com", answers: { ...submission().answers, market: "phoenix", marketText: "Phoenix" },
     timing: { totalMs: 58000, landingMs: 12000, backs: 0, aways: 0, steps: { G1: 12000, G2: 2500, Q1: 3900 } } });
   await S.settled();
   const list = await S.api("/api/admin?action=list&q=Robin", { auth: true });

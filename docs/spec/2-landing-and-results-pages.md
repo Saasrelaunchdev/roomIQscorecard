@@ -236,18 +236,18 @@ sentence only when a texts consent is configured (it is not: `site.booking.conse
 Eleven steps, one per screen, about a minute: five gateway questions (G1 to G5), five scored questions (Q1 to Q5) and
 the contact step (S11). Points and what each answer feeds are in spec 1; here are the words.
 
-| Step | Question | Answers |
-|---|---|---|
-| G1 `stage` | Where are you with rent-by-the-room? | Learning, no house yet / Looking at houses / Under contract / Converting my house / I run 1 to 10 houses / More than 10 houses |
-| G2 `market` | Where is the house, or the market you're looking at? | Dallas-Fort Worth / Houston / Atlanta / Orlando / Jacksonville / Phoenix / Las Vegas / Another US market / Not decided yet |
-| Q1 `rentsource` | Where does your per-room rent number come from? | I don't have one yet / A platform's earnings calculator / Whole-home rent divided by bedrooms / Asking rents I found on room listings / Comps of nearby rooms, with how fast they filled |
-| Q2 `fillsource` | How do you know how fast rooms fill near the property? | I haven't looked / I assume a vacancy percentage / Host stories and forum posts / A platform's market reports / Observed fill times of comparable rooms nearby |
-| Q3 `supply` | How many co-living homes compete within about 3 miles? | No idea / Some, I think / I counted listings / I know the count and roughly how full they are |
-| Q4 `bathmix` | Have you decided the bath mix? | Not yet / Keeping the current bathrooms / Adding a bathroom because it seems worth it / Modeled private against shared-bath rents nearby |
-| Q5 `slowplan` | What happens if lease-up takes longer than planned? | I haven't planned for it / I'd lower rents / A few weeks of reserves / Reserves sized from how comparable launches nearby filled |
-| G3 `carry` | About what will the house cost you each month before rent comes in? _(help: Loan payment, taxes, insurance and utilities, with every room empty. A range is fine.)_ | Under $2,000 / $2,000 to $3,000 / $3,000 to $4,000 / More than $4,000 / Not sure yet |
-| G4 `fillmonths` | How long do you expect the rooms to take to fill? _(help: Counted from the day rooms are ready to rent.)_ | About a month / About 2 months / About 3 months / 4 months or more / Not sure |
-| G5 `reserves` | If no rent came in, how many months of costs could your reserves carry? _(help: Cash set aside for this house, after the down payment and the work.)_ | None set aside yet / 1 month or less / 2 to 3 months / 4 to 5 months / 6 months or more / Not sure |
+| Step | Question | How it's answered | Answers |
+|---|---|---|---|
+| G1 `stage` | Where are you with rent-by-the-room? | Tap one | Learning, no house yet / Looking at houses / Under contract / Converting my house / I run 1 to 10 houses / More than 10 houses |
+| G2 `market` | Where is the house, or the market you're looking at? _(help: Just the city or metro, not the street address.)_ | Typed (placeholder "For example, Phoenix", up to 60 characters; the seven metros as suggestions), matched to an answer by name; the chip "Not decided yet" under it | Dallas-Fort Worth / Houston / Atlanta / Orlando / Jacksonville / Phoenix / Las Vegas / Another US market / Not decided yet |
+| Q1 `rentsource` | Where does your per-room rent number come from? | Tap one | I don't have one yet / A platform's earnings calculator / Whole-home rent divided by bedrooms / Asking rents I found on room listings / Comps of nearby rooms, with how fast they filled |
+| Q2 `fillsource` | How do you know how fast rooms fill near the property? | Tap one | I haven't looked / I assume a vacancy percentage / Host stories and forum posts / A platform's market reports / Observed fill times of comparable rooms nearby |
+| Q3 `supply` | How many co-living homes compete within about 3 miles? | Tap one | No idea / Some, I think / I counted listings / I know the count and roughly how full they are |
+| Q4 `bathmix` | Have you decided the bath mix? | Tap one | Not yet / Keeping the current bathrooms / Adding a bathroom because it seems worth it / Modeled private against shared-bath rents nearby |
+| Q5 `slowplan` | What happens if lease-up takes longer than planned? | Tap one | I haven't planned for it / I'd lower rents / A few weeks of reserves / Reserves sized from how comparable launches nearby filled |
+| G3 `carry` | About what will the house cost you each month before rent comes in? _(help: Loan payment, taxes, insurance and utilities, with every room empty. A range is fine.)_ | A slider, one stop per answer (shown as "{label} a month"); the chip "Not sure yet" under it | Under $2,000 / $2,000 to $3,000 / $3,000 to $4,000 / More than $4,000 / Not sure yet |
+| G4 `fillmonths` | How long do you expect the rooms to take to fill? _(help: Counted from the day rooms are ready to rent.)_ | A slider, one stop per answer; the chip "Not sure" under it | About a month / About 2 months / About 3 months / 4 months or more / Not sure |
+| G5 `reserves` | If no rent came in, how many months of costs could your reserves carry? _(help: Cash set aside for this house, after the down payment and the work.)_ | A slider, one stop per answer; the chip "Not sure" under it | None set aside yet / 1 month or less / 2 to 3 months / 4 to 5 months / 6 months or more / Not sure |
 
 The contact step (S11):
 
@@ -280,6 +280,9 @@ The quiz's own words (buttons, errors, progress):
 | next | Next |
 | close | Close |
 | pick | Pick an answer to go on. |
+| slideHint | Drag the slider to your answer |
+| slide | Drag the slider to your answer, or pick the option under it. |
+| place | Type the city or metro, or pick the option under it. |
 | required | Please fill this in. |
 | email | Please enter a valid email address, like name@example.com. |
 | consent | Tick the box so we can email your score and your report. |

@@ -29,8 +29,9 @@ The thinking behind it, in order:
 
 ```
 Landing page (/ is the ScoreApp template; /first-deal puts the quiz in the hero, for the Meta ads; /start is the quiz alone)
-  └─▶ 11 steps, about a minute: where they are, the market, 5 scored questions (rent, fill, supply, bath mix, a slow
-      lease-up), the monthly cost, the lease-up months, the reserves, first name and email (contact is always last)
+  └─▶ 11 steps, about a minute: where they are (a tap), the market (typed, matched to the preset metros), 5 scored
+      questions (rent, fill, supply, bath mix, a slow lease-up; taps), the monthly cost, the lease-up months and the
+      reserves (sliders), first name and email (contact is always last)
         └─▶ POST /api/scorecard (scored again on the server), stored with the seconds each question took, the
             approximate location (Vercel's IP headers) and the device; answered at once with the score
               └─ right after the answer: the PDF report is printed (about 30 Letter pages) and kept
