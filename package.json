@@ -1,0 +1,23 @@
+{
+  "name": "roomiq-first-deal-scorecard",
+  "private": true,
+  "description": "The First Deal Risk Scorecard: RoomIQ's scorecard funnel (landing pages, quiz, results, deepener, call step, PDF report, emails, admin with analytics)",
+  "type": "module",
+  "engines": {
+    "node": ">=22.17"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "dev": "node tools/dev.mjs",
+    "lint:copy": "node tools/copy-lint.mjs",
+    "test": "node --test \"tests/unit/*.test.mjs\"",
+    "test:e2e": "node --test --test-concurrency=1 \"tests/e2e/*.e2e.mjs\"",
+    "test:sql": "node tests/sql/check-sql.mjs",
+    "pdf:sample": "node tools/render-sample.mjs"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "153.0.0",
+    "@vercel/functions": "3.10.6",
+    "puppeteer-core": "25.16.0"
+  }
+}

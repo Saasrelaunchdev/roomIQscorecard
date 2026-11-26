@@ -1,0 +1,95 @@
+/* Design tokens for RoomIQ. Generated from brand/brand.json by the Scorecard Funnel Creator's brand-tokens.mjs
+   (the gtm-builder landing page's algorithm): edit brand.json, then run the tool again. Do not edit by hand. */
+:root {
+  --c-ink-25: #FAFCFF;
+  --c-ink-50: #F3F7FF;
+  --c-ink-100: #E7EFFF;
+  --c-ink-200: #CFDEFF;
+  --c-ink-300: #AEC7FF;
+  --c-ink-400: #83A8FF;
+  --c-ink-500: #5E88F5;
+  --c-ink-600: #456CD6;
+  --c-ink-700: #2D50B7;
+  --c-ink-800: #18359A;
+  --c-ink-900: #081980;
+  --c-ink-950: #03045E;
+  --c-ink-975: #010041;
+  --c-primary-25: #F7FDFF;
+  --c-primary-50: #ECFAFE;
+  --c-primary-100: #D9F4FC;
+  --c-primary-200: #B6E8F7;
+  --c-primary-300: #83D5EE;
+  --c-primary-400: #00B4D8;
+  --c-primary-500: #009FBF;
+  --c-primary-600: #00829D;
+  --c-primary-700: #00667B;
+  --c-primary-800: #004B5B;
+  --c-primary-900: #003440;
+  --c-primary-950: #00212A;
+  --c-primary-975: #001219;
+  --c-neutral-25: #FAFCFF;
+  --c-neutral-50: #F4F7FE;
+  --c-neutral-100: #EBEEF6;
+  --c-neutral-200: #DADEE6;
+  --c-neutral-300: #C3C7D1;
+  --c-neutral-400: #A6ABB5;
+  --c-neutral-500: #8A8F9A;
+  --c-neutral-600: #6F747F;
+  --c-neutral-700: #565B65;
+  --c-neutral-800: #3E424C;
+  --c-neutral-900: #2A2E36;
+  --c-neutral-950: #191D24;
+  --c-neutral-975: #0D0F16;
+  --c-signal-25: #FFFBF5;
+  --c-signal-50: #FFF5E7;
+  --c-signal-100: #FFECCE;
+  --c-signal-200: #FCD89F;
+  --c-signal-300: #F2B442;
+  --c-signal-400: #DE9D00;
+  --c-signal-500: #BB8300;
+  --c-signal-600: #996B00;
+  --c-signal-700: #785300;
+  --c-signal-800: #593C00;
+  --c-signal-900: #3E2900;
+  --c-signal-950: #291A00;
+  --c-signal-975: #180D00;
+  --c-grad-forward: linear-gradient(135deg, #0077B6 0%, #0077B6 100%);
+  --c-grad-ink: linear-gradient(160deg, #18359A 0%, #081980 45%, #010041 100%);
+  --f-display: "Bricolage Grotesque",system-ui,sans-serif;
+  --f-text: "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-stretch: 100%;
+  --f-stretch-sm: 100%;
+  --r-card: 20px;
+  --r-screen: 28px;
+  --r-btn: 999px;
+}
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --c-bg: #FFFFFF;
+  --c-surface: #FAFCFF;
+  --c-surface-2: #F4F7FE;
+  --c-line: #EBEEF6;
+  --c-line-strong: #DADEE6;
+  --c-heading: #03045E;
+  --c-text: #010041;
+  --c-text-2: #565B65;
+  --c-accent: #00B4D8;
+  --c-accent-text: #00667B;
+  --c-signal-text: #785300;
+  --c-device: #010041;
+  --c-shadow: #03045E;
+  --c-signal: #F2B442;
+  --c-screen: #FFFFFF;
+  --c-focus: #00667B;
+  --c-accent-fill: #0077B6;
+  --c-on-accent: #FFFFFF;
+  --c-on-signal: #010041;
+  --c-logo-ink: #03045E;
+  --c-logo-accent: #00B4D8;
+  --c-accent-fill-2: #0077B6;
+  --c-grad-canvas: radial-gradient(60% 50% at 85% 0%, #D9F4FC 0%, transparent 70%), radial-gradient(50% 45% at 0% 100%, #F4F7FE 0%, transparent 70%), #FFFFFF;
+}
+:root {
+  /* Brand extras (the area colors come from content/scorecard.mjs, injected by the build) */
+  --c-star: #F9CE14;
+}

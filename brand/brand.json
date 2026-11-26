@@ -1,0 +1,66 @@
+{
+  "name": "RoomIQ",
+  "note": "Drafted by extract-design-system.mjs from RoomIQproductionlandingpage and RoomIQGTMWalkthrough on 2026-11-24, then reviewed: pill buttons and the light theme's blue button fill as on the landing page (its navy-to-blue gradient is set in src/styles/site.css), and the logo redrawn with the word as paths (Bricolage Grotesque 800 at 26 px), so it renders the same without the page's fonts.",
+  "colors": {
+    "ink": "#03045E",
+    "primary": "#00B4D8",
+    "signal": "#F2B442",
+    "neutral": "ink"
+  },
+  "light": {
+    "bg": "#FFFFFF",
+    "accent-fill": "#0077B6"
+  },
+  "dark": {
+    "bg": "#03045E",
+    "surface": "#0A0F6B",
+    "surface-2": "#131B77",
+    "line-strong": "#3A4596",
+    "text-2": "#C3C7D1",
+    "accent-text": "#83D5EE"
+  },
+  "fonts": {
+    "display": {
+      "family": "Bricolage Grotesque",
+      "file": "assets/fonts/display.woff2",
+      "weight": "200 800"
+    },
+    "text": {
+      "family": "Instrument Sans",
+      "file": "assets/fonts/text.woff2",
+      "weight": "400 700"
+    }
+  },
+  "radius": {
+    "card": 20,
+    "screen": 28,
+    "button": 999
+  },
+  "logo": {
+    "lockup": "assets/logo/lockup-on-light.svg",
+    "lockupOnDark": "assets/logo/lockup-on-dark.svg",
+    "mark": "assets/logo/mark.svg",
+    "favicon": "assets/logo/favicon.svg",
+    "width": 134,
+    "height": 30
+  },
+  "confidence": {
+    "primary": "high",
+    "ink": "high",
+    "signal": "high",
+    "fonts": "medium",
+    "logo": "high"
+  },
+  "images": [
+    {
+      "file": "assets/images/roomiq-story-poster.webp",
+      "w": 1280,
+      "h": 720,
+      "kb": 54
+    }
+  ],
+  "sources": [
+    "/home/user/RoomIQproductionlandingpage",
+    "/home/user/RoomIQGTMWalkthrough"
+  ]
+}

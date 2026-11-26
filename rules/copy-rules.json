@@ -1,0 +1,96 @@
+{
+  "_note": "RoomIQ's claim rules, from the go-to-market (Saasrelaunchdev/roomIQGTMBuild GTM-BRIEF.md Section 5, the do-not-write table and the banned list; deliverables/scorecard_spec.docx Section 5) and the production landing page's non-negotiables. Applied to every visitor-facing word in content/ by tools/copy-lint.mjs on each build and in npm test. refusalOk: the words may appear only in a sentence that refuses them (no, not, never, don't, isn't...). allow: a content key (a prefix match) where a rule is waived, with the reason. budgets: word budgets; the hero-quiz variant's h1 and lead are errors over budget, everything else a warning. Always on: no em or en dashes, and a percentage needs its source in the same sentence.",
+  "sources": [],
+  "rules": [
+    {
+      "id": "accuracy",
+      "re": "\\b(accurate|accuracy|predicts?|predicted|investor-grade|lender-ready|calibrated|error rate)\\b",
+      "msg": "No accuracy claim before the 90-day backtest: say the estimate shows its working (decision 8)",
+      "refusalOk": true
+    },
+    {
+      "id": "income",
+      "re": "\\b(cash-?flowing deals?|passive income|guaranteed (income|returns?|rent)|(high|higher|better|bigger) returns?|boost (your )?(cash|returns?|income|rent)|how much (you|your house|it) (could|will|can) (earn|make)|you('ll| will) (earn|make))\\b",
+      "msg": "No income, return or yield promise; the deal math is informational, not financial or lending advice",
+      "refusalOk": true
+    },
+    {
+      "id": "return-figure",
+      "re": "\\b\\d+(\\.\\d+)?% (returns?|yield|cash-on-cash|roi|cap rate)\\b",
+      "msg": "No return, yield or cash-on-cash figure"
+    },
+    {
+      "id": "best-markets",
+      "re": "\\bbest (markets?|cities|places|neighborhoods) (to|for) (invest|buy)",
+      "msg": "Write 'markets ranked by RoomIQ's Market Score', never 'the best markets to invest in'"
+    },
+    {
+      "id": "collected",
+      "re": "\\b(real|actual) occupancy\\b|\\brent(s)? collected\\b|\\bcollected rents?\\b|\\brental income data\\b",
+      "msg": "It is observed listing data: 'observed rents and occupancy, not collected payments'",
+      "refusalOk": true
+    },
+    {
+      "id": "named-platform",
+      "re": "\\b(padsplit|airbnb|vrbo|zillow|bigger ?pockets|dealcheck|pillow ?markets|mashvisor|rentometer|rentcast|attom|furnished finder|craigslist|ccl properties|coliving ?pro)\\b",
+      "msg": "No named platform, data source or competitor: categories only"
+    },
+    {
+      "id": "partnership",
+      "re": "\\bpowered by\\b|\\bofficial (data|partner)\\b|\\bpartner(ed)? (of|with)\\b|\\bendorsed by\\b",
+      "msg": "No implied partnership or endorsement"
+    },
+    {
+      "id": "only",
+      "re": "\\b(the only|the first|the leading|#1|number one) (room|co-?living|rent-by-the-room|underwriting|analytics|tool|platform|app|software)\\b",
+      "msg": "No 'only', 'first' or 'leading' claim"
+    },
+    {
+      "id": "price-compare",
+      "re": "\\bcheaper than\\b|\\bbest value\\b|\\blowest price\\b|\\bcosts? less than\\b",
+      "msg": "No price comparison: publish the plans as they are"
+    },
+    {
+      "id": "time-saved",
+      "re": "\\b(underwrite|analy[sz]e|forecast|check) (a |any |your )?(deal|house|address|market)s? in (minutes|seconds)\\b|\\bsaves? (you )?(hours|days|time)\\b",
+      "msg": "No time-saved figure: nobody has timed the product flow"
+    },
+    {
+      "id": "offer-terms",
+      "re": "\\$\\d+ (a|per) month\\b|\\b\\d+-day (pro )?trial\\b|\\bfree trial\\b|\\bdiscount(ed)?\\b|\\bpromo code\\b",
+      "msg": "No price, trial or term in the funnel: the next step is the Free plan"
+    },
+    {
+      "id": "determination",
+      "re": "\\b(zoning check|compliance check|you('re| are) compliant|insurance-ready|flood risk assessment|legal advice|lending advice|financial advice)\\b",
+      "msg": "RoomIQ makes no zoning, compliance, insurance or flood determination and gives no advice",
+      "refusalOk": true
+    },
+    {
+      "id": "guarantee",
+      "re": "\\bguarantee",
+      "msg": "No guarantee of any outcome",
+      "refusalOk": true
+    },
+    {
+      "id": "advice",
+      "re": "\\b(you should buy|buy this house|safe investment|risk-free|can't lose|sure thing)\\b",
+      "msg": "Nothing that reads as investment advice",
+      "refusalOk": true
+    },
+    {
+      "id": "hype",
+      "re": "\\b(leverage|unlock|seamless|robust|streamline|cutting-edge|empower)\\w*\\b",
+      "msg": "Banned words (GTM-BRIEF.md Section 5, mechanics)"
+    }
+  ],
+  "off": [],
+  "budgets": {
+    "h1Words": 10,
+    "heroLeadWords": 26,
+    "h2Words": 9,
+    "faqAnswerWords": 35,
+    "sentenceWords": 28
+  },
+  "allow": []
+}
