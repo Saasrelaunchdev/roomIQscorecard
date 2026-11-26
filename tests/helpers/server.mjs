@@ -59,7 +59,7 @@ export async function svixHeaders(body, secret = WEBHOOK_SECRET, { id = `msg_${M
 export function submission(extra = {}) {
   return {
     action: "submit",
-    answers: { stage: "looking", market: "atlanta", rentsource: "listings", fillsource: "vacancy", supply: "counted", bathmix: "notyet", slowplan: "weeks", carry: "2to3k", fillmonths: "m3", reserves: "m1" },
+    answers: { stage: "looking", market: "atlanta", marketText: "Atlanta", rentsource: "listings", fillsource: "vacancy", supply: "counted", bathmix: "notyet", slowplan: "weeks", carry: "2to3k", fillmonths: "m3", reserves: "m1" },
     firstName: "Sam", email: `sam+${Math.random().toString(36).slice(2, 8)}@example.com`, consentEmail: true,
     visit: `visit-${Math.random().toString(36).slice(2, 10)}`, variant: "scoreapp", page: "https://scorecard.test/?utm_source=facebook", utm_source: "facebook", utm_campaign: "fall",
     ...extra

@@ -27,18 +27,35 @@ const tap = async (page, label) => {
   await page.locator(".gc-step:not([hidden]) .gc-opt", { hasText: label }).first().click();
   await page.waitForTimeout(300);
 };
+const next = async (page) => { await page.locator(".gc-step:not([hidden]) .gc-next").click(); await page.waitForTimeout(300); };
+// Question 2 is typed
+const typeMarket = async (page, text) => { await page.fill(".gc-step:not([hidden]) .gc-text input", text); await next(page); };
+// Questions 8 to 10 are sliders: the keys move the thumb stop by stop to the answer, then Next
+async function slide(page, label) {
+  const r = page.locator(".gc-step:not([hidden]) .gc-range");
+  const stops = JSON.parse(await r.getAttribute("data-opts"));
+  const at = stops.findIndex((o) => o.label === label);
+  assert.ok(at >= 0, `${label} is a stop`);
+  await r.focus();
+  await page.keyboard.press("Home");
+  for (let k = 0; k < at; k++) await page.keyboard.press("ArrowRight");
+  assert.match(await page.locator(".gc-step:not([hidden]) .gc-scale-label").textContent(), new RegExp(label.replace(/[$]/g, "\\$")));
+  await next(page);
+}
+// The chip under a slider or the typed market ("Not sure", "Not decided yet") answers the step and moves on
+const chip = async (page) => { await page.locator(".gc-step:not([hidden]) .gc-alt-opt").click(); await page.waitForTimeout(350); };
 // The worked example (spec 1, section 11)
 async function answerHero(page, { email = "sam@example.com" } = {}) {
   await tap(page, "Looking at houses");
-  await tap(page, "Atlanta");
+  await typeMarket(page, "Atlanta");
   await tap(page, "Asking rents I found on room listings");
   await tap(page, "I assume a vacancy percentage");
   await tap(page, "I counted listings");
   await tap(page, "Not yet");
   await tap(page, "A few weeks of reserves");
-  await tap(page, "$2,000 to $3,000");
-  await tap(page, "About 3 months");
-  await tap(page, "1 month or less");
+  await slide(page, "$2,000 to $3,000");
+  await slide(page, "About 3 months");
+  await slide(page, "1 month or less");
   await page.fill("#f-firstName", "Sam");
   await page.fill("#f-email", email);
   await page.check("input[name=consentEmail]");
@@ -147,8 +164,9 @@ test("Outside the preset markets: no free forecast card, the market lookup inste
   const { ctx, page } = await phone();
   await page.goto(`${S.url}/start`);
   await tap(page, "Learning, no house yet");
-  await tap(page, "Not decided yet");
-  for (const a of ["I don't have one yet", "I haven't looked", "No idea", "Not yet", "I haven't planned for it", "Not sure yet", "Not sure", "Not sure"]) await tap(page, a);
+  await chip(page);
+  for (const a of ["I don't have one yet", "I haven't looked", "No idea", "Not yet", "I haven't planned for it"]) await tap(page, a);
+  for (let k = 0; k < 3; k++) await chip(page);
   await page.fill("#f-firstName", "Lee");
   await page.fill("#f-email", "lee@example.com");
   await page.check("input[name=consentEmail]");
@@ -170,13 +188,76 @@ test("Back keeps the answers; a skipped step is caught before sending", async ()
   const { ctx, page } = await phone();
   await page.goto(`${S.url}/start`);
   await tap(page, "Looking at houses");
-  await tap(page, "Atlanta");
+  await typeMarket(page, "Atlanta");
   await page.locator(".gc-step:not([hidden]) .gc-back").click();
   assert.equal(await page.locator(".gc-count").textContent(), "Question 2 of 11");
-  assert.equal(await page.locator(".gc-step:not([hidden]) input:checked").getAttribute("value"), "atlanta");
-  await page.locator(".gc-step:not([hidden]) .gc-next").click();
+  assert.equal(await page.locator(".gc-step:not([hidden]) .gc-text input").inputValue(), "Atlanta");
+  await next(page);
   assert.equal(await page.locator(".gc-count").textContent(), "Question 3 of 11");
   await ctx.close();
+});
+
+test("The typed market and the sliders: nothing counts until it's typed or moved", async () => {
+  const { ctx, page } = await phone();
+  await page.goto(`${S.url}/start`);
+  await tap(page, "Under contract");
+  // An empty market is caught; a whole address is kept as its city only
+  await next(page);
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 2 of 11");
+  assert.match(await page.locator(".gc-step:not([hidden]) .err").textContent(), /Type the city or metro/);
+  // A street alone names no place: caught here, as the server would refuse it after the contact step
+  await typeMarket(page, "123 Oak Ave");
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 2 of 11");
+  assert.match(await page.locator(".gc-step:not([hidden]) .err").textContent(), /Type the city or metro/);
+  await typeMarket(page, "123 Oak Ave, Boise, ID 83702");
+  for (const a of ["Comps of nearby rooms, with how fast they filled", "Observed fill times of comparable rooms nearby", "I counted listings", "Keeping the current bathrooms", "I'd lower rents"]) await tap(page, a);
+  // A slider left where it starts is not an answer
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 8 of 11");
+  await next(page);
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 8 of 11");
+  assert.match(await page.locator(".gc-step:not([hidden]) .err").textContent(), /Drag the slider/);
+  // A finger on the far end of the track takes the last stop
+  const box = await page.locator(".gc-step:not([hidden]) .gc-range").boundingBox();
+  await page.touchscreen.tap(box.x + box.width - 6, box.y + box.height / 2);
+  assert.equal(await page.locator(".gc-step:not([hidden]) .gc-scale-label").textContent(), "More than $4,000 a month");
+  await next(page);
+  await slide(page, "About 2 months");
+  await chip(page);
+  await page.fill("#f-firstName", "Ari");
+  await page.fill("#f-email", "ari@example.com");
+  await page.check("input[name=consentEmail]");
+  await page.locator(".gc-submit").click();
+  await page.waitForURL(/\/results\/[A-Za-z0-9_-]+$/);
+  await page.waitForSelector(".score-top");
+  // Outside the presets: the market lookup, the place as typed (no house number, street or ZIP)
+  assert.equal(await page.locator("[data-cta=forecast]").count(), 0);
+  assert.equal(await page.locator("[data-cta=market]").count(), 1);
+  assert.match(await page.locator(".iw-big").textContent(), /lease-up costs you at least \$8,000/);
+  const row = S.rows().find((r) => r.email === "ari@example.com");
+  assert.deepEqual([row.answers.market, row.answers.marketText, row.city, row.answers.carry, row.answers.fillmonths, row.answers.reserves], ["other", "Boise, ID", "Boise, ID", "over4k", "m2", "unsure"]);
+  assert.equal(row.fit, "outside");
+  await ctx.close();
+});
+
+test("On a computer, the slider follows the mouse: drag the thumb to an answer", async () => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto(`${S.url}/start`);
+  await tap(page, "Looking at houses");
+  await typeMarket(page, "Houston");
+  for (const a of ["I don't have one yet", "I haven't looked", "No idea", "Not yet", "I haven't planned for it"]) await tap(page, a);
+  const r = page.locator(".gc-step:not([hidden]) .gc-range");
+  const box = await r.boundingBox();
+  const stops = JSON.parse(await r.getAttribute("data-opts"));
+  // From the thumb where it starts (the middle stop) to the far right
+  const startX = box.x + 15 + (box.width - 30) * (Number(await r.inputValue()) / (stops.length - 1));
+  await page.mouse.move(startX, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width - 5, box.y + box.height / 2, { steps: 10 });
+  await page.mouse.up();
+  assert.equal(await page.locator(".gc-step:not([hidden]) .gc-scale-label").textContent(), "More than $4,000 a month");
+  assert.equal(await page.locator(".gc-step:not([hidden]) input[type=hidden]").inputValue(), "over4k");
+  await page.close();
 });
 
 test("The quiz works from the keyboard alone", async () => {
@@ -187,10 +268,15 @@ test("The quiz works from the keyboard alone", async () => {
   await page.keyboard.press("Space");
   await page.waitForTimeout(350);
   assert.equal(await page.locator(".gc-count").textContent(), "Question 2 of 11");
+  // The market field has the focus: type, Enter
+  await page.keyboard.type("Phoenix");
+  await page.keyboard.press("Enter");
+  await page.waitForTimeout(350);
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 3 of 11");
   await page.keyboard.press("Tab");
   await page.keyboard.press("Space");
   await page.waitForTimeout(350);
-  assert.equal(await page.locator(".gc-count").textContent(), "Question 3 of 11");
+  assert.equal(await page.locator(".gc-count").textContent(), "Question 4 of 11");
   await page.close();
 });
 

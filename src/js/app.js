@@ -193,7 +193,8 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
     if (bar) bar.style.setProperty("--p", `${Math.round(((at + 1) / N) * 100)}%`);
     if (focus) {
       const s = steps[at];
-      const first = s.dataset.kind === "fields" ? $("input:not([type=checkbox]):not([type=radio])", s) : $(".gc-q", s);
+      const k = s.dataset.kind;
+      const first = k === "fields" || k === "text" ? $("input:not([type=checkbox]):not([type=radio]):not([type=hidden])", s) : k === "scale" ? $(".gc-range", s) : $(".gc-q", s);
       if (first) first.focus({ preventScroll: true });
       const r = card.getBoundingClientRect();
       if (r.top < 0 || r.top > innerHeight * 0.5) card.scrollIntoView({ block: "start", behavior: REDUCE ? "auto" : "smooth" });
@@ -206,6 +207,21 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
       const picked = $("input:checked", s);
       $(".gc-opts", s).setAttribute("aria-invalid", picked ? "false" : "true");
       if (!picked) { err(s, UI.pick); return false; }
+      return true;
+    }
+    if (s.dataset.kind === "scale") {
+      const ok = Boolean($("input[type=hidden]", s).value);
+      $(".gc-scale", s).classList.toggle("bad", !ok);
+      if (!ok) { err(s, UI.slide); return false; }
+      return true;
+    }
+    if (s.dataset.kind === "text") {
+      // The server's own rule (lib/scoring.mjs typedPlace): a street alone ("123 Main St") names no place, so it is
+      // caught here rather than refused after the contact step
+      const t = $(".gc-text input", s), alt = $(".gc-alt input", s);
+      const ok = (alt && alt.checked) || Boolean(typedPlace(t.value));
+      t.setAttribute("aria-invalid", ok ? "false" : "true");
+      if (!ok) { err(s, UI.place); t.focus(); return false; }
       return true;
     }
     for (const inp of $$(".field input", s)) {
@@ -223,7 +239,7 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
   }
   function collect() {
     for (const inp of $$("input", form)) {
-      if (inp.name === "hp") continue;
+      if (!inp.name || inp.name === "hp") continue;
       if (inp.type === "radio") { if (inp.checked) values[inp.name] = inp.value; }
       else if (inp.type === "checkbox") values[inp.name] = inp.checked;
       else values[inp.name] = inp.value.trim();
@@ -239,8 +255,52 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
     clock.sent[id] = true;
     if (onStep) onStep(s, at, ms);
   }
+  // Sliders: the answer is the stop the thumb rests on, set once the visitor moves it (or taps it, or uses the keys)
+  function setScale(s, idx) {
+    const r = $(".gc-range", s), stops = JSON.parse(r.dataset.opts), o = stops[idx];
+    $(".gc-scale", s).dataset.state = "set";
+    $(".gc-scale", s).classList.remove("bad");
+    $("input[type=hidden]", s).value = o.v;
+    $(".gc-scale-label", s).textContent = r.dataset.format ? r.dataset.format.replace("{label}", o.label) : o.label;
+    r.setAttribute("aria-valuetext", o.label);
+    r.style.setProperty("--p", `${Math.round((idx / (stops.length - 1)) * 100)}%`);
+    const alt = $(".gc-alt input", s);
+    if (alt) alt.checked = false;
+    err(s, "");
+  }
+  const unsetRange = (r) => $(".gc-scale", r.closest(".gc-step")).dataset.state !== "set";
+  form.addEventListener("input", (e) => {
+    const s = e.target.closest(".gc-step");
+    if (!s) return;
+    if (e.target.classList.contains("gc-range")) setScale(s, Number(e.target.value));
+    else if (s.dataset.kind === "text" && e.target.type === "text") {
+      const alt = $(".gc-alt input", s);
+      if (alt && e.target.value) alt.checked = false;
+      e.target.setAttribute("aria-invalid", "false");
+      err(s, "");
+    }
+  });
+  form.addEventListener("pointerup", (e) => { if (e.target.classList && e.target.classList.contains("gc-range") && unsetRange(e.target)) setScale(e.target.closest(".gc-step"), Number(e.target.value)); });
+  form.addEventListener("keyup", (e) => {
+    if (!e.target.classList || !e.target.classList.contains("gc-range") || !/^(Arrow|Home|End|Page)/.test(e.key) || !unsetRange(e.target)) return;
+    setScale(e.target.closest(".gc-step"), Number(e.target.value));
+  });
   form.addEventListener("change", (e) => {
     const s = e.target.closest(".gc-step");
+    // The chip outside a slider or a typed answer answers the step on its own, like a tapped option
+    if (s && e.target.closest(".gc-alt")) {
+      const on = e.target.checked;
+      if (s.dataset.kind === "scale") {
+        const box = $(".gc-scale", s);
+        box.dataset.state = on ? "alt" : "unset";
+        box.classList.remove("bad");
+        $("input[type=hidden]", s).value = on ? e.target.value : "";
+        $(".gc-scale-label", s).textContent = on ? e.target.nextElementSibling.textContent : "";
+      } else if (on) { const t = $(".gc-text input", s); t.value = ""; t.setAttribute("aria-invalid", "false"); }
+      err(s, "");
+      if (on && steps.indexOf(s) < N - 1) { answered(s); setTimeout(() => { if (!s.hidden) show(steps.indexOf(s) + 1, true); }, REDUCE ? 0 : 220); }
+      return;
+    }
     if (!s || e.target.type !== "radio" || s.dataset.kind !== "choice") return;
     err(s, "");
     $(".gc-opts", s).setAttribute("aria-invalid", "false");
@@ -254,7 +314,7 @@ function makeQuiz(card, { onSubmit, onStep, onStart, kind }) {
     if (!s) return;
     if (e.target.closest(".gc-back")) { clock.backs += 1; show(steps.indexOf(s) - 1, true); return; }
     const next = e.target.closest(".gc-next:not(.gc-submit)");
-    if (next && check(s)) { if (s.dataset.kind === "fields") answered(s); show(steps.indexOf(s) + 1, true); }
+    if (next && check(s)) { if (s.dataset.kind !== "choice") answered(s); show(steps.indexOf(s) + 1, true); }
   });
   form.addEventListener("keydown", (e) => {
     if (e.key !== "Enter" || e.target.tagName !== "INPUT" || e.target.type === "checkbox") return;
@@ -299,7 +359,12 @@ function heroQuiz(card) {
     onStep(s, i, ms) { hit("step", s.dataset.id, ms !== undefined ? { ms } : null); },
     async onSubmit(v, fail, timing) {
       const answers = {};
-      for (const c of heroChoices(SC)) if (typeof v[c.key] === "string") answers[c.key] = v[c.key];
+      for (const c of heroChoices(SC)) if (typeof v[c.key] === "string" && v[c.key]) answers[c.key] = v[c.key];
+      // A typed market goes as words (the server matches them to a preset again); its chip as the chip's own answer
+      for (const st of SC.steps.filter((x) => x.type === "text")) {
+        answers[st.textKey] = v[`${st.key}Alt`] === true ? "" : v[st.textKey] || "";
+        if (v[`${st.key}Alt`] === true) answers[st.key] = st.undecided;
+      }
       const local = evaluate(SC, answers);
       // The completion's event id: the browser's pixel and the server's Conversions API send the same one
       const leadEventId = `complete-${visit.replace(/[^A-Za-z0-9-]/g, "").slice(0, 40)}`;

@@ -83,9 +83,11 @@ async function submit(req, res, body) {
   const firstName = str(body.firstName, 60);
   const company = FIELD_NAMES.has("company") ? str(body.company, 120) : "";
   // No city field: the lead's city column holds the market of the deal (a metro, never an address), for the admin's
-  // lists and the team's notices. It is never sent to Meta (api/_lib/integrations.mjs)
+  // lists and the team's notices: a preset metro's name, or the place typed outside the presets (lib/scoring.mjs
+  // cleanPlace keeps no house number, street or ZIP). It is never sent to Meta (api/_lib/integrations.mjs)
   const market = optionOf(SC, "market", ev.answers.market);
-  const city = FIELD_NAMES.has("city") ? str(body.city, 80) : market && SC.markets && SC.markets.covered.includes(market.v) ? market.label : "";
+  const covered = market && SC.markets && SC.markets.covered.includes(market.v);
+  const city = FIELD_NAMES.has("city") ? str(body.city, 80) : covered ? market.label : market && market.v === "other" ? str(ev.answers.marketText, 60) : "";
   if (!email || !EMAIL.test(email)) return send(res, 400, { error: "A valid email is required" });
   if (!firstName) return send(res, 400, { error: "Your first name is required" });
   if ((FIELD_NAMES.has("company") && !company) || (FIELD_NAMES.has("city") && !city)) return send(res, 400, { error: "Your business name and city are required" });

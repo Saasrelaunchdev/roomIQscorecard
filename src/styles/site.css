@@ -177,6 +177,44 @@ a,button,summary,label,select,input{touch-action:manipulation}
 .consent{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;font:400 15px/1.45 var(--f-text);color:var(--c-text);cursor:pointer}
 .consent input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--c-primary-500)}
 .err{color:var(--c-signal-text);font:600 14px/1.4 var(--f-text)}
+/* The quiz's typed answer and sliders (content/scorecard.mjs: type "text" and "scale") */
+.gc-text{margin-top:4px}
+.gc-text .help{margin-top:2px}
+.gc-text input::-webkit-calendar-picker-indicator{display:none!important;opacity:0}
+.gc-help{font:400 14px/1.45 var(--f-text);color:var(--c-text-2);margin:4px 0 0}
+.gc-scale{display:grid;gap:2px;padding:16px 16px 12px;border-radius:16px;background:var(--c-surface);box-shadow:inset 0 0 0 1px var(--c-line)}
+.gc-scale.bad{box-shadow:inset 0 0 0 2px var(--c-signal)}
+.gc-scale-v{min-height:30px;margin:0 0 6px;font:700 clamp(19px,5vw,22px)/1.25 var(--f-display);color:var(--c-heading)}
+.gc-scale-hint{font:500 15px/1.4 var(--f-text);color:var(--c-text-2)}
+.gc-scale:not([data-state=unset]) .gc-scale-hint{display:none}
+.gc-range{-webkit-appearance:none;appearance:none;width:100%;height:36px;margin:0;background:transparent;cursor:pointer;touch-action:pan-y}
+.gc-range:focus{outline:none}
+.gc-range::-webkit-slider-runnable-track{height:10px;border-radius:999px;background:linear-gradient(90deg,var(--c-accent) 0 var(--p),var(--c-ink-100) var(--p) 100%)}
+.gc-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:30px;height:30px;margin-top:-10px;border-radius:50%;background:var(--c-bg);border:3px solid var(--c-accent);box-shadow:0 2px 10px -2px rgba(3,4,94,.35);transition:transform var(--t-press) var(--ease-out)}
+.gc-range:active::-webkit-slider-thumb{transform:scale(1.08)}
+.gc-range::-moz-range-track{height:10px;border-radius:999px;background:var(--c-ink-100)}
+.gc-range::-moz-range-progress{height:10px;border-radius:999px;background:var(--c-accent)}
+.gc-range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--c-bg);border:3px solid var(--c-accent);box-shadow:0 2px 10px -2px rgba(3,4,94,.35)}
+.gc-range:focus-visible::-webkit-slider-thumb{outline:2px solid var(--focus);outline-offset:3px}
+.gc-range:focus-visible::-moz-range-thumb{outline:2px solid var(--focus);outline-offset:3px}
+.gc-scale[data-state=unset] .gc-range::-webkit-slider-runnable-track{background:var(--c-ink-100)}
+.gc-scale[data-state=unset] .gc-range::-moz-range-progress{background:transparent}
+.gc-scale[data-state=unset] .gc-range::-webkit-slider-thumb{border-color:var(--c-ink-400)}
+.gc-scale[data-state=unset] .gc-range::-moz-range-thumb{border-color:var(--c-ink-400)}
+.gc-scale[data-state=alt] .gc-range{opacity:.4}
+.gc-ticks{display:flex;justify-content:space-between;padding:0 13px}
+.gc-ticks i{width:6px;height:6px;border-radius:50%;background:var(--c-ink-300)}
+.gc-ends{display:flex;justify-content:space-between;gap:16px;margin-top:6px;font:500 13.5px/1.3 var(--f-text);color:var(--c-text-2)}
+.gc-ends span:last-child{text-align:right}
+.gc-alt{display:flex}
+.gc-alt-opt{position:relative;display:inline-flex}
+.gc-alt-opt input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.gc-alt-opt span{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--field-line);background:var(--c-bg);font:600 15px/1.2 var(--f-text);color:var(--c-heading);transition:border-color var(--t-ui) ease,background-color var(--t-ui) ease}
+.gc-alt-opt span::before{content:"";flex:none;width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--field-line);background:var(--c-bg)}
+.gc-alt-opt input:checked + span{border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 9%,var(--c-bg))}
+.gc-alt-opt input:checked + span::before{box-shadow:inset 0 0 0 5px var(--c-accent)}
+.gc-alt-opt input:focus-visible + span{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.gc-range::-webkit-slider-thumb{transition:none}}
 .err:empty{display:none}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .legal-note{margin:2px 0 0;font:400 13.5px/1.5 var(--f-text);color:var(--c-text)}

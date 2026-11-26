@@ -29,8 +29,9 @@ The thinking behind it, in order:
 
 ```
 Landing page (/ is the ScoreApp template; /first-deal puts the quiz in the hero, for the Meta ads; /start is the quiz alone)
-  └─▶ 11 steps, about a minute: where they are, the market, 5 scored questions (rent, fill, supply, bath mix, a slow
-      lease-up), the monthly cost, the lease-up months, the reserves, first name and email (contact is always last)
+  └─▶ 11 steps, about a minute: where they are (a tap), the market (typed, matched to the preset metros), 5 scored
+      questions (rent, fill, supply, bath mix, a slow lease-up; taps), the monthly cost, the lease-up months and the
+      reserves (sliders), first name and email (contact is always last)
         └─▶ POST /api/scorecard (scored again on the server), stored with the seconds each question took, the
             approximate location (Vercel's IP headers) and the device; answered at once with the score
               └─ right after the answer: the PDF report is printed (about 30 Letter pages) and kept
@@ -159,8 +160,9 @@ The answers; the seconds each question took, counted only while the page was on 
 how often they went back or left the page mid-quiz; the country, state and city Vercel's IP headers suggest, and the time
 zone (never coordinates, a postal code or the IP address itself: the IP is kept only hashed, for rate limits); phone,
 tablet or computer, the system, the browser and the app whose browser it is; the screen size and language; the source
-(the campaign, a Meta click, the referring site, or direct). The market is a preset metro, never an address; the
-walkthrough's address is optional and kept only with the booking. The analytics events carry no answers and no contact
+(the campaign, a Meta click, the referring site, or direct). The market is typed: it is kept as a preset metro, or as the
+city typed outside the presets, never an address (units, house numbers, streets and ZIP codes are removed before
+anything is stored, `lib/scoring.mjs` cleanPlace); the walkthrough's address is optional and kept only with the booking. The analytics events carry no answers and no contact
 details.
 
 ## The admin
