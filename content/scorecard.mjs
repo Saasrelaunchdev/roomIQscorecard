@@ -23,7 +23,7 @@ export default {
     { key: "fill", name: "Fill Speed", color: "#129E7B",
       description: "Measures whether your fill time and occupancy come from how comparable rooms nearby actually filled, or from an assumed vacancy rate." },
     { key: "supply", name: "Nearby Supply", color: "#E0662F",
-      description: "Checks whether you know how many co-living homes compete within about 3 miles, how full they are, and what's new." },
+      description: "Checks whether you know how many coliving homes compete within about 3 miles, how full they are, and what's new." },
     { key: "mix", name: "Room Mix", color: "#6250D6",
       description: "Assesses whether your bath mix and room count were priced from private and shared-bath rooms nearby, or decided on a hunch." },
     { key: "reserves", name: "Lease-up Reserves", color: "#D6457F",
@@ -42,7 +42,7 @@ export default {
   steps: [
     {
       id: "G1", key: "stage", kind: "gateway", type: "choice", layout: "grid",
-      q: "Where are you with rent-by-the-room?",
+      q: "Where are you with coliving?",
       options: [
         { v: "learning", label: "Learning, no house yet", service: "first deal" },
         { v: "looking", label: "Looking at houses", service: "first deal" },
@@ -102,7 +102,7 @@ export default {
     },
     {
       id: "Q3", key: "supply", kind: "scored", type: "choice", area: "supply", weight: 3,
-      q: "How many co-living homes compete within about 3 miles?",
+      q: "How many coliving homes compete within about 3 miles?",
       options: [
         { v: "none", label: "No idea", points: 0 },
         { v: "some", label: "Some, I think", points: 1 },
@@ -225,7 +225,7 @@ export default {
     },
     {
       id: "D5", key: "newsupply", area: "supply", weight: 2,
-      q: "Do you know whether new co-living homes opened nearby this year?",
+      q: "Do you know whether new coliving homes opened nearby this year?",
       options: [
         { v: "none", label: "No idea", points: 0 },
         { v: "think", label: "I think a few did", points: 1 },
@@ -307,7 +307,7 @@ export default {
         { v: "unsure", label: "Not sure yet" },
         { v: "wholehome", label: "A loan sized on whole-home rent" },
         { v: "cash", label: "Cash" },
-        { v: "roomlender", label: "A lender who works with room rentals, briefed on room income" }
+        { v: "roomlender", label: "A lender who works with coliving, briefed on room income" }
       ]
     }
   ],
@@ -400,7 +400,7 @@ export default {
     rentDivide: "your rent is a whole-home rent split by bedrooms",
     fill: "you don't know how fast rooms fill near the house",
     fillVacancy: "your plan assumes a vacancy rate instead of how fast rooms nearby fill",
-    supply: "you don't know how many co-living homes compete within about 3 miles",
+    supply: "you don't know how many coliving homes compete within about 3 miles",
     mix: "your bath mix isn't priced from the rooms nearby",
     reserves: "your reserves aren't sized for a slow lease-up",
     maintenance: "Every area is 75 or higher. Your plan rests on evidence; check that it holds for this address."
@@ -439,13 +439,13 @@ export default {
       whenever: "Pick your launch month: find when rooms near the house fill fastest, and finish the work before it"
     },
     supply: {
-      none: "Count the co-living homes with rooms listed within about 3 miles of the house",
-      some: "Count the co-living homes with rooms listed within about 3 miles of the house",
+      none: "Count the coliving homes with rooms listed within about 3 miles of the house",
+      some: "Count the coliving homes with rooms listed within about 3 miles of the house",
       counted: "Next to each home you counted, note how many of its rooms are open right now"
     },
     newsupply: {
-      none: "Look up which co-living homes near the house started listing rooms this year",
-      think: "Look up which co-living homes near the house started listing rooms this year"
+      none: "Look up which coliving homes near the house started listing rooms this year",
+      think: "Look up which coliving homes near the house started listing rooms this year"
     },
     pricedrops: {
       unsure: "Check whether rooms near the house cut their rents in the last few months",
@@ -493,7 +493,7 @@ export default {
   checks: {
     rent: "Once a month, recheck five rooms near the house: rent, bath type and whether they filled",
     fill: "Every two weeks, note which of five room listings nearby have filled",
-    supply: "Once a month, count the co-living homes within about 3 miles and note any new ones",
+    supply: "Once a month, count the coliving homes within about 3 miles and note any new ones",
     mix: "Before any work, price the house both ways: the baths as they are, and with one more private bath",
     reserves: "When rents or supply nearby change, rerun your slower lease-up case"
   },

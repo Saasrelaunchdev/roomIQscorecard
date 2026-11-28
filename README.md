@@ -1,6 +1,6 @@
 # The First Deal Risk Scorecard
 
-RoomIQ's self-assessment funnel for rent-by-the-room investors before or during their first deal: idea I1, First Deal
+RoomIQ's self-assessment funnel for coliving investors before or during their first deal: idea I1, First Deal
 Risk, from Path 1 of the Roomiqscorecards proposal, picked by the client. Built with the Scorecard Funnel Creator on
 ScoreApp's structure: a landing page, eleven quick questions, the Deal Readiness Score and the lease-up gap on screen
 right away, the PDF report by email the moment they finish (with the Room-by-Room Underwrite and a 30-day plan), and two

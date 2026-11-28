@@ -12,7 +12,7 @@ import { forDelivery } from "../lib/delivery.mjs";
 const LANDING = {
   meta: {
     title: "The First Deal Risk Scorecard | RoomIQ",
-    description: "Would your first rent-by-the-room deal survive its first six months? Eleven quick questions, about a minute, free. Your score shows right away; your report comes by email.",
+    description: "Would your first coliving deal survive its first six months? Eleven quick questions, about a minute, free. Your score shows right away; your report comes by email.",
     ogImage: "/assets/og.png"
   },
 
@@ -55,11 +55,11 @@ const LANDING = {
       id: "scoreapp",
       slug: "",
       layout: "scoreapp",
-      hook: "Would your first rent-by-the-room deal survive its first six months?",
+      hook: "Would your first coliving deal survive its first six months?",
       hero: {
-        eyebrow: "Free scorecard for rent-by-the-room investors",
-        h1: "Would your first rent-by-the-room deal survive its first six months?",
-        lead: "Every room-rental plan rests on two numbers: rent per room and how fast rooms fill. See if yours are evidence or guesses.",
+        eyebrow: "Free scorecard for coliving investors",
+        h1: "Would your first coliving deal survive its first six months?",
+        lead: "Every coliving plan rests on two numbers: rent per room and how fast rooms fill. See if yours are evidence or guesses.",
         button: "Score my deal",
         picture: "neighborhood"
       },
@@ -71,7 +71,7 @@ const LANDING = {
       layout: "hero-quiz",
       hook: "Where does your per-room rent number come from?",
       hero: {
-        eyebrow: "For rent-by-the-room investors",
+        eyebrow: "For coliving investors",
         h1: "Will your first deal survive six months?",
         lead: "Eleven quick questions. Your score, your lease-up gap and what to check before an offer.",
         leadShort: "Your score, your lease-up gap and what to check before an offer.",
@@ -163,7 +163,7 @@ const LANDING = {
     decline: "Decline"
   },
   footer: {
-    line: "RoomIQ is room-by-room underwriting for rent-by-the-room investors. The houses in our pictures and examples are made up.",
+    line: "RoomIQ is room-by-room underwriting for coliving investors. The houses in our pictures and examples are made up.",
     master: "See how RoomIQ works",
     links: [
       { key: "terms", label: "Terms" },

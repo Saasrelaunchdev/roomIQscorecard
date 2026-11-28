@@ -61,7 +61,7 @@ test("the three checks outside RoomIQ: the market's rule, financing and insuranc
   assert.equal(financing.status.mark, "todo");
   assert.match(financing.status.text, /whole-home rent/);
   assert.equal(insurance.status, null);
-  assert.equal(insurance.body, "Insurance is not a given: some insurers decline homes rented by the room.");
+  assert.equal(insurance.body, "Insurance is not a given: some insurers decline coliving homes.");
   // Houston and Dallas-Fort Worth: the insurance program's exclusion; the market's own rule
   const dfw = build({ answers: { ...HERO, market: "dfw" } });
   assert.match(dfw.checks.items[0].body, /Dallas allows a household of no more than four people/);

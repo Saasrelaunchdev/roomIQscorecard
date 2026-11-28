@@ -33,7 +33,7 @@ test("submit: scored again on the server, stored, answered at once; then the sco
   assert.equal(row.bottleneck, "fill");
   assert.equal(row.fit, "qualified");
   assert.equal(row.route, "free forecast");
-  assert.equal(row.trade, "looking", "the segment: where they are with rent-by-the-room");
+  assert.equal(row.trade, "looking", "the segment: where they are with coliving");
   assert.equal(row.city, "Atlanta", "the market of the deal stands in for a city");
   assert.equal(row.company, "");
   assert.equal(row.email, body.email.toLowerCase());
@@ -264,7 +264,9 @@ test("analytics: known events kept, unknown dropped, nothing personal", async ()
 test("pages: the rewrites serve the right shells, with the right robots rules", async () => {
   const home = await S.api("/", { raw: true });
   const html = await home.text();
-  assert.match(html, /Would your first rent-by-the-room deal survive its first six months\?/);
+  // The founder's revision of 2026-11-28: coliving, not rent-by-the-room (CLAUDE.md)
+  assert.match(html, /Would your first coliving deal survive its first six months\?/);
+  assert.doesNotMatch(html, /rent-by-the-room/i, "the founder's word is coliving");
   assert.equal((html.match(/class="gc-step"/g) || []).length, 11, "the eleven steps are in the page");
   const ads = await (await S.api("/first-deal", { raw: true })).text();
   assert.match(ads, /Will your first deal survive six months\?/);

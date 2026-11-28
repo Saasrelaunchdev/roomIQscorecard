@@ -7,7 +7,7 @@ and from the GTM's own Co-Living Deal Readiness spec (`deliverables/scorecard_sp
 
 ## Who it is for and what it reveals
 
-US investors before or during their first rent-by-the-room deal (the GTM's Level 2), and operators with 1 to 10
+US investors before or during their first coliving deal (the GTM's Level 2), and operators with 1 to 10
 houses checking their next one (Level 1). It shows whether the deal plan rests on evidence or on borrowed numbers:
 where the rent per room came from, how fast rooms fill nearby, what competes within about 3 miles, how the bath mix
 was decided and how the reserves were sized. Then it turns three of their own answers into one number: the lease-up
@@ -18,14 +18,14 @@ the way I expect, I'm at least $4,000 short."
 
 ## The hook
 
-**"Would your first rent-by-the-room deal survive its first six months?"** (I1's hook, verbatim; Version B's H1, 10
+**"Would your first coliving deal survive its first six months?"** (I1's hook, with coliving for rent-by-the-room since the founder's revision of 2026-11-28; Version B's H1, 10
 words.)
 
 Variant hooks:
 
 - Version A (Meta ads, 8 words at most): "Will your first deal survive six months?"
 - Ad hooks, from the GTM's scorecard ads (one question each): "Where does your per-room rent number come from?", "How
-  fast do rooms fill near the house?", "How many co-living homes compete within about 3 miles?" [assets_library.xlsx,
+  fast do rooms fill near the house?", "How many coliving homes compete within about 3 miles?" [assets_library.xlsx,
   Scorecard ads].
 - For the landing page's buttons: "Score your next deal" (the buttons stay as they are).
 
@@ -38,7 +38,7 @@ bathrooms, deal math and reserves".
 |---|---|---|---|---|
 | 1 | `rent` | Rent Evidence | whether the rent per room comes from rooms nearby, by bath type and size, or from a calculator, a whole-home rent or a guess | 1. Price each room |
 | 2 | `fill` | Fill Speed | whether the plan's fill time and occupancy come from how comparable rooms nearby actually filled | 2. Time the fill |
-| 3 | `supply` | Nearby Supply | whether they know how many co-living homes compete within about 3 miles, how full they are, and what is new | 3. Count the competition |
+| 3 | `supply` | Nearby Supply | whether they know how many coliving homes compete within about 3 miles, how full they are, and what is new | 3. Count the competition |
 | 4 | `mix` | Room Mix | whether the bath mix and the room count were priced from private and shared-bath rooms nearby | 4. Price the bath mix |
 | 5 | `reserves` | Lease-up Reserves | whether the deal math and the reserves were sized for a slow lease-up, from how comparable launches filled | 5. Size the cushion |
 
@@ -61,11 +61,11 @@ points (its questions 1, 2, 3, 4 and 7), in its order (lowest points first). The
 
 | Id | Key | Kind | Question | Options (points or value) | Why it is asked |
 |---|---|---|---|---|---|
-| G1 | `stage` | gateway (segment) | Where are you with rent-by-the-room? | Learning, no house yet; Looking at houses; Under contract; Converting my house; I run 1 to 10 houses; More than 10 houses | the segment; "first deal" or "next deal" words; fit (learning is under the floor); call-only (more than 10 houses) |
+| G1 | `stage` | gateway (segment) | Where are you with coliving? | Learning, no house yet; Looking at houses; Under contract; Converting my house; I run 1 to 10 houses; More than 10 houses | the segment; "first deal" or "next deal" words; fit (learning is under the floor); call-only (more than 10 houses) |
 | G2 | `market` | gateway | Where is the house, or the market you're looking at? | Dallas-Fort Worth; Houston; Atlanta; Orlando; Jacksonville; Phoenix; Las Vegas; Another US market; Not decided yet | covered market or not: the free forecast is offered only in covered markets; the city's rule on unrelated adults and the insurance line on the checklist page |
 | Q1 | `rentsource` | scored, Rent Evidence, x3 | Where does your per-room rent number come from? | I don't have one yet (0); A platform's earnings calculator (1); Whole-home rent divided by bedrooms (1); Asking rents I found on room listings (2); Comps of nearby rooms, with how fast they filled (4) | rent is evidence or assumption |
 | Q2 | `fillsource` | scored, Fill Speed, x3 | How do you know how fast rooms fill near the property? | I haven't looked (0); I assume a vacancy percentage (1); Host stories and forum posts (2); A platform's market reports (2); Observed fill times of comparable rooms nearby (4) | lease-up risk awareness |
-| Q3 | `supply` | scored, Nearby Supply, x3 | How many co-living homes compete within about 3 miles? | No idea (0); Some, I think (1); I counted listings (2); I know the count and roughly how full they are (4) | saturation risk |
+| Q3 | `supply` | scored, Nearby Supply, x3 | How many coliving homes compete within about 3 miles? | No idea (0); Some, I think (1); I counted listings (2); I know the count and roughly how full they are (4) | saturation risk |
 | Q4 | `bathmix` | scored, Room Mix, x3 | Have you decided the bath mix? | Not yet (0); Keeping the current bathrooms (1); Adding a bathroom because it seems worth it (2); Modeled private against shared-bath rents nearby (4) | room-segment economics |
 | Q5 | `slowplan` | scored, Lease-up Reserves, x3 | What happens if lease-up takes longer than planned? | I haven't planned for it (0); I'd lower rents (1); A few weeks of reserves (2); Reserves sized from how comparable launches nearby filled (4) | reserve planning |
 | G3 | `carry` | gateway (metric) | About what will the house cost you each month before rent comes in? | Under $2,000 ($1,000); $2,000 to $3,000 ($2,000); $3,000 to $4,000 ($3,000); More than $4,000 ($4,000); Not sure yet (none) | the metric's monthly cost |
@@ -185,14 +185,14 @@ and D2.
 | D2 | `rentcomps` | Rent Evidence, 1 | How many nearby rooms is your rent number based on? | None, or not sure (0); 1 or 2 (1); 3 to 9 (2); 10 or more (4) |
 | D3 | `occsource` | Fill Speed, 2 | Where does your plan's occupancy figure come from? | I haven't set one (0); A rule of thumb (1); A platform's market average (2); Observed occupancy of comparable rooms nearby (4) |
 | D4 | `launch` | Fill Speed, 1 | Have you picked the month to start renting rooms? | Not yet (0); Whenever the work is done (1); A season I've heard is busy (2); When rooms nearby fill fastest (4) |
-| D5 | `newsupply` | Nearby Supply, 2 | Do you know whether new co-living homes opened nearby this year? | No idea (0); I think a few did (1); I checked the current listings (2); I track homes that open and close nearby (4) |
+| D5 | `newsupply` | Nearby Supply, 2 | Do you know whether new coliving homes opened nearby this year? | No idea (0); I think a few did (1); I checked the current listings (2); I track homes that open and close nearby (4) |
 | D6 | `pricedrops` | Nearby Supply, 1 | Have rooms near the house been cutting their rents? | I don't know (0); I've heard so (1); I've seen a few drop (2); I've checked recent price drops on comparable rooms (4) |
 | D7 | `roomcount` | Room Mix, 2 | How did you decide how many rooms to rent? | Not decided yet (0); As many as the house can fit (1); The current bedroom count (2); A layout checked against rents nearby (4) |
 | D8 | `sizemix` | Room Mix, 1 | Have you checked which room sizes rent best nearby? | Not yet (0); I assume bigger rooms rent better (1); I've seen a few listings (2); I compared rents and fill speed by room size nearby (4) |
 | D9 | `dealmath` | Lease-up Reserves, 2 | Where do the numbers in your deal math come from? | I haven't run the numbers yet (0); A calculator's default settings (1); My own estimates (2); Rents and occupancy of comparable rooms, with my own costs (4) |
 | D10 | `stress` | Lease-up Reserves, 1 | Does your deal math test a slower lease-up? | No (0); I add a vacancy rate on top (1); I test one slower case (2); I test it against how comparable launches nearby filled (4) |
 | C1 | `zoning` | checklist, not scored | Have you checked the city's rule on unrelated adults sharing a home? | Not yet; I asked around; I read a summary online; I checked the city code; I confirmed with the city or an attorney |
-| C2 | `financing` | checklist, not scored | How will you finance the house? | Not sure yet; A loan sized on whole-home rent; Cash; A lender who works with room rentals, briefed on room income |
+| C2 | `financing` | checklist, not scored | How will you finance the house? | Not sure yet; A loan sized on whole-home rent; Cash; A lender who works with coliving, briefed on room income |
 
 ## Enrichment
 
@@ -217,7 +217,7 @@ spec 2, section 6.
 3. Overview: the score, the tier, the five areas at a glance, what the report covers.
 4. Your first six months: the lease-up gap, its math, the six-month strip, what it means and what it does not.
 5. Three checks RoomIQ can't do for you: the city's rule on unrelated adults (by market, as published), financing on
-   room income, insurance for renting by the room; marked with their deepener answers when given. Not legal, lending or
+   room income, insurance for coliving; marked with their deepener answers when given. Not legal, lending or
    insurance advice.
 6. The overall score: the tier's interpretation and the urgency line.
 7. The strongest area. 8. The weakest area: fix first, the quick wins, the weekly check, the cascade line.
@@ -230,7 +230,7 @@ spec 2, section 6.
 
 - **Outcome**: an offer where every number rests on evidence you can check.
 - **Steps**, one per area: 1. Price each room (rents from rooms nearby, by bath type and size). 2. Time the fill (fill
-  time and occupancy from comparable rooms, the launch month from the seasons). 3. Count the competition (co-living homes
+  time and occupancy from comparable rooms, the launch month from the seasons). 3. Count the competition (coliving homes
   within about 3 miles, how full, what is new). 4. Price the bath mix (private against shared bath, and the room count,
   from rooms nearby). 5. Size the cushion (reserves from the lease-up the evidence supports, plus a slower case).
 - **Where they stand**: from the area's answers: not started (the hero answer scores 0 or 1), started (2), running (4).

@@ -2,7 +2,7 @@
 
 The report's pages that change with the answers: the cover, the overview, the first six months, the checks, the overall score, the strongest and weakest areas, and the field dictionary.
 
-- For: RoomIQ, room-by-room underwriting for rent-by-the-room investors
+- For: RoomIQ, room-by-room underwriting for coliving investors
 - Builds on: spec 1 (the outcomes), spec 2 (the checks' words)
 - Date: 2026-11-24
 - Status: specification, built and tested. `content/report.mjs` and `content/checks.mjs` hold these words; `tests/unit/report-model.test.mjs` pins the variants and their math.
@@ -163,12 +163,12 @@ insurance, each with its status from the deepener's checklist answers. The page'
 | checks · zoning · asOf | As each city's code publishes it, checked in November 2026. |
 | checks · financing · title | Financing on room income |
 | checks · financing · body | Many loans are sized on the appraised whole-house rent, not on room rents. |
-| checks · financing · ask | Talk early to a lender who knows room rentals, and bring your rent per room with the rooms behind it. |
-| checks · insurance · title | Insurance for renting by the room |
-| checks · insurance · body | Insurance is not a given: some insurers decline homes rented by the room. |
-| checks · insurance · byMarket · dfw | The one rent-by-the-room insurance program the research found excludes the Dallas-Fort Worth counties. |
-| checks · insurance · byMarket · houston | The one rent-by-the-room insurance program the research found excludes Houston. |
-| checks · insurance · ask | Get a quote that covers renting by the room before you make the offer. |
+| checks · financing · ask | Talk early to a lender who knows coliving, and bring your rent per room with the rooms behind it. |
+| checks · insurance · title | Insurance for coliving |
+| checks · insurance · body | Insurance is not a given: some insurers decline coliving homes. |
+| checks · insurance · byMarket · dfw | The one coliving insurance program the research found excludes the Dallas-Fort Worth counties. |
+| checks · insurance · byMarket · houston | The one coliving insurance program the research found excludes Houston. |
+| checks · insurance · ask | Get a quote that covers coliving before you make the offer. |
 | checks · status · labels · done | Done |
 | checks · status · labels · partly | Started |
 | checks · status · labels · todo | To do |
@@ -189,7 +189,7 @@ insurance, each with its status from the deepener's checklist answers. The page'
 | checks · status · financing · cash · mark | done |
 | checks · status · financing · cash · t | You plan to pay cash, so no lender sizes the loan. |
 | checks · status · financing · roomlender · mark | done |
-| checks · status · financing · roomlender · t | You've briefed a lender who works with room rentals. |
+| checks · status · financing · roomlender · t | You've briefed a lender who works with coliving. |
 | checks · status · noAnswer | Add your answers in Sharpen your report to mark this check. |
 
 ## 6. Your Overall Score
@@ -256,7 +256,7 @@ insurance, each with its status from the deepener's checklist answers. The page'
 | Field | Exact text |
 |---|---|
 | h | Your Read on Nearby Supply Is Your Strongest Asset |
-| means · lead | You know the competition: how many co-living homes compete within about 3 miles, and roughly how full they are. |
+| means · lead | You know the competition: how many coliving homes compete within about 3 miles, and roughly how full they are. |
 | means · bullets 1 | You counted the homes near the house |
 | means · bullets 2 | You know roughly how many rooms are open |
 | means · bullets 3 | You watch for new homes and rent cuts |
@@ -362,13 +362,13 @@ weaker borrowed number. When the city's rule is unconfirmed, it is the first qui
 |---|---|
 | h | Your Read on Nearby Supply Has the Most Room to Grow |
 | refinement | Your Read on Nearby Supply Is Your Next Refinement |
-| means · lead | You don't know how many co-living homes compete near the house, or how full they are. Supply nearby decides how hard your rooms will be to fill and what they can ask. |
-| means · bullets 1 | Nobody counted the co-living homes within about 3 miles |
+| means · lead | You don't know how many coliving homes compete near the house, or how full they are. Supply nearby decides how hard your rooms will be to fill and what they can ask. |
+| means · bullets 1 | Nobody counted the coliving homes within about 3 miles |
 | means · bullets 2 | There's no read on how many rooms are open |
 | means · bullets 3 | New homes and rent cuts nearby go unnoticed |
 | means · bullets 4 | A crowded pocket can look like a busy one |
 | next · lead | This week, count the competition within about 3 miles. |
-| next · bullets 1 | List every co-living home with rooms for rent within about 3 miles |
+| next · bullets 1 | List every coliving home with rooms for rent within about 3 miles |
 | next · bullets 2 | Note how many rooms each has open |
 | next · bullets 3 | Note any new homes and rent cuts |
 | next · bullets 4 | Write down your read, with the date |

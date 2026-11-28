@@ -83,8 +83,8 @@ export default {
     },
     supply: {
       n: 3, t: "Count the competition",
-      standard: "Every co-living home within about 3 miles counted, with its open rooms, new listings and rent cuts.",
-      service: "RoomIQ counts and maps active co-living properties within about 3 miles of any address, with listing status on its supply map."
+      standard: "Every coliving home within about 3 miles counted, with its open rooms, new listings and rent cuts.",
+      service: "RoomIQ counts and maps active coliving properties within about 3 miles of any address, with listing status on its supply map."
     },
     mix: {
       n: 4, t: "Price the bath mix",
@@ -148,15 +148,15 @@ export default {
         timed: "You plan to launch when rooms nearby fill fastest."
       },
       supply: {
-        none: "You don't know how many co-living homes compete nearby.",
-        some: "You think some co-living homes compete nearby.",
-        counted: "You counted the co-living listings nearby.",
-        known: "You know how many co-living homes compete nearby, and roughly how full they are."
+        none: "You don't know how many coliving homes compete nearby.",
+        some: "You think some coliving homes compete nearby.",
+        counted: "You counted the coliving listings nearby.",
+        known: "You know how many coliving homes compete nearby, and roughly how full they are."
       },
       newsupply: {
-        none: "You don't know whether new co-living homes opened nearby.",
-        think: "You think a few new co-living homes opened nearby.",
-        checked: "You checked the current co-living listings nearby.",
+        none: "You don't know whether new coliving homes opened nearby.",
+        think: "You think a few new coliving homes opened nearby.",
+        checked: "You checked the current coliving listings nearby.",
         track: "You track the homes that open and close nearby."
       },
       pricedrops: {
@@ -217,7 +217,7 @@ export default {
       bullets: [
         "A list of ten rooms near the house, by bath type and size",
         "A two-week fill watch on five of them",
-        "A count of the co-living homes within about 3 miles",
+        "A count of the coliving homes within about 3 miles",
         "Your own deal math, with a slower case"
       ],
       note: null
@@ -237,14 +237,14 @@ export default {
         "Monthly room revenue for the address, with the formula printed",
         "Support and confidence labels, and how far away the comps are",
         "Rent and occupancy by bath type and size for comparable properties",
-        "Active co-living properties within about 3 miles, mapped",
+        "Active coliving properties within about 3 miles, mapped",
         "When occupancy and fill speed peak in the market"
       ]
     },
     wontTitle: "What RoomIQ doesn't do",
     wont: [
       { t: "No zoning check.", b: "Rules on unrelated adults differ by city: ask the city or an attorney." },
-      { t: "No financing or insurance.", b: "Talk early to a lender and an insurer who know room rentals." },
+      { t: "No financing or insurance.", b: "Talk early to a lender and an insurer who know coliving." },
       { t: "No promises.", b: "An estimate shows its working; it doesn't guarantee rent or occupancy." }
     ],
     rules: "Based on observed rents and occupancy, not collected payments. Thin evidence is labeled Thin."
@@ -258,7 +258,7 @@ export default {
     phases: [
       { t: "Week 1: the forecast on your address", b: "Run the free forecast on the house. Read the formula under the number, the support and confidence labels, and how far away the comps sit." },
       { t: "Week 2: the rooms nearby", b: "Open comparable properties in the Property Analyzer: rent and occupancy by bath type and size, and their 7, 30 and 90-day windows." },
-      { t: "Week 3: the competition and the seasons", b: "Check the co-living properties within about 3 miles on the map, and when occupancy and fill speed peak, before you pick a launch month." },
+      { t: "Week 3: the competition and the seasons", b: "Check the coliving properties within about 3 miles on the map, and when occupancy and fill speed peak, before you pick a launch month." },
       { t: "Week 4: the mix and the math", b: "Re-run the forecast with the room mix you plan, carry it into cash flow under your own costs, size the cushion, then decide." }
     ],
     yourStart: "For your plan, we'd start with {primary_bottleneck}. {fit_line}",

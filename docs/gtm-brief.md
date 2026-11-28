@@ -15,6 +15,10 @@ Sources read (all read-only, on 2026-11-24):
 
 Facts are cited like `[GTM-BRIEF.md, Section 5]`. Anything inferred is marked **Assumption**.
 
+**The scorecard's word is coliving.** Since the founder's revision of 2026-11-28 (CLAUDE.md, owner decisions), every
+word of the scorecard says "coliving" where the go-to-market says "rent-by-the-room" or "co-living". This brief keeps
+the go-to-market's own words, as its sources wrote them.
+
 ## The product
 
 RoomIQ is room-level market data and underwriting software for US rent-by-the-room investors. You pick a market,
