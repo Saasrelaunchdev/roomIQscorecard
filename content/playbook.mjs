@@ -110,7 +110,7 @@ export default {
       withoutHead: "Without a Supply Count",
       withHead: "With a Supply Count",
       compare: [
-        ["Nobody counted the co-living homes nearby", "Every co-living home within about 3 miles is on one list"],
+        ["Nobody counted the coliving homes nearby", "Every coliving home within about 3 miles is on one list"],
         ["A count, with no idea how full those homes are", "Open rooms are noted next to each home"],
         ["New homes opening nearby come as a surprise", "New listings, and homes that stopped listing, are tracked"],
         ["Rent cuts nearby go unnoticed", "Rent cuts are an early warning in the plan"],
@@ -118,7 +118,7 @@ export default {
       ],
       method: "The Three-Mile Count",
       phases: [
-        { t: "Map the homes", s: "Count every co-living home within about 3 miles.", b: ["List every home with rooms for rent within about 3 miles of the house", "Note each home's room count, if it shows", "Mark them on a simple map"] },
+        { t: "Map the homes", s: "Count every coliving home within about 3 miles.", b: ["List every home with rooms for rent within about 3 miles of the house", "Note each home's room count, if it shows", "Mark them on a simple map"] },
         { t: "Note the open rooms", s: "A count says how many; open rooms say how full.", b: ["Next to each home, note how many rooms are open", "Note the bath types of the open rooms", "Many open shared-bath rooms nearby is a warning for shared-bath rooms of your own"] },
         { t: "Watch what changes", s: "Supply keeps moving after you buy.", b: ["Note new homes that started listing rooms", "Note homes that stopped", "Note rent cuts on comparable rooms"] },
         { t: "Decide what it means", s: "Filling up, or already crowded.", b: ["Few open rooms and steady rents: room for one more home", "Many open rooms and rent cuts: plan a lower rent or a slower lease-up", "Write the read into your plan, with the date"] }
@@ -219,13 +219,13 @@ export default {
         b: ["List ten rooms within about 3 miles of the house", "Split them by bath type and size", "Start the two-week fill watch on five of them", "Write down your monthly carrying cost", "Note what your current rent number rests on"],
         outcome: "a rent per room you can trace to rooms nearby, and a fill watch running." },
       { t: "Phase 2, days 8 to 14: Count the competition", focus: "Nearby Supply", area: "supply",
-        b: ["Count the co-living homes within about 3 miles", "Note the open rooms in each", "Note new homes and rent cuts nearby", "Check your fill watch every few days", "Read the city's rule on unrelated adults"],
+        b: ["Count the coliving homes within about 3 miles", "Note the open rooms in each", "Note new homes and rent cuts nearby", "Check your fill watch every few days", "Read the city's rule on unrelated adults"],
         outcome: "the competition on one page, and the city's rule in hand." },
       { t: "Phase 3, days 15 to 21: Time the fill and price the mix", focus: "Fill Speed and Room Mix", area: "fill",
         b: ["Close the fill watch: how many filled, how fast", "Set your lease-up months, and a slower case", "Price the house both ways: the baths as they are, and with one more private bath", "Check the room count against the city's rule", "Pick your launch month"],
         outcome: "lease-up months from evidence, and a bath mix priced from rooms nearby." },
       { t: "Phase 4, days 22 to 30: Size the cushion", focus: "Lease-up Reserves", area: "reserves",
-        b: ["Size reserves: monthly cost × the slower case's months", "Run the deal math on your own costs and on rooms nearby", "Talk to a lender who knows room rentals", "Get an insurance quote that covers renting by the room", "Take the scorecard again on day 30"],
+        b: ["Size reserves: monthly cost × the slower case's months", "Run the deal math on your own costs and on rooms nearby", "Talk to a lender who knows coliving", "Get an insurance quote that covers coliving", "Take the scorecard again on day 30"],
         outcome: "a plan where every number rests on evidence, and a second score to compare with the first." }
     ]
   },
@@ -236,7 +236,7 @@ export default {
       { t: "Day 1: Write Down Your Monthly Cost", m: "20 minutes", body: "Add up what the house will cost each month with every room empty: loan payment, taxes, insurance, utilities and upkeep. Write the total where you'll see it. Every lease-up plan rests on this number." },
       { t: "Day 2: List Ten Rooms Nearby", m: "30 minutes", body: "Find ten rooms for rent within about 3 miles of the house. For each, write the weekly rent, the bath type and the room size. Leave whole-home listings out: you're pricing rooms." },
       { t: "Day 3: Split the Rents", m: "20 minutes", body: "Group your ten rooms by bath type, private or shared, and note the middle rent of each group. The difference is your first read on the bath mix." },
-      { t: "Day 4: Count the Competition", m: "30 minutes", body: "Count the co-living homes with rooms listed within about 3 miles of the house, and note how many rooms each has open. One page, with the date." },
+      { t: "Day 4: Count the Competition", m: "30 minutes", body: "Count the coliving homes with rooms listed within about 3 miles of the house, and note how many rooms each has open. One page, with the date." },
       { t: "Day 5: Start the Fill Watch", m: "15 minutes", body: "Pick five of your ten rooms and set a reminder to check them every few days for two weeks. Which ones fill, how fast and at what rent becomes your lease-up plan." }
     ],
     total: "Total time this week: about two hours."
@@ -262,7 +262,7 @@ export default {
       ["Pick your launch month", "Your plan"]
     ],
     supply: [
-      ["List the co-living homes within about 3 miles", "Room listings, a map"],
+      ["List the coliving homes within about 3 miles", "Room listings, a map"],
       ["Note the open rooms in each", "Your list"],
       ["Note new homes and homes that stopped listing", "Once a month"],
       ["Note rent cuts on comparable rooms", "Once a month"],
@@ -283,7 +283,7 @@ export default {
       ["Size reserves: cost × the slower case's months", "Your plan"],
       ["Run the deal math on your own costs", "Your spreadsheet, or RoomIQ"],
       ["Count empty rooms once, not twice", "Your deal math"],
-      ["Talk to a lender who knows room rentals", "Before the offer"]
+      ["Talk to a lender who knows coliving", "Before the offer"]
     ]
   },
 
@@ -299,7 +299,7 @@ export default {
       ["Lease-up Reserves (1 to 5)", "5"],
       ["Rooms on your rent list", "10 or more"],
       ["Rooms filled in your watch", "Your count"],
-      ["Co-living homes within 3 miles", "Your count"],
+      ["Coliving homes within 3 miles", "Your count"],
       ["Months of reserves", "Your slower case"]
     ],
     // The starting point, printed from this investor's scores (dynamic): the 1 to 5 rating each area's score suggests
@@ -325,11 +325,11 @@ export default {
     title: "Your Next Step",
     lead: "This report showed where your plan borrows its numbers, and gave you a 30-day plan to replace them with evidence. The by-hand way works: it takes listings, a spreadsheet and two weeks of watching. RoomIQ shows that evidence for one address in one place.",
     boxTitle: "Run a free forecast on your address",
-    boxBody: "Type the address and RoomIQ estimates monthly room revenue from observed rooms nearby. Start where your report says to: {primary_bottleneck}. The estimate prints its formula, its comps and how sure it is, and counts the co-living homes within about 3 miles. Free plan: no card needed, three forecasts a month.",
+    boxBody: "Type the address and RoomIQ estimates monthly room revenue from observed rooms nearby. Start where your report says to: {primary_bottleneck}. The estimate prints its formula, its comps and how sure it is, and counts the coliving homes within about 3 miles. Free plan: no card needed, three forecasts a month.",
     fit: {
       rent: "For your Rent Evidence, that means a rent for each room from rooms nearby, by bath type and size.",
       fill: "For your Fill Speed, that means occupancy from comparable rooms nearby, and the months rooms fill fastest.",
-      supply: "For your Nearby Supply, that means the co-living homes within about 3 miles, counted and mapped.",
+      supply: "For your Nearby Supply, that means the coliving homes within about 3 miles, counted and mapped.",
       mix: "For your Room Mix, that means the bath mix you plan, entered in the forecast, because private-bath rooms change the rent.",
       reserves: "For your Lease-up Reserves, that means the estimate carried into cash flow under your own costs, beside your slower case. Informational only, not financial or lending advice.",
       callOnly: "You run more than ten houses, so we'll start with a walkthrough to see what fits."

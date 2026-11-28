@@ -2,7 +2,7 @@
 
 Every word on the landing pages, the quiz, the results page, the walkthrough step, the deepener page and the emails, with the follow-up emails for Loops and the picture slots.
 
-- For: RoomIQ, room-by-room underwriting for rent-by-the-room investors
+- For: RoomIQ, room-by-room underwriting for coliving investors
 - Builds on: spec 1 (`docs/spec/1-assessment-logic.md`), the GTM's landing page and Meta page copy, `lead_magnet_spec.xlsx` (Email_Sequence) and `scorecard_spec.docx` Section 4
 - Date: 2026-11-24
 - Status: specification, built and tested. `content/landing.mjs`, `content/results.mjs`, `content/emails.mjs`, `content/checks.mjs` and `content/site.mjs` (booking) hold these words; `tests/e2e/funnel.e2e.mjs` and the copy lint check them.
@@ -58,7 +58,7 @@ in the hero. Everything else on the page backs that one tap.
 | Field | Exact text |
 |---|---|
 | hook | Where does your per-room rent number come from? |
-| hero · eyebrow | For rent-by-the-room investors |
+| hero · eyebrow | For coliving investors |
 | hero · h1 | Will your first deal survive six months? |
 | hero · lead | Eleven quick questions. Your score, your lease-up gap and what to check before an offer. |
 | hero · leadShort | Your score, your lease-up gap and what to check before an offer. |
@@ -100,10 +100,10 @@ Trust lines under the card:
 
 | Field | Exact text |
 |---|---|
-| hook | Would your first rent-by-the-room deal survive its first six months? |
-| hero · eyebrow | Free scorecard for rent-by-the-room investors |
-| hero · h1 | Would your first rent-by-the-room deal survive its first six months? |
-| hero · lead | Every room-rental plan rests on two numbers: rent per room and how fast rooms fill. See if yours are evidence or guesses. |
+| hook | Would your first coliving deal survive its first six months? |
+| hero · eyebrow | Free scorecard for coliving investors |
+| hero · h1 | Would your first coliving deal survive its first six months? |
+| hero · lead | Every coliving plan rests on two numbers: rent per room and how fast rooms fill. See if yours are evidence or guesses. |
 | hero · button | Score my deal |
 | hero · picture | neighborhood |
 | sticky | Score my deal |
@@ -143,7 +143,7 @@ Trust lines under the card:
 |---|---|
 | Rent Evidence | Checks whether your rent per room comes from rooms nearby, by bath type and size, or from a calculator, a whole-home rent or a guess. |
 | Fill Speed | Measures whether your fill time and occupancy come from how comparable rooms nearby actually filled, or from an assumed vacancy rate. |
-| Nearby Supply | Checks whether you know how many co-living homes compete within about 3 miles, how full they are, and what's new. |
+| Nearby Supply | Checks whether you know how many coliving homes compete within about 3 miles, how full they are, and what's new. |
 | Room Mix | Assesses whether your bath mix and room count were priced from private and shared-bath rooms nearby, or decided on a hunch. |
 | Lease-up Reserves | Evaluates whether your reserves and deal math are sized for a slow lease-up, from how comparable launches nearby filled. |
 
@@ -189,7 +189,7 @@ Trust lines under the card:
 | Field | Exact text |
 |---|---|
 | meta · title | The First Deal Risk Scorecard \| RoomIQ |
-| meta · description | Would your first rent-by-the-room deal survive its first six months? Eleven quick questions, about a minute, free. Your score shows right away; your report comes by email. |
+| meta · description | Would your first coliving deal survive its first six months? Eleven quick questions, about a minute, free. Your score shows right away; your report comes by email. |
 | meta · ogImage | /assets/og.png |
 
 ### The notice at collection, the cookie banner and the footer
@@ -217,7 +217,7 @@ sentence only when a texts consent is configured (it is not: `site.booking.conse
 
 | Field | Exact text |
 |---|---|
-| footer · line | RoomIQ is room-by-room underwriting for rent-by-the-room investors. The houses in our pictures and examples are made up. |
+| footer · line | RoomIQ is room-by-room underwriting for coliving investors. The houses in our pictures and examples are made up. |
 | footer · master | See how RoomIQ works |
 | footer · links 1 · key | terms |
 | footer · links 1 · label | Terms |
@@ -238,11 +238,11 @@ the contact step (S11). Points and what each answer feeds are in spec 1; here ar
 
 | Step | Question | How it's answered | Answers |
 |---|---|---|---|
-| G1 `stage` | Where are you with rent-by-the-room? | Tap one | Learning, no house yet / Looking at houses / Under contract / Converting my house / I run 1 to 10 houses / More than 10 houses |
+| G1 `stage` | Where are you with coliving? | Tap one | Learning, no house yet / Looking at houses / Under contract / Converting my house / I run 1 to 10 houses / More than 10 houses |
 | G2 `market` | Where is the house, or the market you're looking at? _(help: Just the city or metro, not the street address.)_ | Typed (placeholder "For example, Phoenix", up to 60 characters; the seven metros as suggestions), matched to an answer by name; the chip "Not decided yet" under it | Dallas-Fort Worth / Houston / Atlanta / Orlando / Jacksonville / Phoenix / Las Vegas / Another US market / Not decided yet |
 | Q1 `rentsource` | Where does your per-room rent number come from? | Tap one | I don't have one yet / A platform's earnings calculator / Whole-home rent divided by bedrooms / Asking rents I found on room listings / Comps of nearby rooms, with how fast they filled |
 | Q2 `fillsource` | How do you know how fast rooms fill near the property? | Tap one | I haven't looked / I assume a vacancy percentage / Host stories and forum posts / A platform's market reports / Observed fill times of comparable rooms nearby |
-| Q3 `supply` | How many co-living homes compete within about 3 miles? | Tap one | No idea / Some, I think / I counted listings / I know the count and roughly how full they are |
+| Q3 `supply` | How many coliving homes compete within about 3 miles? | Tap one | No idea / Some, I think / I counted listings / I know the count and roughly how full they are |
 | Q4 `bathmix` | Have you decided the bath mix? | Tap one | Not yet / Keeping the current bathrooms / Adding a bathroom because it seems worth it / Modeled private against shared-bath rents nearby |
 | Q5 `slowplan` | What happens if lease-up takes longer than planned? | Tap one | I haven't planned for it / I'd lower rents / A few weeks of reserves / Reserves sized from how comparable launches nearby filled |
 | G3 `carry` | About what will the house cost you each month before rent comes in? _(help: Loan payment, taxes, insurance and utilities, with every room empty. A range is fine.)_ | A slider, one stop per answer (shown as "{label} a month"); the chip "Not sure yet" under it | Under $2,000 / $2,000 to $3,000 / $3,000 to $4,000 / More than $4,000 / Not sure yet |
@@ -349,7 +349,7 @@ six-month strip and its legend:
 | Fill Speed, low | You don't know how fast rooms fill near the house, so your lease-up months are a guess. The costs start on day one, and the rent arrives room by room. An assumed vacancy rate can't tell you whether filling takes three weeks or three months. Watching real rooms nearby can. |
 | Fill Speed, medium | You have a sense of how rooms fill, from stories, forums or a market report. Those describe a market, not the street the house is on, and rooms a few miles apart can fill at different speeds. Check how comparable rooms near the house filled, and set your lease-up months from that. |
 | Fill Speed, high | Your fill time comes from how comparable rooms nearby actually filled. That makes your lease-up months, and the reserves sized from them, something you can defend. Watch the month you launch in: the same room can fill faster or slower depending on the season. |
-| Nearby Supply, low | You don't know how many co-living homes compete near the house. Supply nearby decides how hard your rooms will be to fill and what they can ask. A street with many open rooms and falling rents needs a different plan from one with a few full homes. Count it before you buy. |
+| Nearby Supply, low | You don't know how many coliving homes compete near the house. Supply nearby decides how hard your rooms will be to fill and what they can ask. A street with many open rooms and falling rents needs a different plan from one with a few full homes. Count it before you buy. |
 | Nearby Supply, medium | You've counted the listings, which many first-time buyers never do. A count doesn't say how full those homes are, or whether more are opening. Note the open rooms in each home, and any new listings or rent cuts. That tells you whether the pocket is filling up or already crowded. |
 | Nearby Supply, high | You know the competition: how many homes, and roughly how full they are. Keep watching, because supply keeps changing after you buy. New homes opening nearby, or rooms cutting their rents, are the early signs to adjust your plan. |
 | Room Mix, low | You haven't priced the bath mix yet. Private-bath and shared-bath rooms rent and fill differently, so two houses with the same bedroom count can earn very different money. Deciding the mix before you see those spreads is guessing at the biggest lever you control. Compare private and shared-bath rents nearby before you plan any work. |
@@ -441,12 +441,12 @@ The same words print on the report's checks page (spec 3, section 5). The city's
 | checks · zoning · asOf | As each city's code publishes it, checked in November 2026. |
 | checks · financing · title | Financing on room income |
 | checks · financing · body | Many loans are sized on the appraised whole-house rent, not on room rents. |
-| checks · financing · ask | Talk early to a lender who knows room rentals, and bring your rent per room with the rooms behind it. |
-| checks · insurance · title | Insurance for renting by the room |
-| checks · insurance · body | Insurance is not a given: some insurers decline homes rented by the room. |
-| checks · insurance · byMarket · dfw | The one rent-by-the-room insurance program the research found excludes the Dallas-Fort Worth counties. |
-| checks · insurance · byMarket · houston | The one rent-by-the-room insurance program the research found excludes Houston. |
-| checks · insurance · ask | Get a quote that covers renting by the room before you make the offer. |
+| checks · financing · ask | Talk early to a lender who knows coliving, and bring your rent per room with the rooms behind it. |
+| checks · insurance · title | Insurance for coliving |
+| checks · insurance · body | Insurance is not a given: some insurers decline coliving homes. |
+| checks · insurance · byMarket · dfw | The one coliving insurance program the research found excludes the Dallas-Fort Worth counties. |
+| checks · insurance · byMarket · houston | The one coliving insurance program the research found excludes Houston. |
+| checks · insurance · ask | Get a quote that covers coliving before you make the offer. |
 | checks · status · labels · done | Done |
 | checks · status · labels · partly | Started |
 | checks · status · labels · todo | To do |
@@ -467,7 +467,7 @@ The same words print on the report's checks page (spec 3, section 5). The city's
 | checks · status · financing · cash · mark | done |
 | checks · status · financing · cash · t | You plan to pay cash, so no lender sizes the loan. |
 | checks · status · financing · roomlender · mark | done |
-| checks · status · financing · roomlender · t | You've briefed a lender who works with room rentals. |
+| checks · status · financing · roomlender · t | You've briefed a lender who works with coliving. |
 | checks · status · noAnswer | Add your answers in Sharpen your report to mark this check. |
 
 | Field | Exact text |
@@ -550,14 +550,14 @@ visitor has no rent yet.
 | D2 `rentcomps` | How many nearby rooms is your rent number based on? _(hidden when rentsource is none)_ | None, or not sure / 1 or 2 / 3 to 9 / 10 or more |
 | D3 `occsource` | Where does your plan's occupancy figure come from? | I haven't set one / A rule of thumb / A platform's market average / Observed occupancy of comparable rooms nearby |
 | D4 `launch` | Have you picked the month to start renting rooms? | Not yet / Whenever the work is done / A season I've heard is busy / When rooms nearby fill fastest |
-| D5 `newsupply` | Do you know whether new co-living homes opened nearby this year? | No idea / I think a few did / I checked the current listings / I track homes that open and close nearby |
+| D5 `newsupply` | Do you know whether new coliving homes opened nearby this year? | No idea / I think a few did / I checked the current listings / I track homes that open and close nearby |
 | D6 `pricedrops` | Have rooms near the house been cutting their rents? | I don't know / I've heard so / I've seen a few drop / I've checked recent price drops on comparable rooms |
 | D7 `roomcount` | How did you decide how many rooms to rent? | Not decided yet / As many as the house can fit / The current bedroom count / A layout checked against rents nearby |
 | D8 `sizemix` | Have you checked which room sizes rent best nearby? | Not yet / I assume bigger rooms rent better / I've seen a few listings / I compared rents and fill speed by room size nearby |
 | D9 `dealmath` | Where do the numbers in your deal math come from? | I haven't run the numbers yet / A calculator's default settings / My own estimates / Rents and occupancy of comparable rooms, with my own costs |
 | D10 `stress` | Does your deal math test a slower lease-up? | No / I add a vacancy rate on top / I test one slower case / I test it against how comparable launches nearby filled |
 | C1 `zoning` | Have you checked the city's rule on unrelated adults sharing a home? | Not yet / I asked around / I read a summary online / I checked the city code / I confirmed with the city or an attorney |
-| C2 `financing` | How will you finance the house? | Not sure yet / A loan sized on whole-home rent / Cash / A lender who works with room rentals, briefed on room income |
+| C2 `financing` | How will you finance the house? | Not sure yet / A loan sized on whole-home rent / Cash / A lender who works with coliving, briefed on room income |
 
 ## 9. The emails the funnel sends (Resend)
 
@@ -706,7 +706,7 @@ never invented; email 4's urgency only if a real limit exists.
 | Line 1 | Hi {first_name}, |
 | Line 2 | Your scorecard priced your first six months from your own numbers. Here is what the evidence behind those numbers looks like for one address. |
 | Line 3 | An example, from a RoomIQ run on [date]: a [n]-bedroom house in [market]. |
-| Line 4 | Co-living homes within about 3 miles: [n]. Shared-bath rooms nearby list for [range] a week, evidence [level]. |
+| Line 4 | Coliving homes within about 3 miles: [n]. Shared-bath rooms nearby list for [range] a week, evidence [level]. |
 | Line 5 | How comparable launches filled: [summary]. |
 | Line 6 | What it doesn't tell you: the city's rule on unrelated adults, financing and insurance. Those stay with the city, a lender and an insurer. |
 | Line 7 | Run the same on your address with the Free plan: three forecasts a month, no card needed. |
@@ -721,7 +721,7 @@ never invented; email 4's urgency only if a real limit exists.
 | Subject | Three numbers to check before an offer |
 | Preheader | Rent, fill speed and supply, for one address. |
 | Line 1 | Hi {first_name}, |
-| Line 2 | Three numbers decide a rent-by-the-room deal's first months: what rooms like yours rent for nearby, how fast comparable rooms filled, and how many homes compete within about 3 miles. |
+| Line 2 | Three numbers decide a coliving deal's first months: what rooms like yours rent for nearby, how fast comparable rooms filled, and how many homes compete within about 3 miles. |
 | Line 3 | Your scorecard marked {bottleneck_name} as the one to fix first. |
 | Line 4 | RoomIQ shows each number for an address and labels how much evidence stands behind it. It doesn't check zoning, arrange financing or quote insurance. |
 | Line 5 | Want to go through your address together? Twenty minutes, your address, your numbers. |

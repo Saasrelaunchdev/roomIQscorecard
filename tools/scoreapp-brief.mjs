@@ -220,7 +220,7 @@ list it in your summary. Never invent content to fill a gap.
 name: ${SC.name}
 score_name: ${SC.scoreName} (0 to 100, higher is better)
 business: RoomIQ (${SITE.masterUrl}), ${SITE.product.replace(/^RoomIQ: /, "")}
-audience: US investors before or during their first rent-by-the-room (co-living) deal, and owners converting a house.
+audience: US investors before or during their first coliving deal, and owners converting a house.
   Most arrive on a phone from a Meta ad.
 promise: ten quick questions and the contact step, about a minute; the score right after; the full report by email as a PDF
 measures: how much of the deal plan rests on evidence the investor can check, across five areas. It does not grade the
@@ -294,7 +294,7 @@ suggested answer that matches them).
 
 ${table(["If it asks about", "Answer"], [
   ["Your business", `RoomIQ, ${SITE.product.replace(/^RoomIQ: /, "")}. Website: ${SITE.masterUrl}`],
-  ["Your audience", "US investors before or during their first rent-by-the-room deal, and owners converting a house. Most come from Meta ads on a phone."],
+  ["Your audience", "US investors before or during their first coliving deal, and owners converting a house. Most come from Meta ads on a phone."],
   ["Your goals", "Show each investor which of their deal numbers are evidence and which are borrowed, then send them to a free forecast on their address or a 20-minute walkthrough."],
   ["The leads you want", "Investors looking at houses, under contract, converting a house or running up to 10 houses, in a covered market. Learners are welcome but not the priority."],
   ["Scorecard type", "A scored assessment with five categories, not a personality quiz."],
@@ -823,7 +823,7 @@ ${kv([
   ["Line 1", "Hi {first_name},"],
   ["Line 2", "Your scorecard priced your first six months from your own numbers. Here is what the evidence behind those numbers looks like for one address."],
   ["Line 3", "An example, from a RoomIQ run on [date]: a [n]-bedroom house in [market]."],
-  ["Line 4", "Co-living homes within about 3 miles: [n]. Shared-bath rooms nearby list for [range] a week, evidence [level]."],
+  ["Line 4", "Coliving homes within about 3 miles: [n]. Shared-bath rooms nearby list for [range] a week, evidence [level]."],
   ["Line 5", "How comparable launches filled: [summary]."],
   ["Line 6", "What it doesn't tell you: the city's rule on unrelated adults, financing and insurance. Those stay with the city, a lender and an insurer."],
   ["Line 7", "Run the same on your address with the Free plan: three forecasts a month, no card needed."],
@@ -837,7 +837,7 @@ ${kv([
   ["Subject", "Three numbers to check before an offer"],
   ["Preheader", "Rent, fill speed and supply, for one address."],
   ["Line 1", "Hi {first_name},"],
-  ["Line 2", "Three numbers decide a rent-by-the-room deal's first months: what rooms like yours rent for nearby, how fast comparable rooms filled, and how many homes compete within about 3 miles."],
+  ["Line 2", "Three numbers decide a coliving deal's first months: what rooms like yours rent for nearby, how fast comparable rooms filled, and how many homes compete within about 3 miles."],
   ["Line 3", "Your scorecard marked {bottleneck_name} as the one to fix first."],
   ["Line 4", "RoomIQ shows each number for an address and labels how much evidence stands behind it. It doesn't check zoning, arrange financing or quote insurance."],
   ["Line 5", "Want to go through your address together? Twenty minutes, your address, your numbers."],

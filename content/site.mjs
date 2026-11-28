@@ -3,7 +3,7 @@
 // Secrets never go here: they are Vercel environment variables (README.md, "Settings").
 export default {
   name: "RoomIQ",
-  product: "RoomIQ: room-by-room underwriting for rent-by-the-room investors",
+  product: "RoomIQ: room-by-room underwriting for coliving investors",
 
   // This scorecard's own address once its domain points at Vercel, with no path (for example
   // "https://score.roomiq.io"). Sets canonical links, the share image's full URL and the links in emails. Until then

@@ -124,7 +124,7 @@ export default {
     },
     supply: {
       h: "Your Read on Nearby Supply Is Your Strongest Asset",
-      means: { lead: "You know the competition: how many co-living homes compete within about 3 miles, and roughly how full they are.",
+      means: { lead: "You know the competition: how many coliving homes compete within about 3 miles, and roughly how full they are.",
         bullets: ["You counted the homes near the house", "You know roughly how many rooms are open", "You watch for new homes and rent cuts", "You can tell a busy pocket from a crowded one"] },
       next: { lead: "Supply keeps changing after you buy. Keep the count current.",
         bullets: ["Count again once a month", "Note new homes and rent cuts", "Count again the week you make the offer"] },
@@ -178,10 +178,10 @@ export default {
     supply: {
       h: "Your Read on Nearby Supply Has the Most Room to Grow",
       refinement: "Your Read on Nearby Supply Is Your Next Refinement",
-      means: { lead: "You don't know how many co-living homes compete near the house, or how full they are. Supply nearby decides how hard your rooms will be to fill and what they can ask.",
-        bullets: ["Nobody counted the co-living homes within about 3 miles", "There's no read on how many rooms are open", "New homes and rent cuts nearby go unnoticed", "A crowded pocket can look like a busy one"] },
+      means: { lead: "You don't know how many coliving homes compete near the house, or how full they are. Supply nearby decides how hard your rooms will be to fill and what they can ask.",
+        bullets: ["Nobody counted the coliving homes within about 3 miles", "There's no read on how many rooms are open", "New homes and rent cuts nearby go unnoticed", "A crowded pocket can look like a busy one"] },
       next: { lead: "This week, count the competition within about 3 miles.",
-        bullets: ["List every co-living home with rooms for rent within about 3 miles", "Note how many rooms each has open", "Note any new homes and rent cuts", "Write down your read, with the date"] },
+        bullets: ["List every coliving home with rooms for rent within about 3 miles", "Note how many rooms each has open", "Note any new homes and rent cuts", "Write down your read, with the date"] },
       impact: { lead: "Supply sets the ceiling on rent and the pace of the fill. Fix it and your rent and lease-up plans rest on the street as it is.",
         bullets: ["Many open rooms nearby mean a lower rent or a slower lease-up", "Few open rooms and steady rents leave room for one more home", "It's fixable in an afternoon of counting"] }
     },

@@ -2,7 +2,7 @@
 
 The 30-day plan every report carries: how to use it, one guide per area with a named method, the timeline, the quick start, the checklists, the weekly tracker and the next step.
 
-- For: RoomIQ, room-by-room underwriting for rent-by-the-room investors
+- For: RoomIQ, room-by-room underwriting for coliving investors
 - Builds on: spec 1 (the areas), spec 5 (the method the guides run)
 - Date: 2026-11-24
 - Status: specification, built and tested. `content/playbook.mjs` holds these words; `tests/unit/report-model.test.mjs` and the copy lint check them.
@@ -230,7 +230,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 
 | Without a Supply Count | With a Supply Count |
 |---|---|
-| Nobody counted the co-living homes nearby | Every co-living home within about 3 miles is on one list |
+| Nobody counted the coliving homes nearby | Every coliving home within about 3 miles is on one list |
 | A count, with no idea how full those homes are | Open rooms are noted next to each home |
 | New homes opening nearby come as a surprise | New listings, and homes that stopped listing, are tracked |
 | Rent cuts nearby go unnoticed | Rent cuts are an early warning in the plan |
@@ -238,7 +238,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 
 **The core method: The Three-Mile Count**
 
-**Phase 1: Map the homes.** Count every co-living home within about 3 miles.
+**Phase 1: Map the homes.** Count every coliving home within about 3 miles.
 
 - List every home with rooms for rent within about 3 miles of the house
 - Note each home's room count, if it shows
@@ -421,7 +421,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 | timeline · phases 2 · t | Phase 2, days 8 to 14: Count the competition |
 | timeline · phases 2 · focus | Nearby Supply |
 | timeline · phases 2 · area | supply |
-| timeline · phases 2 · b 1 | Count the co-living homes within about 3 miles |
+| timeline · phases 2 · b 1 | Count the coliving homes within about 3 miles |
 | timeline · phases 2 · b 2 | Note the open rooms in each |
 | timeline · phases 2 · b 3 | Note new homes and rent cuts nearby |
 | timeline · phases 2 · b 4 | Check your fill watch every few days |
@@ -441,8 +441,8 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 | timeline · phases 4 · area | reserves |
 | timeline · phases 4 · b 1 | Size reserves: monthly cost × the slower case's months |
 | timeline · phases 4 · b 2 | Run the deal math on your own costs and on rooms nearby |
-| timeline · phases 4 · b 3 | Talk to a lender who knows room rentals |
-| timeline · phases 4 · b 4 | Get an insurance quote that covers renting by the room |
+| timeline · phases 4 · b 3 | Talk to a lender who knows coliving |
+| timeline · phases 4 · b 4 | Get an insurance quote that covers coliving |
 | timeline · phases 4 · b 5 | Take the scorecard again on day 30 |
 | timeline · phases 4 · outcome | a plan where every number rests on evidence, and a second score to compare with the first. |
 
@@ -462,7 +462,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 | quickStart · days 3 · body | Group your ten rooms by bath type, private or shared, and note the middle rent of each group. The difference is your first read on the bath mix. |
 | quickStart · days 4 · t | Day 4: Count the Competition |
 | quickStart · days 4 · m | 30 minutes |
-| quickStart · days 4 · body | Count the co-living homes with rooms listed within about 3 miles of the house, and note how many rooms each has open. One page, with the date. |
+| quickStart · days 4 · body | Count the coliving homes with rooms listed within about 3 miles of the house, and note how many rooms each has open. One page, with the date. |
 | quickStart · days 5 · t | Day 5: Start the Fill Watch |
 | quickStart · days 5 · m | 15 minutes |
 | quickStart · days 5 · body | Pick five of your ten rooms and set a reminder to check them every few days for two weeks. Which ones fill, how fast and at what rent becomes your lease-up plan. |
@@ -500,7 +500,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 
 | Action | How or where |
 |---|---|
-| List the co-living homes within about 3 miles | Room listings, a map |
+| List the coliving homes within about 3 miles | Room listings, a map |
 | Note the open rooms in each | Your list |
 | Note new homes and homes that stopped listing | Once a month |
 | Note rent cuts on comparable rooms | Once a month |
@@ -527,7 +527,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 | Size reserves: cost × the slower case's months | Your plan |
 | Run the deal math on your own costs | Your spreadsheet, or RoomIQ |
 | Count empty rooms once, not twice | Your deal math |
-| Talk to a lender who knows room rentals | Before the offer |
+| Talk to a lender who knows coliving | Before the offer |
 
 ## 6. The weekly tracker
 
@@ -555,7 +555,7 @@ and a practice protocol. "From your answers" prints the visitor's own first step
 | tracker · rows 6 2 | 10 or more |
 | tracker · rows 7 1 | Rooms filled in your watch |
 | tracker · rows 7 2 | Your count |
-| tracker · rows 8 1 | Co-living homes within 3 miles |
+| tracker · rows 8 1 | Coliving homes within 3 miles |
 | tracker · rows 8 2 | Your count |
 | tracker · rows 9 1 | Months of reserves |
 | tracker · rows 9 2 | Your slower case |
@@ -582,10 +582,10 @@ until one is booked, then the booking.
 | next · title | Your Next Step |
 | next · lead | This report showed where your plan borrows its numbers, and gave you a 30-day plan to replace them with evidence. The by-hand way works: it takes listings, a spreadsheet and two weeks of watching. RoomIQ shows that evidence for one address in one place. |
 | next · boxTitle | Run a free forecast on your address |
-| next · boxBody | Type the address and RoomIQ estimates monthly room revenue from observed rooms nearby. Start where your report says to: {primary_bottleneck}. The estimate prints its formula, its comps and how sure it is, and counts the co-living homes within about 3 miles. Free plan: no card needed, three forecasts a month. |
+| next · boxBody | Type the address and RoomIQ estimates monthly room revenue from observed rooms nearby. Start where your report says to: {primary_bottleneck}. The estimate prints its formula, its comps and how sure it is, and counts the coliving homes within about 3 miles. Free plan: no card needed, three forecasts a month. |
 | next · fit · rent | For your Rent Evidence, that means a rent for each room from rooms nearby, by bath type and size. |
 | next · fit · fill | For your Fill Speed, that means occupancy from comparable rooms nearby, and the months rooms fill fastest. |
-| next · fit · supply | For your Nearby Supply, that means the co-living homes within about 3 miles, counted and mapped. |
+| next · fit · supply | For your Nearby Supply, that means the coliving homes within about 3 miles, counted and mapped. |
 | next · fit · mix | For your Room Mix, that means the bath mix you plan, entered in the forecast, because private-bath rooms change the rent. |
 | next · fit · reserves | For your Lease-up Reserves, that means the estimate carried into cash flow under your own costs, beside your slower case. Informational only, not financial or lending advice. |
 | next · fit · callOnly | You run more than ten houses, so we'll start with a walkthrough to see what fits. |

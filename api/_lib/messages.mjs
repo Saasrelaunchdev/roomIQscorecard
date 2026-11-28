@@ -162,7 +162,7 @@ export function webhookData(row, ev, links) {
   return {
     id: row.id, created_at: row.created_at, status: row.status,
     contact: { first_name: row.first_name, last_name: row.last_name || null, email: row.email },
-    // The deal: where they are with rent-by-the-room (the segment) and the market (a metro, never an address)
+    // The deal: where they are with coliving (the segment) and the market (a metro, never an address)
     deal: { stage: row.trade, market: (row.answers || {}).market || null, market_label: row.city || null },
     answers: row.answers, deepener: row.deepener || null,
     result: {

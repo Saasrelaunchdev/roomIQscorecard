@@ -1,11 +1,11 @@
 // "Three checks RoomIQ can't do for you" (spec 3, the checklist page; spec 2, the results card): the city's rule on
-// unrelated adults sharing a home, financing on room income, and insurance for renting by the room. I1's unscored
+// unrelated adults sharing a home, financing on room income, and insurance for coliving. I1's unscored
 // checklist, shown to everyone, by market (spec 1, G2), and marked with the deepener's answers (C1, C2) when given.
 //
 // The city rules are definitions only, as each city's code publishes them, from GTM-BRIEF.md "External constraints"
 // (the deep research, checked 2026-11-11). An address-level answer needs the city or an attorney: every line says so.
-// The insurance line is the GTM's: the one rent-by-the-room program the research found excludes Houston and the
-// Dallas-Fort Worth counties. Results and report both read this file.
+// The insurance line is the GTM's, in the founder's word (coliving, 2026-11-28): the one coliving insurance program the
+// research found excludes Houston and the Dallas-Fort Worth counties. Results and report both read this file.
 export default {
   title: "Three checks RoomIQ can't do for you",
   lead: "RoomIQ shows the evidence for the house. These three decide whether the plan is allowed, financed and insured.",
@@ -30,16 +30,16 @@ export default {
   financing: {
     title: "Financing on room income",
     body: "Many loans are sized on the appraised whole-house rent, not on room rents.",
-    ask: "Talk early to a lender who knows room rentals, and bring your rent per room with the rooms behind it."
+    ask: "Talk early to a lender who knows coliving, and bring your rent per room with the rooms behind it."
   },
   insurance: {
-    title: "Insurance for renting by the room",
-    body: "Insurance is not a given: some insurers decline homes rented by the room.",
+    title: "Insurance for coliving",
+    body: "Insurance is not a given: some insurers decline coliving homes.",
     byMarket: {
-      dfw: "The one rent-by-the-room insurance program the research found excludes the Dallas-Fort Worth counties.",
-      houston: "The one rent-by-the-room insurance program the research found excludes Houston."
+      dfw: "The one coliving insurance program the research found excludes the Dallas-Fort Worth counties.",
+      houston: "The one coliving insurance program the research found excludes Houston."
     },
-    ask: "Get a quote that covers renting by the room before you make the offer."
+    ask: "Get a quote that covers coliving before you make the offer."
   },
 
   // The deepener's answers, as a status on each check (C1 zoning, C2 financing). No answer: the check shows "To do"
@@ -56,7 +56,7 @@ export default {
       unsure: { mark: "todo", t: "You're not sure yet how you'll finance the house." },
       wholehome: { mark: "todo", t: "You plan a loan sized on whole-home rent, which may not count your room income." },
       cash: { mark: "done", t: "You plan to pay cash, so no lender sizes the loan." },
-      roomlender: { mark: "done", t: "You've briefed a lender who works with room rentals." }
+      roomlender: { mark: "done", t: "You've briefed a lender who works with coliving." }
     },
     noAnswer: "Add your answers in Sharpen your report to mark this check."
   }

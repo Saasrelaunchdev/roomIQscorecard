@@ -2,7 +2,7 @@
 
 RoomIQ as a method, the Room-by-Room Underwrite: its steps, where each investor stands on each step, the two ways to run it, the first 30 days with RoomIQ, and the letter at the front.
 
-- For: RoomIQ, room-by-room underwriting for rent-by-the-room investors
+- For: RoomIQ, room-by-room underwriting for coliving investors
 - Builds on: spec 1 (the areas and their order), the GTM's product facts (GTM-BRIEF.md: the Free plan, the forecast, the Property Analyzer, the deal calculator)
 - Date: 2026-11-24
 - Status: specification, built and tested. `content/method.mjs` holds these words; `tests/unit/v2.test.mjs` checks the pages.
@@ -61,7 +61,7 @@ shows for that step, without promises.
 |---|---|---|
 | 1. Price each room (Rent Evidence) | A rent for each room from rooms nearby with the same bath type and size, kept to the rooms that actually filled. | RoomIQ shows rent and occupancy split by bath type and size for comparable properties, and a revenue estimate for the address with its comps. |
 | 2. Time the fill (Fill Speed) | Lease-up months from how fast comparable rooms nearby filled, with a slower case, and a launch month timed to the seasons. | RoomIQ shows observed occupancy over 7, 30 and 90-day windows for comparable properties, and when occupancy and fill speed peak in the market. |
-| 3. Count the competition (Nearby Supply) | Every co-living home within about 3 miles counted, with its open rooms, new listings and rent cuts. | RoomIQ counts and maps active co-living properties within about 3 miles of any address, with listing status on its supply map. |
+| 3. Count the competition (Nearby Supply) | Every coliving home within about 3 miles counted, with its open rooms, new listings and rent cuts. | RoomIQ counts and maps active coliving properties within about 3 miles of any address, with listing status on its supply map. |
 | 4. Price the bath mix (Room Mix) | The bath mix and the room count priced from private and shared-bath rooms nearby, and checked against the city's rule. | RoomIQ's forecast takes the room mix you plan, private-bath rooms included, and prints the formula behind the estimate. |
 | 5. Size the cushion (Lease-up Reserves) | Reserves sized from the lease-up months the evidence supports, plus a slower case, with the deal math run on your own costs. | RoomIQ carries the estimate into cash flow, cash-on-cash, DSCR and cap rate under your own assumptions. Informational only, not financial or lending advice. |
 
@@ -101,14 +101,14 @@ area's band: fix "Fix first", low "Gap", medium "Partly there", high "In place".
 | A platform's market reports | Your sense of fill speed comes from a platform's market reports. |
 | Observed fill times of comparable rooms nearby | Your fill speed comes from observed fill times of comparable rooms nearby. |
 
-### Q3 `supply`: How many co-living homes compete within about 3 miles?
+### Q3 `supply`: How many coliving homes compete within about 3 miles?
 
 | Answer | Sentence on the page |
 |---|---|
-| No idea | You don't know how many co-living homes compete nearby. |
-| Some, I think | You think some co-living homes compete nearby. |
-| I counted listings | You counted the co-living listings nearby. |
-| I know the count and roughly how full they are | You know how many co-living homes compete nearby, and roughly how full they are. |
+| No idea | You don't know how many coliving homes compete nearby. |
+| Some, I think | You think some coliving homes compete nearby. |
+| I counted listings | You counted the coliving listings nearby. |
+| I know the count and roughly how full they are | You know how many coliving homes compete nearby, and roughly how full they are. |
 
 ### Q4 `bathmix`: Have you decided the bath mix?
 
@@ -164,13 +164,13 @@ area's band: fix "Fix first", low "Gap", medium "Partly there", high "In place".
 | A season I've heard is busy | You plan to launch in a season you've heard is busy. |
 | When rooms nearby fill fastest | You plan to launch when rooms nearby fill fastest. |
 
-### D5 `newsupply`: Do you know whether new co-living homes opened nearby this year?
+### D5 `newsupply`: Do you know whether new coliving homes opened nearby this year?
 
 | Answer | Sentence on the page |
 |---|---|
-| No idea | You don't know whether new co-living homes opened nearby. |
-| I think a few did | You think a few new co-living homes opened nearby. |
-| I checked the current listings | You checked the current co-living listings nearby. |
+| No idea | You don't know whether new coliving homes opened nearby. |
+| I think a few did | You think a few new coliving homes opened nearby. |
+| I checked the current listings | You checked the current coliving listings nearby. |
 | I track homes that open and close nearby | You track the homes that open and close nearby. |
 
 ### D6 `pricedrops`: Have rooms near the house been cutting their rents?
@@ -229,7 +229,7 @@ area's band: fix "Fix first", low "Gap", medium "Partly there", high "In place".
 | ways · self · body | The 30-day plan in this report is the method, step by step, and it's yours to keep. |
 | ways · self · bullets 1 | A list of ten rooms near the house, by bath type and size |
 | ways · self · bullets 2 | A two-week fill watch on five of them |
-| ways · self · bullets 3 | A count of the co-living homes within about 3 miles |
+| ways · self · bullets 3 | A count of the coliving homes within about 3 miles |
 | ways · self · bullets 4 | Your own deal math, with a slower case |
 | ways · service · title | Run it with RoomIQ |
 | ways · service · body | The same five steps for one address, in one place, with the evidence behind each number shown. |
@@ -246,13 +246,13 @@ area's band: fix "Fix first", low "Gap", medium "Partly there", high "In place".
 | ways · service · list 1 | Monthly room revenue for the address, with the formula printed |
 | ways · service · list 2 | Support and confidence labels, and how far away the comps are |
 | ways · service · list 3 | Rent and occupancy by bath type and size for comparable properties |
-| ways · service · list 4 | Active co-living properties within about 3 miles, mapped |
+| ways · service · list 4 | Active coliving properties within about 3 miles, mapped |
 | ways · service · list 5 | When occupancy and fill speed peak in the market |
 | ways · wontTitle | What RoomIQ doesn't do |
 | ways · wont 1 · t | No zoning check. |
 | ways · wont 1 · b | Rules on unrelated adults differ by city: ask the city or an attorney. |
 | ways · wont 2 · t | No financing or insurance. |
-| ways · wont 2 · b | Talk early to a lender and an insurer who know room rentals. |
+| ways · wont 2 · b | Talk early to a lender and an insurer who know coliving. |
 | ways · wont 3 · t | No promises. |
 | ways · wont 3 · b | An estimate shows its working; it doesn't guarantee rent or occupancy. |
 | ways · rules | Based on observed rents and occupancy, not collected payments. Thin evidence is labeled Thin. |
@@ -272,7 +272,7 @@ then the mix and the math. Nothing is promised; the deal math is informational o
 | days · phases 2 · t | Week 2: the rooms nearby |
 | days · phases 2 · b | Open comparable properties in the Property Analyzer: rent and occupancy by bath type and size, and their 7, 30 and 90-day windows. |
 | days · phases 3 · t | Week 3: the competition and the seasons |
-| days · phases 3 · b | Check the co-living properties within about 3 miles on the map, and when occupancy and fill speed peak, before you pick a launch month. |
+| days · phases 3 · b | Check the coliving properties within about 3 miles on the map, and when occupancy and fill speed peak, before you pick a launch month. |
 | days · phases 4 · t | Week 4: the mix and the math |
 | days · phases 4 · b | Re-run the forecast with the room mix you plan, carry it into cash flow under your own costs, size the cushion, then decide. |
 | days · yourStart | For your plan, we'd start with {primary_bottleneck}. {fit_line} |

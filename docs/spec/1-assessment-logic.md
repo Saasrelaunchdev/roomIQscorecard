@@ -2,7 +2,7 @@
 
 Questions, scoring, the lease-up gap and the outcome logic.
 
-- For: RoomIQ, room-by-room underwriting for rent-by-the-room investors
+- For: RoomIQ, room-by-room underwriting for coliving investors
 - Builds on: `docs/gtm-brief.md`, `docs/scorecard-strategy.md`; the GTM's `deliverables/scorecard_spec.docx` and
   `lead_magnet_spec.xlsx`; the Roomiqscorecards proposal, idea I1
 - Date: 2026-11-24
@@ -23,8 +23,8 @@ Copy rules for every word below:
 
 | Variable | Value |
 |---|---|
-| Product | RoomIQ: room-level market data and underwriting for US rent-by-the-room investors |
-| Audience | US investors before or during their first rent-by-the-room deal; operators with 1 to 10 houses checking the next one |
+| Product | RoomIQ: room-level market data and underwriting for US coliving investors |
+| Audience | US investors before or during their first coliving deal; operators with 1 to 10 houses checking the next one |
 | Traffic | Meta ads (through the Meta page's scorecard buttons, or straight to `/first-deal`), the production landing page's score buttons, community, events and outreach links |
 | Time promise | about a minute: ten quick questions (taps, one typed market, three sliders) and one short form |
 | Delivery | instant: the score on screen, the PDF report by email at once |
@@ -134,7 +134,7 @@ carrying cost; rooms that fill sooner bring rent in sooner. The report says so.
 
 | Id | Key | Question | Options (key: label) | Feeds |
 |---|---|---|---|---|
-| G1 | `stage` | Where are you with rent-by-the-room? | `learning`: Learning, no house yet; `looking`: Looking at houses; `contract`: Under contract; `own`: Converting my house; `operator`: I run 1 to 10 houses; `scaling`: More than 10 houses | the segment ("first deal" for the first four, "next deal" for operators); fit; call-only; call notes |
+| G1 | `stage` | Where are you with coliving? | `learning`: Learning, no house yet; `looking`: Looking at houses; `contract`: Under contract; `own`: Converting my house; `operator`: I run 1 to 10 houses; `scaling`: More than 10 houses | the segment ("first deal" for the first four, "next deal" for operators); fit; call-only; call notes |
 | G2 | `market` | Where is the house, or the market you're looking at? | typed; matched to `dfw`: Dallas-Fort Worth; `houston`: Houston; `atlanta`: Atlanta; `orlando`: Orlando; `jacksonville`: Jacksonville; `phoenix`: Phoenix; `lasvegas`: Las Vegas; else `other`: Another US market; the chip under the field answers `undecided`: Not decided yet | covered or not (section 10); the checklist page's city rule and insurance line; the report's cover; the stored city |
 | G3 | `carry` | About what will the house cost you each month before rent comes in? | see section 4 | C |
 | G4 | `fillmonths` | How long do you expect the rooms to take to fill? | see section 4 | N |
@@ -229,26 +229,26 @@ when rooms near the house fill fastest, and finish the work before it".
 
 ### 6.3 Nearby Supply (`supply`)
 
-Measures: "Checks whether you know how many co-living homes compete within about 3 miles, how full they are, and
+Measures: "Checks whether you know how many coliving homes compete within about 3 miles, how full they are, and
 what's new."
 
 | Q | Key | Weight | Question | Options (points) |
 |---|---|---|---|---|
-| Q3 | `supply` | 3 | How many co-living homes compete within about 3 miles? | `none` No idea (0); `some` Some, I think (1); `counted` I counted listings (2); `known` I know the count and roughly how full they are (4) |
-| D5 | `newsupply` | 2 | Do you know whether new co-living homes opened nearby this year? | `none` No idea (0); `think` I think a few did (1); `checked` I checked the current listings (2); `track` I track homes that open and close nearby (4) |
+| Q3 | `supply` | 3 | How many coliving homes compete within about 3 miles? | `none` No idea (0); `some` Some, I think (1); `counted` I counted listings (2); `known` I know the count and roughly how full they are (4) |
+| D5 | `newsupply` | 2 | Do you know whether new coliving homes opened nearby this year? | `none` No idea (0); `think` I think a few did (1); `checked` I checked the current listings (2); `track` I track homes that open and close nearby (4) |
 | D6 | `pricedrops` | 1 | Have rooms near the house been cutting their rents? | `unsure` I don't know (0); `heard` I've heard so (1); `seen` I've seen a few drop (2); `checked` I've checked recent price drops on comparable rooms (4) |
 
 | Band | Card text |
 |---|---|
-| Low | You don't know how many co-living homes compete near the house. Supply nearby decides how hard your rooms will be to fill and what they can ask. A street with many open rooms and falling rents needs a different plan from one with a few full homes. Count it before you buy. |
+| Low | You don't know how many coliving homes compete near the house. Supply nearby decides how hard your rooms will be to fill and what they can ask. A street with many open rooms and falling rents needs a different plan from one with a few full homes. Count it before you buy. |
 | Medium | You've counted the listings, which many first-time buyers never do. A count doesn't say how full those homes are, or whether more are opening. Note the open rooms in each home, and any new listings or rent cuts. That tells you whether the pocket is filling up or already crowded. |
 | High | You know the competition: how many homes, and roughly how full they are. Keep watching, because supply keeps changing after you buy. New homes opening nearby, or rooms cutting their rents, are the early signs to adjust your plan. |
 
 Fix-first line: "Supply nearby decides how hard your rooms will be to fill. Count it before you buy."
 
-Quick wins: Q3 `none` and `some` "Count the co-living homes with rooms listed within about 3 miles of the house";
+Quick wins: Q3 `none` and `some` "Count the coliving homes with rooms listed within about 3 miles of the house";
 `counted` "Next to each home you counted, note how many of its rooms are open right now". D5 `none` and `think` "Look up
-which co-living homes near the house started listing rooms this year". D6 `unsure` and `heard` "Check whether rooms
+which coliving homes near the house started listing rooms this year". D6 `unsure` and `heard` "Check whether rooms
 near the house cut their rents in the last few months".
 
 ### 6.4 Room Mix (`mix`)
@@ -307,7 +307,7 @@ extra vacancy rate if your occupancy already comes from rooms nearby, because it
 | Q | Key | Question | Options |
 |---|---|---|---|
 | C1 | `zoning` | Have you checked the city's rule on unrelated adults sharing a home? | `notyet` Not yet; `asked` I asked around; `summary` I read a summary online; `code` I checked the city code; `confirmed` I confirmed with the city or an attorney |
-| C2 | `financing` | How will you finance the house? | `unsure` Not sure yet; `wholehome` A loan sized on whole-home rent; `cash` Cash; `roomlender` A lender who works with room rentals, briefed on room income |
+| C2 | `financing` | How will you finance the house? | `unsure` Not sure yet; `wholehome` A loan sized on whole-home rent; `cash` Cash; `roomlender` A lender who works with coliving, briefed on room income |
 
 The checklist's flag (`checklistFlag`): C1 `notyet`, `asked` or `summary` puts this quick win first, whatever the area
 scores, and adds the note on the city's rule to the weakest area's page: "Read your city's rule on unrelated adults
@@ -351,7 +351,7 @@ deepener has ten questions; otherwise twelve.
 | `rentDivide` | your rent is a whole-home rent split by bedrooms |
 | `fill` | you don't know how fast rooms fill near the house |
 | `fillVacancy` | your plan assumes a vacancy rate instead of how fast rooms nearby fill |
-| `supply` | you don't know how many co-living homes compete within about 3 miles |
+| `supply` | you don't know how many coliving homes compete within about 3 miles |
 | `mix` | your bath mix isn't priced from the rooms nearby |
 | `reserves` | your reserves aren't sized for a slow lease-up |
 | maintenance | "Every area is 75 or higher. Your plan rests on evidence; check that it holds for this address." |
@@ -374,7 +374,7 @@ deepener has ten questions; otherwise twelve.
    the order primary, secondary, then the ranking.
 7. Maintenance checks, one from each of the three lowest areas: `rent` "Once a month, recheck five rooms near the house:
    rent, bath type and whether they filled"; `fill` "Every two weeks, note which of five room listings nearby have
-   filled"; `supply` "Once a month, count the co-living homes within about 3 miles and note any new ones"; `mix` "Before
+   filled"; `supply` "Once a month, count the coliving homes within about 3 miles and note any new ones"; `mix` "Before
    any work, price the house both ways: the baths as they are, and with one more private bath"; `reserves` "When rents or
    supply nearby change, rerun your slower lease-up case".
 
